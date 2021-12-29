@@ -10,7 +10,7 @@ public interface ProjectDao {
 
 	void update(Project obj);
 
-	void updateStatus(Integer idProject, String status);
+	void disable(Integer idProject, String status, String reason);
 
 	List<Project> findAll();
 }

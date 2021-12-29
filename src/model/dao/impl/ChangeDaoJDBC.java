@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import db.DB;
@@ -15,8 +14,6 @@ import entities.Change;
 import model.dao.ChangeDao;
 
 public class ChangeDaoJDBC implements ChangeDao {
-	
-	private final java.sql.Date DATE = new java.sql.Date(new Date().getTime());
 	
 	private Connection conn;
 
@@ -29,7 +26,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO `wti_inventory`.`changes` " 
+					"INSERT INTO `changes` " 
 					+ "(`object`,"
 					+ "`typeChange`,"
 					+ "`changes`,"
@@ -42,7 +39,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 			st.setString(1, obj.getObject());
 			st.setString(2, obj.getTypeChange());
 			st.setString(3, obj.getChanges());
-			st.setDate(4, DATE);
+			st.setDate(4, new java.sql.Date(obj.getDateChange().getTime()));
 			st.setString(5, obj.getAuthor());
 
 			int rowsAffected = st.executeUpdate();
@@ -70,7 +67,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM `wti_inventory`.`changes`");
+			st = conn.prepareStatement("SELECT * FROM `changes`");
 
 			rs = st.executeQuery();
 

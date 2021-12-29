@@ -21,6 +21,16 @@ public class WorkPosition implements Serializable {
 
 	public WorkPosition() {
 	}
+	
+	public WorkPosition(String workPoint, String location, String floors, String netPoint, String statusWorkPoint,
+			Date dateEntry) {
+		this.workPoint = workPoint;
+		this.location = location;
+		this.floors = floors;
+		this.netPoint = netPoint;
+		this.statusWorkPoint = statusWorkPoint;
+		this.dateEntry = dateEntry;
+	}
 
 	public WorkPosition(String workPoint, String location, String floors, String netPoint, String statusWorkPoint,
 			Date dateEntry, String reason, List<Change> changes) {

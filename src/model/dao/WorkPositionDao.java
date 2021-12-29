@@ -12,5 +12,7 @@ public interface WorkPositionDao {
 
 	void updateStatus(String workPoint, String status);
 
+	void disable(String workPoint, String status, String reason);
+
 	List<WorkPosition> findAll();
 }

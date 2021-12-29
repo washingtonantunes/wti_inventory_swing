@@ -31,7 +31,7 @@ public class Equipment implements Serializable {
 	
 	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,
 			String patrimonyNumberEquipment, String brandEquipment, String modelEquipment, String memoryRam,
-			String hardDisk, String costType, Double valueEquipment, String statusEquipment) {
+			String hardDisk, String costType, Double valueEquipment, String statusEquipment, Date dateEntry) {
 		this.serialNumber = serialNumber;
 		this.hostName = hostName;
 		this.addressMAC = addressMAC;
@@ -44,6 +44,7 @@ public class Equipment implements Serializable {
 		this.costType = costType;
 		this.valueEquipment = valueEquipment;
 		this.statusEquipment = statusEquipment;
+		this.dateEntry = dateEntry;
 	}
 
 	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,

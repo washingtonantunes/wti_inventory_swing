@@ -12,7 +12,5 @@ public interface InventoryDao {
 
 	void deleteById(Integer id);
 
-	Inventory findById(Integer id);
-
 	List<Inventory> findAll();
 }

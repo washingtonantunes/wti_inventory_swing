@@ -10,7 +10,7 @@ public interface OptionDao {
 
 	void update(Option obj);
 
-	void updateStatus(Integer idOption, String status);
+	void disable(Integer idOption, String status);
 
 	List<Option> findAll();
 }

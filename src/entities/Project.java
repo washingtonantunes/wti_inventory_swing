@@ -13,7 +13,6 @@ public class Project implements Serializable {
 	private String nameProject;
 	private String locality;
 	private String costCenter;
-	private String department;
 	private String statusProject;
 	private Date dateEntry;
 	private String reason;
@@ -22,15 +21,22 @@ public class Project implements Serializable {
 
 	public Project() {
 	}
+	
+	public Project(String nameProject, String locality, String costCenter,
+			String statusProject, Date dateEntry) {
+		this.nameProject = nameProject;
+		this.locality = locality;
+		this.costCenter = costCenter;
+		this.statusProject = statusProject;
+		this.dateEntry = dateEntry;
+	}
 
-	public Project(Integer idProject, String nameProject, String locality, String costCenter, String department,
+	public Project(Integer idProject, String nameProject, String locality, String costCenter,
 			String statusProject, Date dateEntry, String reason, List<Change> changes) {
-		super();
 		this.idProject = idProject;
 		this.nameProject = nameProject;
 		this.locality = locality;
 		this.costCenter = costCenter;
-		this.department = department;
 		this.statusProject = statusProject;
 		this.dateEntry = dateEntry;
 		this.reason = reason;
@@ -67,14 +73,6 @@ public class Project implements Serializable {
 
 	public void setCostCenter(String costCenter) {
 		this.costCenter = costCenter;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
 	}
 
 	public String getStatusProject() {

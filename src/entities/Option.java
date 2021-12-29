@@ -16,6 +16,13 @@ public class Option implements Serializable {
 
 	public Option() {
 	}
+	
+	public Option(String option, String type, String statusOption, Date dateEntry) {
+		this.option = option;
+		this.type = type;
+		this.statusOption = statusOption;
+		this.dateEntry = dateEntry;
+	}
 
 	public Option(Integer idOption, String option, String type, String statusOption, Date dateEntry) {
 		this.idOption = idOption;

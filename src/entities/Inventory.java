@@ -107,6 +107,13 @@ public class Inventory implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Inventory [idInventory=" + idInventory + "]";
+		return "Inventory [idInventory=" + idInventory + ", workPosition=" + workPosition + ", project=" + project
+				+ ", user=" + user + ", equipment=" + equipment + ", monitor1=" + monitor1 + ", monitor2=" + monitor2
+				+ "]";
 	}
+
+	/*@Override
+	public String toString() {
+		return "Inventory [idInventory=" + idInventory + "]";
+	}*/
 }

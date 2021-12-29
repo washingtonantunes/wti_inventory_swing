@@ -5,11 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.JOptionPane;
 
 import db.DB;
 import db.DBException;
@@ -17,8 +13,6 @@ import entities.Equipment;
 import model.dao.EquipmentDao;
 
 public class EquipmentDaoJDBC implements EquipmentDao {
-
-	private final java.sql.Date DATE = new java.sql.Date(new Date().getTime());
 
 	private Connection conn;
 
@@ -31,7 +25,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO `wti_inventory`.`equipments` "
+					"INSERT INTO `equipments` "
 					+ "(`serialNumber`,"
 					+ "`hostname`,"
 					+ "`addressMAC`,"
@@ -59,11 +53,10 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(9, obj.getHardDisk());
 			st.setString(10, obj.getCostType());
 			st.setDouble(11, obj.getValueEquipment());
-			st.setString(12, "STAND BY");
-			st.setDate(13, DATE);
+			st.setString(12, obj.getStatusEquipment());
+			st.setDate(13, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Equipamento cadastrado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -78,7 +71,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`equipments` "
+					"UPDATE `equipments` "
 					+ "SET `memoryRam` = ?, hardDisk = ?, costType = ?, valueEquipment = ? "
 					+ "WHERE serialNumber = ?");
 
@@ -89,7 +82,6 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(5, obj.getSerialNumber());
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Equipamento alterado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -104,7 +96,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`equipments` "
+					"UPDATE `equipments` "
 					+ "SET `statusEquipment` = ? "
 					+ "WHERE `serialNumber` = ?");
 
@@ -126,7 +118,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`equipments` " 
+					"UPDATE `equipments` " 
 					+ "SET `statusEquipment` = ?, `reason` = ? "
 					+ "WHERE `serialNumber` = ?");
 
@@ -135,7 +127,6 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(3, serialNumberEquipment);
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Equipamento desativado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -150,7 +141,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM `wti_inventory`.`equipments`");
+			st = conn.prepareStatement("SELECT * FROM `equipments`");
 
 			rs = st.executeQuery();
 

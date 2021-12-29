@@ -19,14 +19,27 @@ public class User implements Serializable {
 	private String statusUser;
 	private Date dateEntry;
 	private String reason;
-
+	
 	private List<Change> changes;
 
 	public User() {
 	}
+	
+	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
+			String department, String statusUser, Date dateEntry) {
+		this.registration = registration;
+		this.nameUser = nameUser;
+		this.cpf = cpf;
+		this.phone = phone;
+		this.email = email;
+		this.project = project;
+		this.department = department;
+		this.statusUser = statusUser;
+		this.dateEntry = dateEntry;
+	}
 
 	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
-			String department, String statusUser, String reason, Date dateEntry, List<entities.Change> changes) {
+			String department, String statusUser, String reason, Date dateEntry) {
 		this.registration = registration;
 		this.nameUser = nameUser;
 		this.cpf = cpf;
@@ -37,7 +50,6 @@ public class User implements Serializable {
 		this.statusUser = statusUser;
 		this.reason = reason;
 		this.dateEntry = dateEntry;
-		this.changes = changes;
 	}
 
 	public String getRegistration() {
@@ -119,11 +131,11 @@ public class User implements Serializable {
 	public void setDateEntry(Date dateEntry) {
 		this.dateEntry = dateEntry;
 	}
-
+	
 	public List<Change> getChanges() {
 		return changes;
 	}
-
+	
 	public void setChanges(List<Change> changes) {
 		this.changes = changes;
 	}

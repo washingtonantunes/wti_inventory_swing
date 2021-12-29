@@ -4,11 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.swing.JOptionPane;
 
 import db.DB;
 import db.DBException;
@@ -16,8 +13,6 @@ import entities.Collaborator;
 import model.dao.CollaboratorDao;
 
 public class CollaboratorDaoJDBC implements CollaboratorDao {
-	
-	private final java.sql.Date DATE = new java.sql.Date(new Date().getTime());
 	
 	private Connection conn;
 
@@ -30,7 +25,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO `wti_inventory`.`collaborators` "
+					"INSERT INTO `collaborators` "
 					+ "(`name`,"
 					+ "`registration`,"
 					+ "`password`,"
@@ -46,11 +41,10 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 			st.setString(3, obj.getPassword());
 			st.setString(4, obj.getPrivilege());
 			st.setString(5, obj.getOffice());
-			st.setString(6, "ATIVO");
-			st.setDate(7, DATE);
+			st.setString(6, obj.getStatusCollaborator());
+			st.setDate(7, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Colaborador cadastrado com sucesso");
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
@@ -63,7 +57,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`collaborators` "
+					"UPDATE `collaborators` "
 					+ "SET `password` = ?, `privilege` = ?, `office` = ? "
 					+ "WHERE `registration` = ?");
 
@@ -73,7 +67,6 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 			st.setString(4, obj.getRegistration());
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Colaborador alterado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -88,7 +81,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`collaborators` " 
+					"UPDATE `collaborators` " 
 					+ "SET `statusCollaborator` = ?, `reason` = ? "
 					+ "WHERE `serialNumber` = ?");
 
@@ -97,7 +90,6 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 			st.setString(3, registration);
 			
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Colaborador desativado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -112,7 +104,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM `wti_inventory`.`collaborators`");
+			st = conn.prepareStatement("SELECT * FROM `collaborators`");
 
 			rs = st.executeQuery();
 

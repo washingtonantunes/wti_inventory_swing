@@ -5,11 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.swing.JOptionPane;
 
 import db.DB;
 import db.DBException;
@@ -17,8 +13,6 @@ import entities.Monitor;
 import model.dao.MonitorDao;
 
 public class MonitorDaoJDBC implements MonitorDao {
-
-	private final java.sql.Date DATE = new java.sql.Date(new Date().getTime());
 
 	private Connection conn;
 
@@ -31,7 +25,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO `wti_inventory`.`monitors` "
+					"INSERT INTO `monitors` "
 					+ "(`serialNumberMonitor`,"
 					+ "`modelMonitor`,"
 					+ "`patrimonyNumberMonitor`,"
@@ -43,11 +37,10 @@ public class MonitorDaoJDBC implements MonitorDao {
 			st.setString(1, obj.getSerialNumberMonitor());
 			st.setString(2, obj.getModelMonitor());
 			st.setString(3, obj.getPatrimonyNumberMonitor());
-			st.setString(4, "STAND BY");
-			st.setDate(5, DATE);
+			st.setString(4, obj.getStatusMonitor());
+			st.setDate(5, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Monitor cadastrado com sucesso");
 		} catch (SQLException e) {
 			throw new DBException(e.getMessage());
 		} finally {
@@ -60,7 +53,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`monitors` "
+					"UPDATE `monitors` "
 					+ "SET `patrimonyNumberMonitor` = ? "
 					+ "WHERE `serialNumberMonitor` = ?");
 
@@ -68,7 +61,6 @@ public class MonitorDaoJDBC implements MonitorDao {
 			st.setString(2, obj.getSerialNumberMonitor());
 
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Monitor alterado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -83,7 +75,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`equipments` "
+					"UPDATE `monitors` "
 					+ "SET `statusMonitor` = ? "
 					+ "WHERE `serialNumberMonitor` = ?");
 
@@ -105,7 +97,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `wti_inventory`.`equipments` " 
+					"UPDATE `monitors` " 
 					+ "SET `statusEquipment` = ?, `reason` = ? "
 					+ "WHERE `serialNumber` = ?");
 
@@ -114,7 +106,6 @@ public class MonitorDaoJDBC implements MonitorDao {
 			st.setString(3, serialNumberMonitor);
 			
 			st.executeUpdate();
-			JOptionPane.showMessageDialog(null, "Monitor desativado com sucesso");
 		} 
 		catch (SQLException e) {
 			throw new DBException(e.getMessage());
@@ -129,7 +120,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM `wti_inventory`.`monitors`");
+			st = conn.prepareStatement("SELECT * FROM `monitors`");
 
 			rs = st.executeQuery();
 

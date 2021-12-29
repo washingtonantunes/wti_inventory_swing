@@ -20,19 +20,19 @@ public class Collaborator implements Serializable {
 	public Collaborator() {
 	}
 	
-	public Collaborator(String name, String registration, String password, String privilege, String office, String statusCollaborator) {
-		super();
+	public Collaborator(String name, String registration, String password, String privilege, String office,
+			String statusCollaborator, Date dateEntry) {
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
 		this.privilege = privilege;
 		this.office = office;
 		this.statusCollaborator = statusCollaborator;
+		this.dateEntry = dateEntry;
 	}
 
 	public Collaborator(String name, String registration, String password, String privilege, String office,
 			String statusCollaborator, Date dateEntry, String reason) {
-		super();
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
