@@ -10,9 +10,7 @@ public interface ProjectDao {
 
 	void update(Project obj);
 
-	void deleteById(Integer id);
-
-	Project findById(Integer id);
+	void updateStatus(Integer idProject, String status);
 
 	List<Project> findAll();
 }

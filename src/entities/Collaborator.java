@@ -15,12 +15,23 @@ public class Collaborator implements Serializable {
 	private String office;
 	private String statusCollaborator;
 	private Date dateEntry;
+	private String reason;
 
 	public Collaborator() {
 	}
+	
+	public Collaborator(String name, String registration, String password, String privilege, String office, String statusCollaborator) {
+		super();
+		this.name = name;
+		this.registration = registration;
+		this.password = password;
+		this.privilege = privilege;
+		this.office = office;
+		this.statusCollaborator = statusCollaborator;
+	}
 
 	public Collaborator(String name, String registration, String password, String privilege, String office,
-			String statusCollaborator, Date dateEntry) {
+			String statusCollaborator, Date dateEntry, String reason) {
 		super();
 		this.name = name;
 		this.registration = registration;
@@ -29,6 +40,7 @@ public class Collaborator implements Serializable {
 		this.office = office;
 		this.statusCollaborator = statusCollaborator;
 		this.dateEntry = dateEntry;
+		this.reason = reason;
 	}
 
 	public String getName() {
@@ -85,6 +97,14 @@ public class Collaborator implements Serializable {
 
 	public void setDateEntry(Date dateEntry) {
 		this.dateEntry = dateEntry;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 	@Override

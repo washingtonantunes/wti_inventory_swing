@@ -9,20 +9,27 @@ public class Change implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer idChange;
-	private String changes;
 	private String object;
 	private String typeChange;
+	private String changes;
 	private Date dateChange;
 	private String author;
 
 	public Change() {
 	}
-
-	public Change(Integer idChange, String changes, String object, String typeChange, Date dateChange, String author) {
-		this.idChange = idChange;
-		this.changes = changes;
+	
+	public Change(String object, String typeChange, String changes, String author) {
 		this.object = object;
 		this.typeChange = typeChange;
+		this.changes = changes;
+		this.author = author;
+	}
+
+	public Change(Integer idChange, String object, String typeChange, String changes, Date dateChange, String author) {
+		this.idChange = idChange;
+		this.object = object;
+		this.typeChange = typeChange;
+		this.changes = changes;
 		this.dateChange = dateChange;
 		this.author = author;
 	}

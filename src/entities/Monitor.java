@@ -20,6 +20,13 @@ public class Monitor implements Serializable {
 
 	public Monitor() {
 	}
+	
+	public Monitor(String serialNumberMonitor, String modelMonitor, String patrimonyNumberMonitor, String statusMonitor) {
+		this.serialNumberMonitor = serialNumberMonitor;
+		this.modelMonitor = modelMonitor;
+		this.patrimonyNumberMonitor = patrimonyNumberMonitor;
+		this.statusMonitor = statusMonitor;
+	}
 
 	public Monitor(String serialNumberMonitor, String modelMonitor, String patrimonyNumberMonitor, String statusMonitor,
 			Date dateEntry, String reason, List<entities.Change> changes) {

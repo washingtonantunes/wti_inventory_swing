@@ -28,6 +28,23 @@ public class Equipment implements Serializable {
 
 	public Equipment() {
 	}
+	
+	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,
+			String patrimonyNumberEquipment, String brandEquipment, String modelEquipment, String memoryRam,
+			String hardDisk, String costType, Double valueEquipment, String statusEquipment) {
+		this.serialNumber = serialNumber;
+		this.hostName = hostName;
+		this.addressMAC = addressMAC;
+		this.typeEquipment = typeEquipment;
+		this.patrimonyNumberEquipment = patrimonyNumberEquipment;
+		this.brandEquipment = brandEquipment;
+		this.modelEquipment = modelEquipment;
+		this.memoryRam = memoryRam;
+		this.hardDisk = hardDisk;
+		this.costType = costType;
+		this.valueEquipment = valueEquipment;
+		this.statusEquipment = statusEquipment;
+	}
 
 	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,
 			String patrimonyNumberEquipment, String brandEquipment, String modelEquipment, String memoryRam,

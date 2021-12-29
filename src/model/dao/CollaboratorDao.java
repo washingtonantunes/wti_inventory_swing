@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import entities.Collaborator;
 
@@ -9,10 +9,8 @@ public interface CollaboratorDao {
 	void insert(Collaborator obj);
 
 	void update(Collaborator obj);
+	
+	void disable(String registration, String status, String reason);
 
-	void deleteById(Integer id);
-
-	Collaborator findById(Integer id);
-
-	List<Collaborator> findAll();
+	Map<String, Collaborator> findAll();
 }

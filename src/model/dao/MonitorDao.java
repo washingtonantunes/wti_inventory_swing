@@ -10,9 +10,9 @@ public interface MonitorDao {
 
 	void update(Monitor obj);
 
-	void deleteById(Integer id);
+	void updateStatus(String serialNumberMonitor, String status);
 
-	Monitor findById(Integer id);
+	void disable(String serialNumberMonitor, String status, String reason);
 
 	List<Monitor> findAll();
 }

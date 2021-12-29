@@ -10,9 +10,7 @@ public interface WorkPositionDao {
 
 	void update(WorkPosition obj);
 
-	void deleteById(Integer id);
-
-	WorkPosition findById(Integer id);
+	void updateStatus(String workPoint, String status);
 
 	List<WorkPosition> findAll();
 }

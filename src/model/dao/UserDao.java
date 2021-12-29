@@ -10,9 +10,7 @@ public interface UserDao {
 
 	void update(User obj);
 
-	void deleteById(Integer id);
-
-	User findById(Integer id);
+	void updateStatus(String registration, String status);
 
 	List<User> findAll();
 }
