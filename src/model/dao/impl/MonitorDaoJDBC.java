@@ -9,8 +9,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.Monitor;
 import model.dao.MonitorDao;
+import model.entities.Monitor;
 
 public class MonitorDaoJDBC implements MonitorDao {
 
@@ -34,10 +34,10 @@ public class MonitorDaoJDBC implements MonitorDao {
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?)");
 			
-			st.setString(1, obj.getSerialNumberMonitor());
-			st.setString(2, obj.getModelMonitor());
-			st.setString(3, obj.getPatrimonyNumberMonitor());
-			st.setString(4, obj.getStatusMonitor());
+			st.setString(1, obj.getSerialNumber());
+			st.setString(2, obj.getModel());
+			st.setString(3, obj.getPatrimonyNumber());
+			st.setString(4, obj.getStatus());
 			st.setDate(5, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
@@ -57,8 +57,8 @@ public class MonitorDaoJDBC implements MonitorDao {
 					+ "SET `patrimonyNumberMonitor` = ? "
 					+ "WHERE `serialNumberMonitor` = ?");
 
-			st.setString(1, obj.getPatrimonyNumberMonitor());
-			st.setString(2, obj.getSerialNumberMonitor());
+			st.setString(1, obj.getPatrimonyNumber());
+			st.setString(2, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -129,10 +129,10 @@ public class MonitorDaoJDBC implements MonitorDao {
 			while (rs.next()) {
 				Monitor monitor = new Monitor();
 
-				monitor.setSerialNumberMonitor(rs.getString("serialNumberMonitor"));
-				monitor.setModelMonitor(rs.getString("modelMonitor"));
-				monitor.setPatrimonyNumberMonitor(rs.getString("patrimonyNumberMonitor"));
-				monitor.setStatusMonitor(rs.getString("statusMonitor"));
+				monitor.setSerialNumber(rs.getString("serialNumberMonitor"));
+				monitor.setModel(rs.getString("modelMonitor"));
+				monitor.setPatrimonyNumber(rs.getString("patrimonyNumberMonitor"));
+				monitor.setStatus(rs.getString("statusMonitor"));
 				monitor.setDateEntry(rs.getDate("dateEntry"));
 				//monitor.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(monitor.getSerialNumberMonitor())).collect(Collectors.toList()));
 				monitor.setReason(rs.getString("reason"));

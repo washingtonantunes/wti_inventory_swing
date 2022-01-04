@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,7 +8,7 @@ public class Option implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer idOption;
+	private Integer id;
 	private String option;
 	private String type;
 	private String statusOption;
@@ -16,7 +16,7 @@ public class Option implements Serializable {
 
 	public Option() {
 	}
-	
+
 	public Option(String option, String type, String statusOption, Date dateEntry) {
 		this.option = option;
 		this.type = type;
@@ -24,20 +24,20 @@ public class Option implements Serializable {
 		this.dateEntry = dateEntry;
 	}
 
-	public Option(Integer idOption, String option, String type, String statusOption, Date dateEntry) {
-		this.idOption = idOption;
+	public Option(Integer id, String option, String type, String statusOption, Date dateEntry) {
+		this.id = id;
 		this.option = option;
 		this.type = type;
 		this.statusOption = statusOption;
 		this.dateEntry = dateEntry;
 	}
 
-	public Integer getIdOption() {
-		return idOption;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdOption(Integer idOption) {
-		this.idOption = idOption;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getOption() {
@@ -74,7 +74,7 @@ public class Option implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idOption, option);
+		return Objects.hash(id, option);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class Option implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Option other = (Option) obj;
-		return Objects.equals(idOption, other.idOption) && Objects.equals(option, other.option);
+		return Objects.equals(id, other.id) && Objects.equals(option, other.option);
 	}
 
 	@Override

@@ -12,13 +12,13 @@ import java.util.Map;
 
 import db.DB;
 import db.DBException;
-import entities.Equipment;
-import entities.Inventory;
-import entities.Monitor;
-import entities.Project;
-import entities.User;
-import entities.WorkPosition;
 import model.dao.InventoryDao;
+import model.entities.Equipment;
+import model.entities.Inventory;
+import model.entities.Monitor;
+import model.entities.Project;
+import model.entities.User;
+import model.entities.WorkPosition;
 
 public class InventoryDaoJDBC implements InventoryDao {
 	
@@ -45,11 +45,11 @@ public class InventoryDaoJDBC implements InventoryDao {
 					Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, obj.getWorkPosition().getWorkPoint());
-			st.setString(2, obj.getProject().getNameProject());
+			st.setString(2, obj.getProject().getName());
 			st.setString(3, obj.getUser().getRegistration());
 			st.setString(4, obj.getEquipment().getSerialNumber());
-			st.setString(5, obj.getMonitor1().getSerialNumberMonitor());
-			st.setString(6, obj.getMonitor2().getSerialNumberMonitor());
+			st.setString(5, obj.getMonitor1().getSerialNumber());
+			st.setString(6, obj.getMonitor2().getSerialNumber());
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -84,8 +84,8 @@ public class InventoryDaoJDBC implements InventoryDao {
 
 			st.setString(1, obj.getWorkPosition().getWorkPoint());
 			st.setString(2, obj.getEquipment().getSerialNumber());
-			st.setString(3, obj.getMonitor1().getSerialNumberMonitor());
-			st.setString(4, obj.getMonitor2().getSerialNumberMonitor());
+			st.setString(3, obj.getMonitor1().getSerialNumber());
+			st.setString(4, obj.getMonitor2().getSerialNumber());
 			st.setInt(5, obj.getIdInventory());
 
 			st.executeUpdate();
@@ -202,8 +202,8 @@ public class InventoryDaoJDBC implements InventoryDao {
 	
 	private Project instatiateProject(ResultSet rs) throws SQLException {
 		Project project = new Project();
-		project.setIdProject(rs.getInt("idProject"));
-		project.setNameProject(rs.getString("nameProject"));
+		project.setId(rs.getInt("idProject"));
+		project.setName(rs.getString("nameProject"));
 		project.setLocality(rs.getString("locality"));
 		project.setCostCenter(rs.getString("costCenter"));
 		return project;
@@ -226,30 +226,30 @@ public class InventoryDaoJDBC implements InventoryDao {
 		equipment.setSerialNumber(rs.getString("serialNumber"));
 		equipment.setHostName(rs.getString("hostname"));
 		equipment.setAddressMAC(rs.getString("addressMAC"));
-		equipment.setTypeEquipment(rs.getString("typeEquipment"));
-		equipment.setPatrimonyNumberEquipment(rs.getString("patrimonyNumberEquipment"));
-		equipment.setBrandEquipment(rs.getString("brandEquipment"));
-		equipment.setModelEquipment(rs.getString("modelEquipment"));
+		equipment.setType(rs.getString("typeEquipment"));
+		equipment.setPatrimonyNumber(rs.getString("patrimonyNumberEquipment"));
+		equipment.setBrand(rs.getString("brandEquipment"));
+		equipment.setModel(rs.getString("modelEquipment"));
 		equipment.setMemoryRam(rs.getString("memoryRam"));
 		equipment.setHardDisk(rs.getString("hardDisk"));
 		equipment.setCostType(rs.getString("costType"));
-		equipment.setValueEquipment(rs.getDouble("valueEquipment"));
+		equipment.setValue(rs.getDouble("valueEquipment"));
 		return equipment;
 	}
 	
 	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
 		Monitor monitor = new Monitor();
-		monitor.setSerialNumberMonitor(rs.getString("serialNumberMonitor1"));
-		monitor.setModelMonitor(rs.getString("modelMonitor1"));
-		monitor.setPatrimonyNumberMonitor(rs.getString("patrimonyNumberMonitor1"));
+		monitor.setSerialNumber(rs.getString("serialNumberMonitor1"));
+		monitor.setModel(rs.getString("modelMonitor1"));
+		monitor.setPatrimonyNumber(rs.getString("patrimonyNumberMonitor1"));
 		return monitor;
 	}
 	
 	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
 		Monitor monitor = new Monitor();
-		monitor.setSerialNumberMonitor(rs.getString("serialNumberMonitor2"));
-		monitor.setModelMonitor(rs.getString("modelMonitor2"));
-		monitor.setPatrimonyNumberMonitor(rs.getString("patrimonyNumberMonitor2"));
+		monitor.setSerialNumber(rs.getString("serialNumberMonitor2"));
+		monitor.setModel(rs.getString("modelMonitor2"));
+		monitor.setPatrimonyNumber(rs.getString("patrimonyNumberMonitor2"));
 		return monitor;
 	}
 }

@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +17,7 @@ public class Change implements Serializable {
 
 	public Change() {
 	}
-	
+
 	public Change(String object, String typeChange, String changes, String author) {
 		this.object = object;
 		this.typeChange = typeChange;

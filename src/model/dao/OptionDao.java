@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.List;
 
-import entities.Option;
+import model.entities.Option;
 
 public interface OptionDao {
 

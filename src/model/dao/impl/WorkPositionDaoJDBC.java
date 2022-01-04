@@ -9,8 +9,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.WorkPosition;
 import model.dao.WorkPositionDao;
+import model.entities.WorkPosition;
 
 public class WorkPositionDaoJDBC implements WorkPositionDao {
 	
@@ -39,7 +39,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 			st.setString(2, obj.getLocation());
 			st.setString(3, obj.getFloors());
 			st.setString(4, obj.getNetPoint());
-			st.setString(5, obj.getStatusWorkPoint());
+			st.setString(5, obj.getStatus());
 			st.setDate(6, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
@@ -135,7 +135,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 				workPosition.setLocation(rs.getString("location"));
 				workPosition.setFloors(rs.getString("floors"));
 				workPosition.setNetPoint(rs.getString("netPoint"));
-				workPosition.setStatusWorkPoint(rs.getString("statusWorkPosition"));
+				workPosition.setStatus(rs.getString("statusWorkPosition"));
 				workPosition.setDateEntry(rs.getDate("dateEntry"));
 				//workPosition.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
 				workPosition.setReason(rs.getString("reason"));

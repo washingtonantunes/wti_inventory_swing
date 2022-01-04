@@ -9,8 +9,8 @@ import java.util.Map;
 
 import db.DB;
 import db.DBException;
-import entities.Collaborator;
 import model.dao.CollaboratorDao;
+import model.entities.Collaborator;
 
 public class CollaboratorDaoJDBC implements CollaboratorDao {
 	

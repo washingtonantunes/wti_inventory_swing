@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.List;
 
-import entities.Change;
+import model.entities.Change;
 
 public interface ChangeDao {
 

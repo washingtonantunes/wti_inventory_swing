@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,10 +9,10 @@ public class Monitor implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String serialNumberMonitor;
-	private String modelMonitor;
-	private String patrimonyNumberMonitor;
-	private String statusMonitor;
+	private String serialNumber;
+	private String model;
+	private String patrimonyNumber;
+	private String status;
 	private Date dateEntry;
 	private String reason;
 
@@ -20,57 +20,57 @@ public class Monitor implements Serializable {
 
 	public Monitor() {
 	}
-	
-	public Monitor(String serialNumberMonitor, String modelMonitor, String patrimonyNumberMonitor, String statusMonitor,
+
+	public Monitor(String serialNumber, String model, String patrimonyNumber, String status,
 			Date dateEntry) {
-		this.serialNumberMonitor = serialNumberMonitor;
-		this.modelMonitor = modelMonitor;
-		this.patrimonyNumberMonitor = patrimonyNumberMonitor;
-		this.statusMonitor = statusMonitor;
+		this.serialNumber = serialNumber;
+		this.model = model;
+		this.patrimonyNumber = patrimonyNumber;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
-	public Monitor(String serialNumberMonitor, String modelMonitor, String patrimonyNumberMonitor, String statusMonitor,
-			Date dateEntry, String reason, List<entities.Change> changes) {
-		this.serialNumberMonitor = serialNumberMonitor;
-		this.modelMonitor = modelMonitor;
-		this.patrimonyNumberMonitor = patrimonyNumberMonitor;
-		this.statusMonitor = statusMonitor;
+	public Monitor(String serialNumber, String model, String patrimonyNumber, String status,
+			Date dateEntry, String reason, List<model.entities.Change> changes) {
+		this.serialNumber = serialNumber;
+		this.model = model;
+		this.patrimonyNumber = patrimonyNumber;
+		this.status = status;
 		this.dateEntry = dateEntry;
 		this.reason = reason;
 		this.changes = changes;
 	}
 
-	public String getSerialNumberMonitor() {
-		return serialNumberMonitor;
+	public String getSerialNumber() {
+		return serialNumber;
 	}
 
-	public void setSerialNumberMonitor(String serialNumberMonitor) {
-		this.serialNumberMonitor = serialNumberMonitor;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
-	public String getModelMonitor() {
-		return modelMonitor;
+	public String getModel() {
+		return model;
 	}
 
-	public void setModelMonitor(String modelMonitor) {
-		this.modelMonitor = modelMonitor;
+	public void setModel(String model) {
+		this.model = model;
 	}
 
-	public String getPatrimonyNumberMonitor() {
-		return patrimonyNumberMonitor;
+	public String getPatrimonyNumber() {
+		return patrimonyNumber;
 	}
 
-	public void setPatrimonyNumberMonitor(String patrimonyNumberMonitor) {
-		this.patrimonyNumberMonitor = patrimonyNumberMonitor;
+	public void setPatrimonyNumber(String patrimonyNumber) {
+		this.patrimonyNumber = patrimonyNumber;
 	}
 
-	public String getStatusMonitor() {
-		return statusMonitor;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusMonitor(String statusMonitor) {
-		this.statusMonitor = statusMonitor;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getDateEntry() {
@@ -99,7 +99,7 @@ public class Monitor implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(serialNumberMonitor);
+		return Objects.hash(serialNumber);
 	}
 
 	@Override
@@ -111,11 +111,11 @@ public class Monitor implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Monitor other = (Monitor) obj;
-		return Objects.equals(serialNumberMonitor, other.serialNumberMonitor);
+		return Objects.equals(serialNumber, other.serialNumber);
 	}
 
 	@Override
 	public String toString() {
-		return serialNumberMonitor;
+		return serialNumber;
 	}
 }

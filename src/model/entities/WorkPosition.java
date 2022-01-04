@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +13,7 @@ public class WorkPosition implements Serializable {
 	private String location;
 	private String floors;
 	private String netPoint;
-	private String statusWorkPoint;
+	private String status;
 	private Date dateEntry;
 	private String reason;
 
@@ -21,24 +21,24 @@ public class WorkPosition implements Serializable {
 
 	public WorkPosition() {
 	}
-	
-	public WorkPosition(String workPoint, String location, String floors, String netPoint, String statusWorkPoint,
+
+	public WorkPosition(String workPoint, String location, String floors, String netPoint, String status,
 			Date dateEntry) {
 		this.workPoint = workPoint;
 		this.location = location;
 		this.floors = floors;
 		this.netPoint = netPoint;
-		this.statusWorkPoint = statusWorkPoint;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
-	public WorkPosition(String workPoint, String location, String floors, String netPoint, String statusWorkPoint,
+	public WorkPosition(String workPoint, String location, String floors, String netPoint, String status,
 			Date dateEntry, String reason, List<Change> changes) {
 		this.workPoint = workPoint;
 		this.location = location;
 		this.floors = floors;
 		this.netPoint = netPoint;
-		this.statusWorkPoint = statusWorkPoint;
+		this.status = status;
 		this.dateEntry = dateEntry;
 		this.reason = reason;
 		this.changes = changes;
@@ -76,12 +76,12 @@ public class WorkPosition implements Serializable {
 		this.netPoint = netPoint;
 	}
 
-	public String getStatusWorkPoint() {
-		return statusWorkPoint;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusWorkPoint(String statusWorkPoint) {
-		this.statusWorkPoint = statusWorkPoint;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getDateEntry() {

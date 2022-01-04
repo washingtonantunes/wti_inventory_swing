@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -112,8 +112,8 @@ public class Inventory implements Serializable {
 				+ "]";
 	}
 
-	/*@Override
-	public String toString() {
-		return "Inventory [idInventory=" + idInventory + "]";
-	}*/
+	/*
+	 * @Override public String toString() { return "Inventory [idInventory=" +
+	 * idInventory + "]"; }
+	 */
 }

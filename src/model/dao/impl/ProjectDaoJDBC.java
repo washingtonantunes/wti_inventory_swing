@@ -10,8 +10,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.Project;
 import model.dao.ProjectDao;
+import model.entities.Project;
 
 public class ProjectDaoJDBC implements ProjectDao {
 
@@ -36,10 +36,10 @@ public class ProjectDaoJDBC implements ProjectDao {
 					+ "(?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			
-			st.setString(1, obj.getNameProject());
+			st.setString(1, obj.getName());
 			st.setString(2, obj.getLocality());
 			st.setString(3, obj.getCostCenter());
-			st.setString(4, obj.getStatusProject());
+			st.setString(4, obj.getStatus());
 			st.setDate(5, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			int rowsAffected = st.executeUpdate();
@@ -48,7 +48,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					obj.setIdProject(id);
+					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
 			}
@@ -73,7 +73,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 
 			st.setString(1, obj.getLocality());
 			st.setString(2, obj.getCostCenter());
-			st.setInt(3, obj.getIdProject());
+			st.setInt(3, obj.getId());
 
 			st.executeUpdate();
 		} 
@@ -122,11 +122,11 @@ public class ProjectDaoJDBC implements ProjectDao {
 			while (rs.next()) {
 				Project project = new Project();
 
-				project.setIdProject(rs.getInt("idProject"));
-				project.setNameProject(rs.getString("nameProject"));
+				project.setId(rs.getInt("idProject"));
+				project.setName(rs.getString("nameProject"));
 				project.setLocality(rs.getString("locality"));
 				project.setCostCenter(rs.getString("costCenter"));
-				project.setStatusProject(rs.getString("statusProject"));
+				project.setStatus(rs.getString("statusProject"));
 				project.setDateEntry(rs.getDate("dateEntry"));
 				//project.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(project.getNameProject())).collect(Collectors.toList()));
 				project.setReason(rs.getString("reason"));

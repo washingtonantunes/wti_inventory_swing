@@ -10,8 +10,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.Option;
 import model.dao.OptionDao;
+import model.entities.Option;
 
 public class OptionDaoJDBC implements OptionDao {
 	
@@ -46,7 +46,7 @@ public class OptionDaoJDBC implements OptionDao {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					obj.setIdOption(id);
+					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
 			}
@@ -70,7 +70,7 @@ public class OptionDaoJDBC implements OptionDao {
 					+ "WHERE `idOption` = ?");
 
 			st.setString(1, obj.getOption());
-			st.setInt(2, obj.getIdOption());
+			st.setInt(2, obj.getId());
 
 			st.executeUpdate();
 		} 
@@ -118,7 +118,7 @@ public class OptionDaoJDBC implements OptionDao {
 			while (rs.next()) {
 				Option option = new Option();
 				
-				option.setIdOption(rs.getInt("idOption"));
+				option.setId(rs.getInt("idOption"));
 				option.setOption(rs.getString("option"));
 				option.setType(rs.getString("type"));
 				option.setStatusOption(rs.getString("statusOption"));

@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.List;
 
-import entities.Monitor;
+import model.entities.Monitor;
 
 public interface MonitorDao {
 

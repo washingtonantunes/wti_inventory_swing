@@ -10,8 +10,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.Change;
 import model.dao.ChangeDao;
+import model.entities.Change;
 
 public class ChangeDaoJDBC implements ChangeDao {
 	

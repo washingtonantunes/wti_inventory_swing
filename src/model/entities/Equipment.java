@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,15 +12,15 @@ public class Equipment implements Serializable {
 	private String serialNumber;
 	private String hostName;
 	private String addressMAC;
-	private String typeEquipment;
-	private String patrimonyNumberEquipment;
-	private String brandEquipment;
-	private String modelEquipment;
+	private String type;
+	private String patrimonyNumber;
+	private String brand;
+	private String model;
 	private String memoryRam;
 	private String hardDisk;
 	private String costType;
-	private Double valueEquipment;
-	private String statusEquipment;
+	private Double value;
+	private String status;
 	private Date dateEntry;
 	private String reason;
 
@@ -28,41 +28,41 @@ public class Equipment implements Serializable {
 
 	public Equipment() {
 	}
-	
-	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,
-			String patrimonyNumberEquipment, String brandEquipment, String modelEquipment, String memoryRam,
-			String hardDisk, String costType, Double valueEquipment, String statusEquipment, Date dateEntry) {
+
+	public Equipment(String serialNumber, String hostName, String addressMAC, String type,
+			String patrimonyNumber, String brand, String model, String memoryRam,
+			String hardDisk, String costType, Double value, String status, Date dateEntry) {
 		this.serialNumber = serialNumber;
 		this.hostName = hostName;
 		this.addressMAC = addressMAC;
-		this.typeEquipment = typeEquipment;
-		this.patrimonyNumberEquipment = patrimonyNumberEquipment;
-		this.brandEquipment = brandEquipment;
-		this.modelEquipment = modelEquipment;
+		this.type = type;
+		this.patrimonyNumber = patrimonyNumber;
+		this.brand = brand;
+		this.model = model;
 		this.memoryRam = memoryRam;
 		this.hardDisk = hardDisk;
 		this.costType = costType;
-		this.valueEquipment = valueEquipment;
-		this.statusEquipment = statusEquipment;
+		this.value = value;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
-	public Equipment(String serialNumber, String hostName, String addressMAC, String typeEquipment,
-			String patrimonyNumberEquipment, String brandEquipment, String modelEquipment, String memoryRam,
-			String hardDisk, String costType, Double valueEquipment, String statusEquipment, Date dateEntry,
-			String reason, List<entities.Change> changes) {
+	public Equipment(String serialNumber, String hostName, String addressMAC, String type,
+			String patrimonyNumber, String brand, String model, String memoryRam,
+			String hardDisk, String costType, Double value, String status, Date dateEntry,
+			String reason, List<model.entities.Change> changes) {
 		this.serialNumber = serialNumber;
 		this.hostName = hostName;
 		this.addressMAC = addressMAC;
-		this.typeEquipment = typeEquipment;
-		this.patrimonyNumberEquipment = patrimonyNumberEquipment;
-		this.brandEquipment = brandEquipment;
-		this.modelEquipment = modelEquipment;
+		this.type = type;
+		this.patrimonyNumber = patrimonyNumber;
+		this.brand = brand;
+		this.model = model;
 		this.memoryRam = memoryRam;
 		this.hardDisk = hardDisk;
 		this.costType = costType;
-		this.valueEquipment = valueEquipment;
-		this.statusEquipment = statusEquipment;
+		this.value = value;
+		this.status = status;
 		this.dateEntry = dateEntry;
 		this.reason = reason;
 		this.changes = changes;
@@ -92,36 +92,36 @@ public class Equipment implements Serializable {
 		this.addressMAC = addressMAC;
 	}
 
-	public String getTypeEquipment() {
-		return typeEquipment;
+	public String getType() {
+		return type;
 	}
 
-	public void setTypeEquipment(String typeEquipment) {
-		this.typeEquipment = typeEquipment;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getPatrimonyNumberEquipment() {
-		return patrimonyNumberEquipment;
+	public String getPatrimonyNumber() {
+		return patrimonyNumber;
 	}
 
-	public void setPatrimonyNumberEquipment(String patrimonyNumberEquipment) {
-		this.patrimonyNumberEquipment = patrimonyNumberEquipment;
+	public void setPatrimonyNumber(String patrimonyNumber) {
+		this.patrimonyNumber = patrimonyNumber;
 	}
 
-	public String getBrandEquipment() {
-		return brandEquipment;
+	public String getBrand() {
+		return brand;
 	}
 
-	public void setBrandEquipment(String brandEquipment) {
-		this.brandEquipment = brandEquipment;
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 
-	public String getModelEquipment() {
-		return modelEquipment;
+	public String getModel() {
+		return model;
 	}
 
-	public void setModelEquipment(String modelEquipment) {
-		this.modelEquipment = modelEquipment;
+	public void setModel(String model) {
+		this.model = model;
 	}
 
 	public String getMemoryRam() {
@@ -148,20 +148,20 @@ public class Equipment implements Serializable {
 		this.costType = costType;
 	}
 
-	public Double getValueEquipment() {
-		return valueEquipment;
+	public Double getValue() {
+		return value;
 	}
 
-	public void setValueEquipment(Double valueEquipment) {
-		this.valueEquipment = valueEquipment;
+	public void setValue(Double value) {
+		this.value = value;
 	}
 
-	public String getStatusEquipment() {
-		return statusEquipment;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusEquipment(String statusEquipment) {
-		this.statusEquipment = statusEquipment;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getDateEntry() {

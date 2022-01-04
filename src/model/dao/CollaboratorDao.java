@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.Map;
 
-import entities.Collaborator;
+import model.entities.Collaborator;
 
 public interface CollaboratorDao {
 

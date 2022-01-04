@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.List;
 
-import entities.Equipment;
+import model.entities.Equipment;
 
 public interface EquipmentDao {
 

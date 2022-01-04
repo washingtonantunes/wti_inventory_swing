@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,17 +16,17 @@ public class User implements Serializable {
 	private String email;
 	private String project;
 	private String department;
-	private String statusUser;
+	private String status;
 	private Date dateEntry;
 	private String reason;
-	
+
 	private List<Change> changes;
 
 	public User() {
 	}
-	
+
 	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
-			String department, String statusUser, Date dateEntry) {
+			String department, String status, Date dateEntry) {
 		this.registration = registration;
 		this.nameUser = nameUser;
 		this.cpf = cpf;
@@ -34,12 +34,12 @@ public class User implements Serializable {
 		this.email = email;
 		this.project = project;
 		this.department = department;
-		this.statusUser = statusUser;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
 	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
-			String department, String statusUser, String reason, Date dateEntry) {
+			String department, String status, String reason, Date dateEntry) {
 		this.registration = registration;
 		this.nameUser = nameUser;
 		this.cpf = cpf;
@@ -47,7 +47,7 @@ public class User implements Serializable {
 		this.email = email;
 		this.project = project;
 		this.department = department;
-		this.statusUser = statusUser;
+		this.status = status;
 		this.reason = reason;
 		this.dateEntry = dateEntry;
 	}
@@ -108,12 +108,12 @@ public class User implements Serializable {
 		this.department = department;
 	}
 
-	public String getStatusUser() {
-		return statusUser;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusUser(String statusUser) {
-		this.statusUser = statusUser;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getReason() {
@@ -131,11 +131,11 @@ public class User implements Serializable {
 	public void setDateEntry(Date dateEntry) {
 		this.dateEntry = dateEntry;
 	}
-	
+
 	public List<Change> getChanges() {
 		return changes;
 	}
-	
+
 	public void setChanges(List<Change> changes) {
 		this.changes = changes;
 	}

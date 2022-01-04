@@ -2,7 +2,7 @@ package model.dao;
 
 import java.util.List;
 
-import entities.Project;
+import model.entities.Project;
 
 public interface ProjectDao {
 

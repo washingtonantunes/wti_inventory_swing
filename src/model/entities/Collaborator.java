@@ -1,4 +1,4 @@
-package entities;
+package model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,32 +13,32 @@ public class Collaborator implements Serializable {
 	private String password;
 	private String privilege;
 	private String office;
-	private String statusCollaborator;
+	private String status;
 	private Date dateEntry;
 	private String reason;
 
 	public Collaborator() {
 	}
-	
+
 	public Collaborator(String name, String registration, String password, String privilege, String office,
-			String statusCollaborator, Date dateEntry) {
+			String status, Date dateEntry) {
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
 		this.privilege = privilege;
 		this.office = office;
-		this.statusCollaborator = statusCollaborator;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
 	public Collaborator(String name, String registration, String password, String privilege, String office,
-			String statusCollaborator, Date dateEntry, String reason) {
+			String status, Date dateEntry, String reason) {
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
 		this.privilege = privilege;
 		this.office = office;
-		this.statusCollaborator = statusCollaborator;
+		this.status = status;
 		this.dateEntry = dateEntry;
 		this.reason = reason;
 	}
@@ -84,11 +84,11 @@ public class Collaborator implements Serializable {
 	}
 
 	public String getStatusCollaborator() {
-		return statusCollaborator;
+		return status;
 	}
 
-	public void setStatusCollaborator(String statusCollaborator) {
-		this.statusCollaborator = statusCollaborator;
+	public void setStatusCollaborator(String status) {
+		this.status = status;
 	}
 
 	public Date getDateEntry() {

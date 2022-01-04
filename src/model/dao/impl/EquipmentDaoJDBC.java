@@ -9,8 +9,8 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
-import entities.Equipment;
 import model.dao.EquipmentDao;
+import model.entities.Equipment;
 
 public class EquipmentDaoJDBC implements EquipmentDao {
 
@@ -45,15 +45,15 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(1, obj.getSerialNumber());
 			st.setString(2, obj.getHostName());
 			st.setString(3, obj.getAddressMAC());
-			st.setString(4, obj.getTypeEquipment());
-			st.setString(5, obj.getPatrimonyNumberEquipment());
-			st.setString(6, obj.getBrandEquipment());
-			st.setString(7, obj.getModelEquipment());
+			st.setString(4, obj.getType());
+			st.setString(5, obj.getPatrimonyNumber());
+			st.setString(6, obj.getBrand());
+			st.setString(7, obj.getModel());
 			st.setString(8, obj.getMemoryRam());
 			st.setString(9, obj.getHardDisk());
 			st.setString(10, obj.getCostType());
-			st.setDouble(11, obj.getValueEquipment());
-			st.setString(12, obj.getStatusEquipment());
+			st.setDouble(11, obj.getValue());
+			st.setString(12, obj.getStatus());
 			st.setDate(13, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
@@ -78,7 +78,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(1, obj.getMemoryRam());
 			st.setString(2, obj.getHardDisk());
 			st.setString(3, obj.getCostType());
-			st.setDouble(4, obj.getValueEquipment());
+			st.setDouble(4, obj.getValue());
 			st.setString(5, obj.getSerialNumber());
 
 			st.executeUpdate();
@@ -153,15 +153,15 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setSerialNumber(rs.getString("serialNumber"));
 				equipment.setHostName(rs.getString("hostname"));
 				equipment.setAddressMAC(rs.getString("addressMAC"));
-				equipment.setTypeEquipment(rs.getString("typeEquipment"));
-				equipment.setPatrimonyNumberEquipment(rs.getString("patrimonyNumberEquipment"));
-				equipment.setBrandEquipment(rs.getString("brandEquipment"));
-				equipment.setModelEquipment(rs.getString("modelEquipment"));
+				equipment.setType(rs.getString("typeEquipment"));
+				equipment.setPatrimonyNumber(rs.getString("patrimonyNumberEquipment"));
+				equipment.setBrand(rs.getString("brandEquipment"));
+				equipment.setModel(rs.getString("modelEquipment"));
 				equipment.setMemoryRam(rs.getString("memoryRam"));
 				equipment.setHardDisk(rs.getString("hardDisk"));
 				equipment.setCostType(rs.getString("costType"));
-				equipment.setValueEquipment(rs.getDouble("valueEquipment"));
-				equipment.setStatusEquipment(rs.getString("statusEquipment"));
+				equipment.setValue(rs.getDouble("valueEquipment"));
+				equipment.setStatus(rs.getString("statusEquipment"));
 				equipment.setDateEntry(rs.getDate("dateEntry"));
 				// equipment.setChanges(Window.getChange().stream().filter(c ->
 				// c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
