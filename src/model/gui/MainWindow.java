@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,11 +17,11 @@ public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(1300, 710);
+	private static final Dimension DIMENSIONMAINPANEL = new Dimension(1350, 710);
 
 	private final MenuBar menu = new MenuBar(1);
-	
-	private final static JFrame mainFrame = new JFrame();
+
+	private static JDesktopPane main;
 
 	public MainWindow() {
 		initComponents();
@@ -29,15 +30,12 @@ public class MainWindow extends JFrame {
 	private void initComponents() {
 		setJMenuBar(menu);
 
-		add(createPanelMain());
+		add(create());
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new CardLayout());
 		setTitle("wTI Inventory");
 		setPreferredSize(DIMENSIONMAINPANEL);
 		setResizable(false);
-		
-		
 
 		pack();
 		setLocationRelativeTo(null);
@@ -66,7 +64,16 @@ public class MainWindow extends JFrame {
 		return panel;
 	}
 
-	public static JFrame getFrame() {
-		return mainFrame;
+	private JDesktopPane create() {
+		main = new JDesktopPane();
+		main.setLayout(new CardLayout());
+
+		main.add(createPanelMain());
+
+		return main;
+	}
+
+	public static JDesktopPane getMain() {
+		return main;
 	}
 }

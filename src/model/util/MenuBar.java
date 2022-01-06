@@ -8,6 +8,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import model.gui.EquipmentsList;
+import model.gui.MainWindow;
+
 public class MenuBar extends JMenuBar {
 
 	private static final long serialVersionUID = 1L;
@@ -130,7 +133,10 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemEquipmentsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-
+			MainWindow.getMain().removeAll();
+			final EquipmentsList equipmentsList = new EquipmentsList();
+			MainWindow.getMain().add(equipmentsList);
+			equipmentsList.setVisible(true);
 		}
 	}
 
