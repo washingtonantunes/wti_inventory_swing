@@ -8,8 +8,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import model.gui.EquipmentsList;
 import model.gui.MainWindow;
+import model.gui.equipment.EquipmentsList;
 
 public class MenuBar extends JMenuBar {
 
@@ -136,7 +136,7 @@ public class MenuBar extends JMenuBar {
 			MainWindow.getMain().removeAll();
 			final EquipmentsList equipmentsList = new EquipmentsList();
 			MainWindow.getMain().add(equipmentsList);
-			equipmentsList.setVisible(true);
+			MainWindow.getMain().revalidate();
 		}
 	}
 

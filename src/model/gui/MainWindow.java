@@ -22,6 +22,8 @@ public class MainWindow extends JFrame {
 	private final MenuBar menu = new MenuBar(1);
 
 	private static JDesktopPane main;
+	
+	public static String author = "Washington Antunes";
 
 	public MainWindow() {
 		initComponents();
