@@ -48,7 +48,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					obj.setIdChange(id);
+					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
 			}
@@ -76,7 +76,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 			while (rs.next()) {
 				Change change = new Change();
 
-				change.setIdChange(rs.getInt("idChange"));
+				change.setId(rs.getInt("id"));
 				change.setChanges(rs.getString("changes"));
 				change.setDateChange(rs.getDate("dateChange"));
 				change.setObject(rs.getString("object"));

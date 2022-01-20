@@ -27,17 +27,17 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `equipments` "
 					+ "(`serialNumber`,"
-					+ "`hostname`,"
+					+ "`hostName`,"
 					+ "`addressMAC`,"
-					+ "`typeEquipment`,"
-					+ "`patrimonyNumberEquipment`,"
-					+ "`brandEquipment`,"
-					+ "`modelEquipment`,"
+					+ "`type`,"
+					+ "`patrimonyNumber`,"
+					+ "`brand`,"
+					+ "`model`,"
 					+ "`memoryRam`,"
 					+ "`hardDisk`,"
 					+ "`costType`,"
-					+ "`valueEquipment`,"
-					+ "`statusEquipment`,"
+					+ "`value`,"
+					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES " 
 					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -72,8 +72,11 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
-					+ "SET `memoryRam` = ?, hardDisk = ?, costType = ?, valueEquipment = ? "
-					+ "WHERE serialNumber = ?");
+					+ "SET `memoryRam` = ?, "
+					+ "`hardDisk` = ?, "
+					+ "`costType` = ?, "
+					+ "`value` = ? "
+					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getMemoryRam());
 			st.setString(2, obj.getHardDisk());
@@ -97,7 +100,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
-					+ "SET `statusEquipment` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, status);
@@ -119,7 +122,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` " 
-					+ "SET `statusEquipment` = ?, `reason` = ? "
+					+ "SET `status` = ?, `reason` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, status);
@@ -151,17 +154,17 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				Equipment equipment = new Equipment();
 
 				equipment.setSerialNumber(rs.getString("serialNumber"));
-				equipment.setHostName(rs.getString("hostname"));
+				equipment.setHostName(rs.getString("hostName"));
 				equipment.setAddressMAC(rs.getString("addressMAC"));
-				equipment.setType(rs.getString("typeEquipment"));
-				equipment.setPatrimonyNumber(rs.getString("patrimonyNumberEquipment"));
-				equipment.setBrand(rs.getString("brandEquipment"));
-				equipment.setModel(rs.getString("modelEquipment"));
+				equipment.setType(rs.getString("type"));
+				equipment.setPatrimonyNumber(rs.getString("patrimonyNumber"));
+				equipment.setBrand(rs.getString("brand"));
+				equipment.setModel(rs.getString("model"));
 				equipment.setMemoryRam(rs.getString("memoryRam"));
 				equipment.setHardDisk(rs.getString("hardDisk"));
 				equipment.setCostType(rs.getString("costType"));
-				equipment.setValue(rs.getDouble("valueEquipment"));
-				equipment.setStatus(rs.getString("statusEquipment"));
+				equipment.setValue(rs.getDouble("value"));
+				equipment.setStatus(rs.getString("status"));
 				equipment.setDateEntry(rs.getDate("dateEntry"));
 				// equipment.setChanges(Window.getChange().stream().filter(c ->
 				// c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));

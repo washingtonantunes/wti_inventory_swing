@@ -18,6 +18,9 @@ public class EquipmentService {
 
 	private EquipmentDao equipmentDao = DaoFactory.createEquipmentDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
+	
+	private Equipment objOld;
+	private Equipment objNew;
 
 	public List<Equipment> findAll() {
 		return equipmentDao.findAll();
@@ -44,13 +47,15 @@ public class EquipmentService {
 		}
 	}
 
-	public void update(Equipment obj, Change change) {
+	public void update(Equipment objOld, Equipment objNew) {
+		this.objOld = objOld;
+		this.objNew = objNew;
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.update(obj);
-			//changeDao.insert(getChange(obj.getSerialNumber()));
+			equipmentDao.update(objNew);
+			changeDao.insert(getChange(objOld.getSerialNumber(), 1));
 
 			conn.commit();
 		} 
@@ -115,12 +120,30 @@ public class EquipmentService {
 		if (type == 0) {
 			changes = "New Equipment Added";
 		} else if (type == 1) {
-			
+			changes = getFieldsUpdated();
 		} else if (type == 2) {
 			
 		} else if (type == 3) {
 			
 		}
 		return changes;
+	}
+	
+	private String getFieldsUpdated() {
+		String fieldsUpdated = "Fields Updated: ";
+
+		if (!objOld.getMemoryRam().equals(objNew.getMemoryRam())) {
+			fieldsUpdated += "'MemoryRam Old: " + objOld.getMemoryRam() + "', ";
+		}
+		if (!objOld.getHardDisk().equals(objNew.getHardDisk())) {
+			fieldsUpdated += "'HardDisk Old: " + objOld.getHardDisk() + "', ";
+		}
+		if (!objOld.getCostType().equals(objNew.getCostType())) {
+			fieldsUpdated += "'CostType Old: " + objOld.getCostType() + "', ";
+		}
+		if (!objOld.getValue().equals(objNew.getValue())) {
+			fieldsUpdated += "'Value Old: " + objOld.getValue() + "' ";
+		}
+		return fieldsUpdated;
 	}
 }

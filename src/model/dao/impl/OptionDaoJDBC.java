@@ -29,7 +29,7 @@ public class OptionDaoJDBC implements OptionDao {
 					"INSERT INTO `options` "
 					+ "(`option`,"
 					+ "`type`,"
-					+ "`statusOption`,"
+					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?)",
@@ -37,7 +37,7 @@ public class OptionDaoJDBC implements OptionDao {
 			
 			st.setString(1, obj.getOption());
 			st.setString(2, obj.getType());
-			st.setString(3, obj.getStatusOption());
+			st.setString(3, obj.getStatus());
 			st.setDate(4, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			int rowsAffected = st.executeUpdate();
@@ -67,7 +67,7 @@ public class OptionDaoJDBC implements OptionDao {
 			st = conn.prepareStatement(
 					"UPDATE `options` "
 					+ "SET `option` = ? "
-					+ "WHERE `idOption` = ?");
+					+ "WHERE `id` = ?");
 
 			st.setString(1, obj.getOption());
 			st.setInt(2, obj.getId());
@@ -88,8 +88,8 @@ public class OptionDaoJDBC implements OptionDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `options` " 
-					+ "SET `statusOption` = ? "
-					+ "WHERE `idOption` = ?");
+					+ "SET `status` = ? "
+					+ "WHERE `id` = ?");
 
 			st.setString(1, status);
 			st.setInt(2, idOption);
@@ -118,10 +118,10 @@ public class OptionDaoJDBC implements OptionDao {
 			while (rs.next()) {
 				Option option = new Option();
 				
-				option.setId(rs.getInt("idOption"));
+				option.setId(rs.getInt("id"));
 				option.setOption(rs.getString("option"));
 				option.setType(rs.getString("type"));
-				option.setStatusOption(rs.getString("statusOption"));
+				option.setStatus(rs.getString("status"));
 				option.setDateEntry(rs.getDate("dateEntry"));
 				options.add(option);	
 			}

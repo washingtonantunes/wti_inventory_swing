@@ -8,7 +8,7 @@ public class Change implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer idChange;
+	private Integer id;
 	private String object;
 	private String typeChange;
 	private String changes;
@@ -25,8 +25,8 @@ public class Change implements Serializable {
 		this.author = author;
 	}
 
-	public Change(Integer idChange, String object, String typeChange, String changes, Date dateChange, String author) {
-		this.idChange = idChange;
+	public Change(Integer id, String object, String typeChange, String changes, Date dateChange, String author) {
+		this.id = id;
 		this.object = object;
 		this.typeChange = typeChange;
 		this.changes = changes;
@@ -34,12 +34,12 @@ public class Change implements Serializable {
 		this.author = author;
 	}
 
-	public Integer getIdChange() {
-		return idChange;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdChange(Integer idChange) {
-		this.idChange = idChange;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getChanges() {
@@ -84,7 +84,7 @@ public class Change implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idChange);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -96,11 +96,11 @@ public class Change implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Change other = (Change) obj;
-		return Objects.equals(idChange, other.idChange);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override
 	public String toString() {
-		return "Change [idChange=" + idChange + "]";
+		return "Change [idChange=" + id + "]";
 	}
 }

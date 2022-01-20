@@ -2,20 +2,25 @@ package model.gui.equipment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import model.entities.Equipment;
@@ -41,14 +46,12 @@ public class EquipmentsList extends JPanel {
 	private List<Equipment> equipments;
 
 	public EquipmentsList() {
-		//super("Equipments");
 		this.equipments = loadData();
 		initComponents();
 	}
 
 	private void initComponents() {
 		setLayout(new BorderLayout());
-		//setResizable(false);
 		setVisible(true);
 		
 		add(createPanelNorth(), BorderLayout.NORTH);
@@ -130,6 +133,7 @@ public class EquipmentsList extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		configureColumn();
 		sizeColumn();
+		get();
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -146,31 +150,31 @@ public class EquipmentsList extends JPanel {
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			column = table.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(105); // Serial Number
+				column.setPreferredWidth(110); // Serial Number
 			} else if (i == 1) {
-				column.setPreferredWidth(100); // Host Name
+				column.setPreferredWidth(110); // Host Name
 			} else if (i == 2) {
-				column.setPreferredWidth(120); // Address MAC
+				column.setPreferredWidth(130); // Address MAC
 			} else if (i == 3) {
-				column.setPreferredWidth(80); // Type
+				column.setPreferredWidth(90); // Type
 			} else if (i == 4) {
-				column.setPreferredWidth(120); // Patrimony Number
+				column.setPreferredWidth(90); // Patrimony Number
 			} else if (i == 5) {
 				column.setPreferredWidth(80); // Brand
 			} else if (i == 6) {
-				column.setPreferredWidth(170); // Model
+				column.setPreferredWidth(180); // Model
 			} else if (i == 7) {
-				column.setPreferredWidth(90); // Memory Ram
+				column.setPreferredWidth(60); // Memory Ram
 			} else if (i == 8) {
-				column.setPreferredWidth(70); // Hard Disk
+				column.setPreferredWidth(60); // Hard Disk
 			} else if (i == 9) {
 				column.setPreferredWidth(90); // Cost Type
 			} else if (i == 10) {
-				column.setPreferredWidth(70); // Value
+				column.setPreferredWidth(60); // Value
 			} else if (i == 11) {
-				column.setPreferredWidth(90); // Status
+				column.setPreferredWidth(100); // Status
 			} else if (i == 12) {
-				column.setPreferredWidth(120); // Date Entry
+				column.setPreferredWidth(100); // Date Entry
 			} else if (i == 13) {
 				column.setPreferredWidth(90); // Reason
 			}
@@ -180,7 +184,7 @@ public class EquipmentsList extends JPanel {
 	private void configureColumn() {
 		((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer())
 				.setHorizontalAlignment(SwingConstants.CENTER);
-		((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer()).setPreferredSize(new Dimension(0, 50));
+		((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer()).setPreferredSize(new Dimension(0, 40));
 
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			table.getColumnModel().getColumn(i).setResizable(false);
@@ -200,7 +204,20 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("buttonEditListener");
+			int lineSelected = -1;
+			lineSelected = table.getSelectedRow();
+			if (lineSelected < 0) {
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+			} else  {
+				String status = model.getEquipment(lineSelected).getStatus();
+				if (status.equals("DESATIVADO")) {
+					JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				else {
+					Equipment equipment = model.getEquipment(lineSelected);
+					new EditEquipmentForm(model, equipment, lineSelected).setVisible(true);
+				}
+			}
 		}
 	}
 
@@ -239,5 +256,24 @@ public class EquipmentsList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("buttonExportListener");
 		}
+	}
+	
+	private void get() {
+		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
+
+		    SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+
+		    public Component getTableCellRendererComponent(JTable table,
+		            Object value, boolean isSelected, boolean hasFocus,
+		            int row, int column) {
+		        if( value instanceof Date) {
+		            value = f.format(value);
+		        }
+		        return super.getTableCellRendererComponent(table, value, isSelected,
+		                hasFocus, row, column);
+		    }
+		};
+
+		table.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
 	}
 }

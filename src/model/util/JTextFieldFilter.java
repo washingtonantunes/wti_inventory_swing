@@ -20,7 +20,7 @@ public class JTextFieldFilter extends PlainDocument {
 
 	public static final String ALPHA = LOWERCASE + UPPERCASE; 
 	public static final String NUMERIC = "0123456789";
-	public static final String DECIMAL = NUMERIC + "," + ".";
+	public static final String DECIMAL = NUMERIC + ".";
 
 	public static final String PONTO = ".";
 	public static final String UPPERCASE_NUMERIC_PONTO = UPPERCASE + NUMERIC + PONTO;

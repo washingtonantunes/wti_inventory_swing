@@ -11,24 +11,24 @@ public class Option implements Serializable {
 	private Integer id;
 	private String option;
 	private String type;
-	private String statusOption;
+	private String status;
 	private Date dateEntry;
 
 	public Option() {
 	}
 
-	public Option(String option, String type, String statusOption, Date dateEntry) {
+	public Option(String option, String type, String status, Date dateEntry) {
 		this.option = option;
 		this.type = type;
-		this.statusOption = statusOption;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
-	public Option(Integer id, String option, String type, String statusOption, Date dateEntry) {
+	public Option(Integer id, String option, String type, String status, Date dateEntry) {
 		this.id = id;
 		this.option = option;
 		this.type = type;
-		this.statusOption = statusOption;
+		this.status = status;
 		this.dateEntry = dateEntry;
 	}
 
@@ -56,12 +56,12 @@ public class Option implements Serializable {
 		this.type = type;
 	}
 
-	public String getStatusOption() {
-		return statusOption;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStatusOption(String statusOption) {
-		this.statusOption = statusOption;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getDateEntry() {
