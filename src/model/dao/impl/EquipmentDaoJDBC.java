@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import db.DB;
 import db.DBException;
 import model.dao.EquipmentDao;
 import model.entities.Equipment;
+import model.gui.MainWindow;
 
 public class EquipmentDaoJDBC implements EquipmentDao {
 
@@ -95,7 +97,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 	}
 
 	@Override
-	public void updateStatus(String serialNumberEquipment, String status) {
+	public void updateStatus(Equipment obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
@@ -103,8 +105,8 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 					+ "SET `status` = ? "
 					+ "WHERE `serialNumber` = ?");
 
-			st.setString(1, status);
-			st.setString(2, serialNumberEquipment);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -117,7 +119,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 	}
 
 	@Override
-	public void disable(String serialNumberEquipment, String status, String reason) {
+	public void disable(Equipment obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
@@ -125,9 +127,9 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 					+ "SET `status` = ?, `reason` = ? "
 					+ "WHERE `serialNumber` = ?");
 
-			st.setString(1, status);
-			st.setString(2, reason);
-			st.setString(3, serialNumberEquipment);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getReason());
+			st.setString(3, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -166,8 +168,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setValue(rs.getDouble("value"));
 				equipment.setStatus(rs.getString("status"));
 				equipment.setDateEntry(rs.getDate("dateEntry"));
-				// equipment.setChanges(Window.getChange().stream().filter(c ->
-				// c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
+				equipment.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
 				equipment.setReason(rs.getString("reason"));
 				equipments.add(equipment);
 			}

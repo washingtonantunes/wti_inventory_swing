@@ -10,27 +10,20 @@ public class Change implements Serializable {
 
 	private Integer id;
 	private String object;
-	private String typeChange;
+	private String type;
 	private String changes;
-	private Date dateChange;
+	private Date date;
 	private String author;
 
 	public Change() {
 	}
 
-	public Change(String object, String typeChange, String changes, String author) {
-		this.object = object;
-		this.typeChange = typeChange;
-		this.changes = changes;
-		this.author = author;
-	}
-
-	public Change(Integer id, String object, String typeChange, String changes, Date dateChange, String author) {
+	public Change(Integer id, String object, String type, String changes, Date date, String author) {
 		this.id = id;
 		this.object = object;
-		this.typeChange = typeChange;
+		this.type = type;
 		this.changes = changes;
-		this.dateChange = dateChange;
+		this.date = date;
 		this.author = author;
 	}
 
@@ -58,20 +51,20 @@ public class Change implements Serializable {
 		this.object = object;
 	}
 
-	public String getTypeChange() {
-		return typeChange;
+	public String getType() {
+		return type;
 	}
 
-	public void setTypeChange(String typeChange) {
-		this.typeChange = typeChange;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public Date getDateChange() {
-		return dateChange;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDateChange(Date dateChange) {
-		this.dateChange = dateChange;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public String getAuthor() {

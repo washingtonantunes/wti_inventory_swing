@@ -28,18 +28,18 @@ public class ChangeDaoJDBC implements ChangeDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `changes` " 
 					+ "(`object`,"
-					+ "`typeChange`,"
+					+ "`type`,"
 					+ "`changes`,"
-					+ "`dateChange`,"
+					+ "`date`,"
 					+ "`author`) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?,  ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, obj.getObject());
-			st.setString(2, obj.getTypeChange());
+			st.setString(2, obj.getType());
 			st.setString(3, obj.getChanges());
-			st.setDate(4, new java.sql.Date(obj.getDateChange().getTime()));
+			st.setDate(4, new java.sql.Date(obj.getDate().getTime()));
 			st.setString(5, obj.getAuthor());
 
 			int rowsAffected = st.executeUpdate();
@@ -78,9 +78,9 @@ public class ChangeDaoJDBC implements ChangeDao {
 
 				change.setId(rs.getInt("id"));
 				change.setChanges(rs.getString("changes"));
-				change.setDateChange(rs.getDate("dateChange"));
+				change.setDate(rs.getDate("date"));
 				change.setObject(rs.getString("object"));
-				change.setTypeChange(rs.getString("typeChange"));
+				change.setType(rs.getString("type"));
 				change.setAuthor(rs.getString("author"));
 
 				changes.add(change);

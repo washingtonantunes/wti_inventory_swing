@@ -1,7 +1,6 @@
 package model.services;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -53,14 +52,6 @@ public class EquipmentTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int columnIndex) {
 		return columns[columnIndex];
-	}
-
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		if (columnIndex == COL_DATE_ENTRY) {
-			return Date.class;
-		}
-		return String.class;
 	}
 
 	@Override

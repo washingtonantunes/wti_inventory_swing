@@ -18,9 +18,6 @@ public class EquipmentService {
 
 	private EquipmentDao equipmentDao = DaoFactory.createEquipmentDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
-	
-	private Equipment objOld;
-	private Equipment objNew;
 
 	public List<Equipment> findAll() {
 		return equipmentDao.findAll();
@@ -32,7 +29,7 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.insert(obj);
-			changeDao.insert(getChange(obj.getSerialNumber(), 0));
+			changeDao.insert(getChange(obj, null, 0));
 
 			conn.commit();
 		} 
@@ -48,14 +45,12 @@ public class EquipmentService {
 	}
 
 	public void update(Equipment objOld, Equipment objNew) {
-		this.objOld = objOld;
-		this.objNew = objNew;
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
 			equipmentDao.update(objNew);
-			changeDao.insert(getChange(objOld.getSerialNumber(), 1));
+			changeDao.insert(getChange(objOld, objNew, 1));
 
 			conn.commit();
 		} 
@@ -70,13 +65,13 @@ public class EquipmentService {
 		}
 	}
 
-	public void disable(Equipment obj, Change change) {
+	public void disable(Equipment obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.disable(obj.getSerialNumber(), obj.getStatus(), obj.getReason());
-			//changeDao.insert(getChange(obj.getSerialNumber()));
+			equipmentDao.disable(obj);
+			changeDao.insert(getChange(obj, null, 3));
 
 			conn.commit();
 		} 
@@ -91,12 +86,12 @@ public class EquipmentService {
 		}
 	}
 	
-	private Change getChange(String obj, int type) {
+	private Change getChange(Equipment objOld, Equipment objNew, int type) {
 		Change change = new Change();
-		change.setObject(obj);
-		change.setTypeChange(getTypeChange(type));
-		change.setChanges(getChanges(type));
-		change.setDateChange(new Date());
+		change.setObject(objOld.getSerialNumber());
+		change.setType(getTypeChange(type));
+		change.setChanges(getChanges(objOld, objNew, type));
+		change.setDate(new Date());
 		change.setAuthor(MainWindow.author);
 		return change;
 	}
@@ -110,26 +105,26 @@ public class EquipmentService {
 		} else if (type == 2) {
 			typeChange = "Equipment Update Status";
 		} else if (type == 3) {
-			typeChange = "Equipment Disable";
+			typeChange = "Equipment Deactivation";
 		}
 		return typeChange;
 	}
 	
-	private String getChanges(int type) {
+	private String getChanges(Equipment objOld, Equipment objNew, int type) {
 		String changes = "";
 		if (type == 0) {
 			changes = "New Equipment Added";
 		} else if (type == 1) {
-			changes = getFieldsUpdated();
+			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 2) {
 			
 		} else if (type == 3) {
-			
+			changes = "Equipment Disabled for: " + objOld.getReason();
 		}
 		return changes;
 	}
 	
-	private String getFieldsUpdated() {
+	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
 		if (!objOld.getMemoryRam().equals(objNew.getMemoryRam())) {

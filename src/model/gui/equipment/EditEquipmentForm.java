@@ -26,7 +26,6 @@ import model.entities.Equipment;
 import model.entities.Option;
 import model.services.EquipmentService;
 import model.services.EquipmentTableModel;
-import model.services.OptionService;
 import model.util.JTextFieldFilter;
 import model.util.Utils;
 
@@ -43,7 +42,7 @@ public class EditEquipmentForm extends JDialog {
 	private static final int WIDTH = 150;
 	private static final int HEIGHT = 25;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 670);
+	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 630);
 
 	private JComboBox<String> comboBox_MemoryRam;
 	private JComboBox<String> comboBox_HardDisk;
@@ -55,16 +54,16 @@ public class EditEquipmentForm extends JDialog {
 	private JLabel labelError_MemoryRam;
 	private JLabel labelError_HardDisk;
 
+	private EquipmentTableModel model;
 	private Equipment equipmentOld;
 	private Equipment equipmentNew;
-	private EquipmentTableModel model;
 	private List<Option> options;
 	private int lineSelected;
 
-	public EditEquipmentForm(EquipmentTableModel model, Equipment equipmentOld, int lineSelected) {
+	public EditEquipmentForm(EquipmentTableModel model, Equipment equipmentOld, List<Option> options, int lineSelected) {
 		this.model = model;
 		this.equipmentOld = equipmentOld;
-		this.options = loadDataOption();
+		this.options = options;
 		this.lineSelected = lineSelected;
 		initComponents();
 	}
@@ -87,7 +86,7 @@ public class EditEquipmentForm extends JDialog {
 		final JPanel panel = new JPanel(new FlowLayout());
 		panel.setLayout(null);
 
-		addLabelsShow(panel);
+		addLabels(panel);
 		addTextFieldsAndComboBoxes(panel);
 		addLabelsError(panel);
 		addButtons(panel);
@@ -95,7 +94,7 @@ public class EditEquipmentForm extends JDialog {
 		return panel;
 	}
 	
-	private void addLabelsShow(JPanel panel) {
+	private void addLabels(JPanel panel) {
 		JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
@@ -147,10 +146,6 @@ public class EditEquipmentForm extends JDialog {
 		JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setBounds(COLUMN1, 490, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
-		
-		JLabel label_Reason = new JLabel("Reason:");
-		label_Reason.setBounds(COLUMN1, 530, WIDTH, HEIGHT);
-		panel.add(label_Reason);
 	}
 	
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
@@ -216,10 +211,6 @@ public class EditEquipmentForm extends JDialog {
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(equipmentOld.getDateEntry()));
 		label_Show_DateEntry.setBounds(COLUMN2, 490, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
-		
-		final JLabel label_Show_Reason = new JLabel(equipmentOld.getReason());
-		label_Show_Reason.setBounds(COLUMN2, 530, WIDTH, HEIGHT);
-		panel.add(label_Show_Reason);
 	}
 	
 	private void addLabelsError(JPanel panel) {		
@@ -246,20 +237,14 @@ public class EditEquipmentForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 590, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(180, 550, WIDTH - 30, HEIGHT);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 590, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(320, 550, WIDTH - 30, HEIGHT);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
-	}
-	
-	private List<Option> loadDataOption() {
-		final OptionService service = new OptionService();
-		List<Option> list = service.findAll();
-		return list;
 	}
 	
 	private class buttonSaveListener implements ActionListener {
@@ -290,30 +275,9 @@ public class EditEquipmentForm extends JDialog {
 	}
 	
 	private Equipment getFormData() {
-		Equipment equipment = new Equipment();
+		Equipment equipment = this.equipmentOld;
 
 		ValidationException exception = new ValidationException("Validation error");
-		
-		// Insert SerialNumber
-		equipment.setSerialNumber(equipmentOld.getSerialNumber());
-
-		// Insert HostName
-		equipment.setHostName(equipmentOld.getHostName());
-
-		// Insert AddressMac
-		equipment.setAddressMAC(equipmentOld.getAddressMAC());
-		
-		// Insert Type
-		equipment.setType(equipmentOld.getType());
-
-		// Insert Patrimony Number
-		equipment.setPatrimonyNumber(equipmentOld.getPatrimonyNumber());
-
-		// Insert Brand
-		equipment.setBrand(equipmentOld.getBrand());
-
-		// Insert Model
-		equipment.setModel(equipmentOld.getModel());
 
 		// Validation Memory Ram
 		if (comboBox_MemoryRam.getSelectedIndex() < 0
@@ -338,12 +302,6 @@ public class EditEquipmentForm extends JDialog {
 		
 		// Insert Value
 		equipment.setValue(Utils.tryParseToDouble(textField_Value.getText()));
-		
-		// Insert Status
-		equipment.setStatus(equipmentOld.getStatus());
-		
-		// Insert DateEntry
-		equipment.setDateEntry(equipmentOld.getDateEntry());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

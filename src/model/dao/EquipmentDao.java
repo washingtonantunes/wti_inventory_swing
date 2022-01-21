@@ -10,9 +10,9 @@ public interface EquipmentDao {
 
 	void update(Equipment obj);
 
-	void updateStatus(String serialNumberEquipment, String status);
+	void updateStatus(Equipment obj);
 	
-	void disable(String serialNumberEquipment, String status, String reason);
+	void disable(Equipment obj);
 
 	List<Equipment> findAll();
 }

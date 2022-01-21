@@ -24,8 +24,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import model.entities.Equipment;
+import model.entities.Option;
 import model.services.EquipmentService;
 import model.services.EquipmentTableModel;
+import model.services.OptionService;
 
 public class EquipmentsList extends JPanel {
 
@@ -44,9 +46,11 @@ public class EquipmentsList extends JPanel {
 	private EquipmentTableModel model;
 
 	private List<Equipment> equipments;
+	private List<Option> options;
 
 	public EquipmentsList() {
 		this.equipments = loadData();
+		this.options = loadDataOption();
 		initComponents();
 	}
 
@@ -101,10 +105,10 @@ public class EquipmentsList extends JPanel {
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonRemove = new JButton("Remove");
-		buttonRemove.setPreferredSize(DIMENSIONBUTTON);
-		buttonRemove.addActionListener(new buttonRemoveListener());
-		panel.add(buttonRemove);
+		JButton buttonDisable = new JButton("Disable");
+		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
+		buttonDisable.addActionListener(new buttonDisableListener());
+		panel.add(buttonDisable);
 
 		JButton buttonSearch = new JButton("Search");
 		buttonSearch.setPreferredSize(DIMENSIONBUTTON);
@@ -133,7 +137,7 @@ public class EquipmentsList extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		configureColumn();
 		sizeColumn();
-		get();
+		configureDate();
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -142,6 +146,14 @@ public class EquipmentsList extends JPanel {
 	private List<Equipment> loadData() {
 		final EquipmentService service = new EquipmentService();
 		List<Equipment> list = service.findAll();
+		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
+		return list;
+	}
+	
+	private List<Option> loadDataOption() {
+		final OptionService service = new OptionService();
+		List<Option> list = service.findAll();
+		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
 		return list;
 	}
 
@@ -191,12 +203,33 @@ public class EquipmentsList extends JPanel {
 			table.getTableHeader().setReorderingAllowed(false);
 		}
 	}
+	
+	private void configureDate() {
+		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
+
+			private static final long serialVersionUID = 1L;
+			
+			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+
+		    public Component getTableCellRendererComponent(JTable table,
+		            Object value, boolean isSelected, boolean hasFocus,
+		            int row, int column) {
+		        if( value instanceof Date) {
+		            value = f.format(value);
+		        }
+		        return super.getTableCellRendererComponent(table, value, isSelected,
+		                hasFocus, row, column);
+		    }
+		};
+
+		table.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
+	}
 
 	private class buttonNewListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new NewEquipmentForm(model).setVisible(true);
+			new NewEquipmentForm(model, options).setVisible(true);
 		}
 	}
 
@@ -209,13 +242,12 @@ public class EquipmentsList extends JPanel {
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} else  {
-				String status = model.getEquipment(lineSelected).getStatus();
-				if (status.equals("DESATIVADO")) {
+				Equipment equipment = model.getEquipment(lineSelected);
+				if (equipment.getStatus().equals("DISABLED")) {
 					JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
-					Equipment equipment = model.getEquipment(lineSelected);
-					new EditEquipmentForm(model, equipment, lineSelected).setVisible(true);
+					new EditEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
 				}
 			}
 		}
@@ -224,14 +256,35 @@ public class EquipmentsList extends JPanel {
 	private class buttonViewListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("buttonViewListener");
+			int lineSelected = -1;
+			lineSelected = table.getSelectedRow();
+			if (lineSelected < 0) {
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+			} else  {
+				Equipment equipment = model.getEquipment(lineSelected);
+				new ViewEquipmentForm(equipment).setVisible(true);
+			}
 		}
 	}
 
-	private class buttonRemoveListener implements ActionListener {
+	private class buttonDisableListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("buttonRemoveListener");
+			int lineSelected = -1;
+			lineSelected = table.getSelectedRow();
+			if (lineSelected < 0) {
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+			} else  {
+				Equipment equipment = model.getEquipment(lineSelected);
+				if (equipment.getStatus().equals("DISABLED")) {
+					JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+				} else if (equipment.getStatus().equals("IN USE")) {
+					JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					new DisableEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+				}
+			}
 		}
 	}
 
@@ -256,24 +309,5 @@ public class EquipmentsList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("buttonExportListener");
 		}
-	}
-	
-	private void get() {
-		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-
-		    SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-
-		    public Component getTableCellRendererComponent(JTable table,
-		            Object value, boolean isSelected, boolean hasFocus,
-		            int row, int column) {
-		        if( value instanceof Date) {
-		            value = f.format(value);
-		        }
-		        return super.getTableCellRendererComponent(table, value, isSelected,
-		                hasFocus, row, column);
-		    }
-		};
-
-		table.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
 	}
 }

@@ -26,7 +26,6 @@ import model.entities.Equipment;
 import model.entities.Option;
 import model.services.EquipmentService;
 import model.services.EquipmentTableModel;
-import model.services.OptionService;
 import model.util.JTextFieldFilter;
 import model.util.Utils;
 
@@ -65,13 +64,13 @@ public class NewEquipmentForm extends JDialog {
 	private JLabel labelError_MemoryRam;
 	private JLabel labelError_HardDisk;
 
-	private Equipment equipment;
 	private EquipmentTableModel model;
+	private Equipment equipment;
 	private List<Option> options;
 
-	public NewEquipmentForm(EquipmentTableModel model) {
+	public NewEquipmentForm(EquipmentTableModel model, List<Option> options) {
 		this.model = model;
-		this.options = loadDataOption();
+		this.options = options;
 		initComponents();
 	}
 
@@ -93,7 +92,7 @@ public class NewEquipmentForm extends JDialog {
 		final JPanel panel = new JPanel(new FlowLayout());
 		panel.setLayout(null);
 
-		addLabelsShow(panel);
+		addLabels(panel);
 		addTextFieldsAndComboBoxes(panel);
 		addLabelsError(panel);
 		addButtons(panel);
@@ -101,7 +100,7 @@ public class NewEquipmentForm extends JDialog {
 		return panel;
 	}
 
-	private void addLabelsShow(JPanel panel) {
+	private void addLabels(JPanel panel) {
 		JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
@@ -273,12 +272,6 @@ public class NewEquipmentForm extends JDialog {
 		buttonClose.setBounds(320, 470, WIDTH - 30, HEIGHT);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
-	}
-	
-	private List<Option> loadDataOption() {
-		final OptionService service = new OptionService();
-		List<Option> list = service.findAll();
-		return list;
 	}
 
 	private class buttonSaveListener implements ActionListener {
