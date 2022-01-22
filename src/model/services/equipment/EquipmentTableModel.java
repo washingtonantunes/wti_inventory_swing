@@ -1,4 +1,4 @@
-package model.services;
+package model.services.equipment;
 
 import java.util.ArrayList;
 import java.util.List;

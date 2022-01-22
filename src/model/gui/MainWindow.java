@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.entities.Change;
+import model.entities.Collaborator;
 import model.services.ChangeService;
 import model.util.MenuBar;
 
@@ -27,8 +28,8 @@ public class MainWindow extends JFrame {
 	private static JDesktopPane main;
 	
 	private static List<Change> changes;
-
-	public static String author = "Washington Antunes";
+	
+	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
 
 	public MainWindow() {
 		MainWindow.changes = loadDataChanges();

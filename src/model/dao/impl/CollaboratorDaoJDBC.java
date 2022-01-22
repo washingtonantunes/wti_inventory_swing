@@ -39,7 +39,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 			st.setString(1, obj.getName());
 			st.setString(2, obj.getRegistration());
 			st.setString(3, obj.getPassword());
-			st.setString(4, obj.getPrivilege());
+			st.setInt(4, obj.getPrivilege());
 			st.setString(5, obj.getOffice());
 			st.setString(6, obj.getStatusCollaborator());
 			st.setDate(7, new java.sql.Date(obj.getDateEntry().getTime()));
@@ -62,7 +62,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 					+ "WHERE `registration` = ?");
 
 			st.setString(1, obj.getPassword());
-			st.setString(2, obj.getPrivilege());
+			st.setInt(2, obj.getPrivilege());
 			st.setString(3, obj.getOffice());
 			st.setString(4, obj.getRegistration());
 
@@ -116,7 +116,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 				collaborator.setName(rs.getString("name"));
 				collaborator.setRegistration(rs.getString("registration"));
 				collaborator.setPassword(rs.getString("password"));
-				collaborator.setPrivilege(rs.getString("privilege"));
+				collaborator.setPrivilege(rs.getInt("privilege"));
 				collaborator.setOffice(rs.getString("office"));
 				collaborator.setStatusCollaborator(rs.getString("statusCollaborator"));
 				collaborator.setDateEntry(rs.getDate("dateEntry"));

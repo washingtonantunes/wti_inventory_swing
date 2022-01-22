@@ -1,4 +1,4 @@
-package model.services;
+package model.services.equipment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -92,7 +92,7 @@ public class EquipmentService {
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
-		change.setAuthor(MainWindow.author);
+		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
 	}
 	

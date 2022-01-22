@@ -24,8 +24,8 @@ import db.DBException;
 import exception.ValidationException;
 import model.entities.Equipment;
 import model.entities.Option;
-import model.services.EquipmentService;
-import model.services.EquipmentTableModel;
+import model.services.equipment.EquipmentService;
+import model.services.equipment.EquipmentTableModel;
 import model.util.JTextFieldFilter;
 import model.util.Utils;
 
@@ -236,12 +236,12 @@ public class EditEquipmentForm extends JDialog {
 	}
 
 	private void addButtons(JPanel panel) {
-		JButton buttonSave = new JButton("Save");
+		final JButton buttonSave = new JButton("Save");
 		buttonSave.setBounds(180, 550, WIDTH - 30, HEIGHT);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
-		JButton buttonClose = new JButton("Close");
+		final JButton buttonClose = new JButton("Close");
 		buttonClose.setBounds(320, 550, WIDTH - 30, HEIGHT);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);

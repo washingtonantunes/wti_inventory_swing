@@ -7,11 +7,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,15 +21,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import model.entities.Equipment;
 import model.entities.Option;
-import model.services.EquipmentService;
-import model.services.EquipmentTableModel;
+import model.gui.MainWindow;
 import model.services.OptionService;
+import model.services.equipment.CreateExlFileEquipment;
+import model.services.equipment.EquipmentService;
+import model.services.equipment.EquipmentTableModel;
 
 public class EquipmentsList extends JPanel {
 
@@ -46,7 +51,7 @@ public class EquipmentsList extends JPanel {
 	private EquipmentTableModel model;
 
 	private List<Equipment> equipments;
-	private List<Option> options;
+	private List<Option> options; 
 
 	public EquipmentsList() {
 		this.equipments = loadData();
@@ -163,31 +168,44 @@ public class EquipmentsList extends JPanel {
 			column = table.getColumnModel().getColumn(i);
 			if (i == 0) {
 				column.setPreferredWidth(110); // Serial Number
-			} else if (i == 1) {
+			} 
+			else if (i == 1) {
 				column.setPreferredWidth(110); // Host Name
-			} else if (i == 2) {
+			} 
+			else if (i == 2) {
 				column.setPreferredWidth(130); // Address MAC
-			} else if (i == 3) {
+			} 
+			else if (i == 3) {
 				column.setPreferredWidth(90); // Type
-			} else if (i == 4) {
+			} 
+			else if (i == 4) {
 				column.setPreferredWidth(90); // Patrimony Number
-			} else if (i == 5) {
+			} 
+			else if (i == 5) {
 				column.setPreferredWidth(80); // Brand
-			} else if (i == 6) {
+			} 
+			else if (i == 6) {
 				column.setPreferredWidth(180); // Model
-			} else if (i == 7) {
+			} 
+			else if (i == 7) {
 				column.setPreferredWidth(60); // Memory Ram
-			} else if (i == 8) {
+			} 
+			else if (i == 8) {
 				column.setPreferredWidth(60); // Hard Disk
-			} else if (i == 9) {
+			} 
+			else if (i == 9) {
 				column.setPreferredWidth(90); // Cost Type
-			} else if (i == 10) {
+			} 
+			else if (i == 10) {
 				column.setPreferredWidth(60); // Value
-			} else if (i == 11) {
+			} 
+			else if (i == 11) {
 				column.setPreferredWidth(100); // Status
-			} else if (i == 12) {
+			} 
+			else if (i == 12) {
 				column.setPreferredWidth(100); // Date Entry
-			} else if (i == 13) {
+			} 
+			else if (i == 13) {
 				column.setPreferredWidth(90); // Reason
 			}
 		}
@@ -229,7 +247,11 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new NewEquipmentForm(model, options).setVisible(true);
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				new NewEquipmentForm(model, options).setVisible(true);
+			}
 		}
 	}
 
@@ -237,17 +259,23 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int lineSelected = -1;
-			lineSelected = table.getSelectedRow();
-			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
-			} else  {
-				Equipment equipment = model.getEquipment(lineSelected);
-				if (equipment.getStatus().equals("DISABLED")) {
-					JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				if (lineSelected < 0) {
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
-				else {
-					new EditEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+				else  {
+					Equipment equipment = model.getEquipment(lineSelected);
+					if (equipment.getStatus().equals("DISABLED")) {
+						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
+					} 
+					else {
+						new EditEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+					}
 				}
 			}
 		}
@@ -255,12 +283,14 @@ public class EquipmentsList extends JPanel {
 
 	private class buttonViewListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int lineSelected = -1;
 			lineSelected = table.getSelectedRow();
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
-			} else  {
+			} 
+			else  {
 				Equipment equipment = model.getEquipment(lineSelected);
 				new ViewEquipmentForm(equipment).setVisible(true);
 			}
@@ -269,20 +299,28 @@ public class EquipmentsList extends JPanel {
 
 	private class buttonDisableListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			int lineSelected = -1;
-			lineSelected = table.getSelectedRow();
-			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
-			} else  {
-				Equipment equipment = model.getEquipment(lineSelected);
-				if (equipment.getStatus().equals("DISABLED")) {
-					JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
-				} else if (equipment.getStatus().equals("IN USE")) {
-					JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
-				}
-				else {
-					new DisableEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied", JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				if (lineSelected < 0) {
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				else  {
+					Equipment equipment = model.getEquipment(lineSelected);
+					if (equipment.getStatus().equals("DISABLED")) {
+						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+					} 
+					else if (equipment.getStatus().equals("IN USE")) {
+						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						new DisableEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+					}
 				}
 			}
 		}
@@ -290,6 +328,7 @@ public class EquipmentsList extends JPanel {
 
 	private class buttonSearchListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("buttonSearchListener");
 		}
@@ -307,7 +346,14 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("buttonExportListener");
+			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+
+			int returnValue = jfc.showSaveDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = jfc.getSelectedFile();
+				new CreateExlFileEquipment(equipments, selectedFile.getAbsolutePath());
+			}
 		}
 	}
 }

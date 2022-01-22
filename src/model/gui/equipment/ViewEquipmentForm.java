@@ -61,59 +61,59 @@ public class ViewEquipmentForm extends JDialog {
 	}
 	
 	private void addLabels(JPanel panel) {
-		JLabel label_SerialNumber = new JLabel("Serial Number:");
+		final JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
-		JLabel label_HostName = new JLabel("Host Name:");
+		final JLabel label_HostName = new JLabel("Host Name:");
 		label_HostName.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_HostName);
 
-		JLabel label_AddressMAC = new JLabel("Address MAC:");
+		final JLabel label_AddressMAC = new JLabel("Address MAC:");
 		label_AddressMAC.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_AddressMAC);
 
-		JLabel label_Type = new JLabel("Type:");
+		final JLabel label_Type = new JLabel("Type:");
 		label_Type.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Type);
 		
-		JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
 		label_PatrimonyNumber.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 		
-		JLabel label_Brand = new JLabel("Brand:");
+		final JLabel label_Brand = new JLabel("Brand:");
 		label_Brand.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 		
-		JLabel label_Model = new JLabel("Model:");
+		final JLabel label_Model = new JLabel("Model:");
 		label_Model.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Model);
 		
-		JLabel label_MemoryRam = new JLabel("MemoryRam:");
+		final JLabel label_MemoryRam = new JLabel("MemoryRam:");
 		label_MemoryRam.setBounds(COLUMN1, 290, WIDTH, HEIGHT);
 		panel.add(label_MemoryRam);
 		
-		JLabel label_HardDisk = new JLabel("HardDisk:");
+		final JLabel label_HardDisk = new JLabel("HardDisk:");
 		label_HardDisk.setBounds(COLUMN1, 330, WIDTH, HEIGHT);
 		panel.add(label_HardDisk);
 		
-		JLabel label_CostType = new JLabel("CostType:");
+		final JLabel label_CostType = new JLabel("CostType:");
 		label_CostType.setBounds(COLUMN1, 370, WIDTH, HEIGHT);
 		panel.add(label_CostType);
 		
-		JLabel label_Value = new JLabel("Value:");
+		final JLabel label_Value = new JLabel("Value:");
 		label_Value.setBounds(COLUMN1, 410, WIDTH, HEIGHT);
 		panel.add(label_Value);
 		
-		JLabel label_Status = new JLabel("Status:");
+		final JLabel label_Status = new JLabel("Status:");
 		label_Status.setBounds(COLUMN1, 450, WIDTH, HEIGHT);
 		panel.add(label_Status);
 		
-		JLabel label_DateEntry = new JLabel("DateEntry:");
+		final JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setBounds(COLUMN1, 490, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 		
-		JLabel label_Reason = new JLabel("Reason:");
+		final JLabel label_Reason = new JLabel("Reason:");
 		label_Reason.setBounds(COLUMN1, 530, WIDTH, HEIGHT);
 		panel.add(label_Reason);
 	}
@@ -177,12 +177,12 @@ public class ViewEquipmentForm extends JDialog {
 	}
 
 	private void addButtons(JPanel panel) {
-		JButton buttonChanges = new JButton("Changes");
+		final JButton buttonChanges = new JButton("Changes");
 		buttonChanges.setBounds(180, 590, WIDTH - 30, HEIGHT);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
-		JButton buttonClose = new JButton("Close");
+		final JButton buttonClose = new JButton("Close");
 		buttonClose.setBounds(320, 590, WIDTH - 30, HEIGHT);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);

@@ -21,8 +21,8 @@ import db.DBException;
 import exception.ValidationException;
 import model.entities.Equipment;
 import model.entities.Option;
-import model.services.EquipmentService;
-import model.services.EquipmentTableModel;
+import model.services.equipment.EquipmentService;
+import model.services.equipment.EquipmentTableModel;
 
 public class DisableEquipmentForm extends JDialog {
 
@@ -73,7 +73,7 @@ public class DisableEquipmentForm extends JDialog {
 	}
 	
 	private void addLabelsAndComboBoxes(JPanel panel) {
-		JLabel label_Reason = new JLabel("Reason:");
+		final JLabel label_Reason = new JLabel("Reason:");
 		label_Reason.setBounds(20, 20, 50, 25);
 		panel.add(label_Reason);
 
@@ -93,12 +93,12 @@ public class DisableEquipmentForm extends JDialog {
 	}
 	
 	private void addButtons(JPanel panel) {
-		JButton buttonSave = new JButton("Save");
+		final JButton buttonSave = new JButton("Save");
 		buttonSave.setBounds(90, 70, 100, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
-		JButton buttonClose = new JButton("Close");
+		final JButton buttonClose = new JButton("Close");
 		buttonClose.setBounds(200, 70, 100, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
