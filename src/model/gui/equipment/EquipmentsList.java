@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
 
 import model.entities.Equipment;
 import model.entities.Option;
@@ -52,10 +54,12 @@ public class EquipmentsList extends JPanel {
 
 	private List<Equipment> equipments;
 	private List<Option> options; 
+	
+	private TableRowSorter<EquipmentTableModel> sorter;
 
 	public EquipmentsList() {
-		this.equipments = loadData();
-		this.options = loadDataOption();
+		this.equipments = loadDataEquipments();
+		this.options = loadDataOptions();
 		initComponents();
 	}
 
@@ -115,11 +119,6 @@ public class EquipmentsList extends JPanel {
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonSearch = new JButton("Search");
-		buttonSearch.setPreferredSize(DIMENSIONBUTTON);
-		buttonSearch.addActionListener(new buttonSearchListener());
-		panel.add(buttonSearch);
-
 		JButton buttonFilter = new JButton("Filter");
 		buttonFilter.setPreferredSize(DIMENSIONBUTTON);
 		buttonFilter.addActionListener(new buttonFilterListener());
@@ -148,14 +147,14 @@ public class EquipmentsList extends JPanel {
 		return scrollPane;
 	}
 
-	private List<Equipment> loadData() {
+	private List<Equipment> loadDataEquipments() {
 		final EquipmentService service = new EquipmentService();
 		List<Equipment> list = service.findAll();
 		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
 		return list;
 	}
 	
-	private List<Option> loadDataOption() {
+	private List<Option> loadDataOptions() {
 		final OptionService service = new OptionService();
 		List<Option> list = service.findAll();
 		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
@@ -265,16 +264,17 @@ public class EquipmentsList extends JPanel {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else  {
-					Equipment equipment = model.getEquipment(lineSelected);
+					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+						new EditEquipmentForm(model, equipment, options, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -287,11 +287,12 @@ public class EquipmentsList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int lineSelected = -1;
 			lineSelected = table.getSelectedRow();
+			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else  {
-				Equipment equipment = model.getEquipment(lineSelected);
+				Equipment equipment = model.getEquipment(modelRow);
 				new ViewEquipmentForm(equipment).setVisible(true);
 			}
 		}
@@ -307,11 +308,12 @@ public class EquipmentsList extends JPanel {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else  {
-					Equipment equipment = model.getEquipment(lineSelected);
+					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
@@ -319,18 +321,10 @@ public class EquipmentsList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						new DisableEquipmentForm(model, equipment, options, lineSelected).setVisible(true);
+						new DisableEquipmentForm(model, equipment, options, modelRow).setVisible(true);
 					}
 				}
 			}
-		}
-	}
-
-	private class buttonSearchListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			new SearchEquipment(table).setVisible(true);
 		}
 	}
 
@@ -338,7 +332,10 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("buttonFilterListener");
+			sorter = new TableRowSorter<EquipmentTableModel>(model);
+			table.setRowSorter(sorter);
+			new FilterEquipmentForm(sorter).setVisible(true);
+			model.fireTableDataChanged();
 		}
 	}
 
@@ -346,6 +343,11 @@ public class EquipmentsList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			List<Equipment> equipments = new ArrayList<Equipment>();
+			for(int row = 0; row < table.getRowCount();row++) {
+				equipments.add(model.getEquipment(row));
+            }
+					
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
 			int returnValue = jfc.showSaveDialog(null);
