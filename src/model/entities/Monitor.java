@@ -10,6 +10,7 @@ public class Monitor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String serialNumber;
+	private String brand;
 	private String model;
 	private String patrimonyNumber;
 	private String status;
@@ -47,6 +48,14 @@ public class Monitor implements Serializable {
 
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
+	}
+	
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 
 	public String getModel() {

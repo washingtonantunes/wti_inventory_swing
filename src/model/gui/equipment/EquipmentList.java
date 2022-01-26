@@ -28,7 +28,7 @@ import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
 import model.services.equipment.TableEquipment;
 
-public class EquipmentsList extends JPanel {
+public class EquipmentList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ public class EquipmentsList extends JPanel {
 	
 	private TableRowSorter<EquipmentTableModel> sorter;
 
-	public EquipmentsList() {
+	public EquipmentList() {
 		this.equipments = loadDataEquipments();
 		this.options = loadDataOptions();
 		initComponents();

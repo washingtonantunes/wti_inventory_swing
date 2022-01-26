@@ -66,31 +66,44 @@ public class EquipmentTableModel extends AbstractTableModel {
 
 		if (column == COL_SERIAL_NUMBER) {
 			return e.getSerialNumber();
-		} else if (column == COL_HOST_NAME) {
+		} 
+		else if (column == COL_HOST_NAME) {
 			return e.getHostName();
-		} else if (column == COL_ADDRESSMAC) {
+		} 
+		else if (column == COL_ADDRESSMAC) {
 			return e.getAddressMAC();
-		} else if (column == COL_TYPE) {
+		} 
+		else if (column == COL_TYPE) {
 			return e.getType();
-		} else if (column == COL_PATRIMONY_NUMBER) {
+		} 
+		else if (column == COL_PATRIMONY_NUMBER) {
 			return e.getPatrimonyNumber();
-		} else if (column == COL_BRAND) {
+		} 
+		else if (column == COL_BRAND) {
 			return e.getBrand();
-		} else if (column == COL_MODEL) {
+		} 
+		else if (column == COL_MODEL) {
 			return e.getModel();
-		} else if (column == COL_MEMORY_RAM) {
+		} 
+		else if (column == COL_MEMORY_RAM) {
 			return e.getMemoryRam();
-		} else if (column == COL_HARD_DISK) {
+		} 
+		else if (column == COL_HARD_DISK) {
 			return e.getHardDisk();
-		} else if (column == COL_COST_TYPE) {
+		} 
+		else if (column == COL_COST_TYPE) {
 			return e.getCostType();
-		} else if (column == COL_VALUE) {
+		} 
+		else if (column == COL_VALUE) {
 			return e.getValue();
-		} else if (column == COL_STATUS) {
+		} 
+		else if (column == COL_STATUS) {
 			return e.getStatus();
-		} else if (column == COL_DATE_ENTRY) {
+		} 
+		else if (column == COL_DATE_ENTRY) {
 			return e.getDateEntry();
-		} else if (column == COL_REASON) {
+		} 
+		else if (column == COL_REASON) {
 			return e.getReason();
 		}
 		return "";

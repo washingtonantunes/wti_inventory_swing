@@ -153,7 +153,7 @@ public class NewEquipmentForm extends JDialog {
 		panel.add(textField_SerialNumber);
 
 		textField_HostName = new JTextField();
-		textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 10));
+		textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 11));
 		textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(textField_HostName);
 
@@ -175,14 +175,14 @@ public class NewEquipmentForm extends JDialog {
 		panel.add(textField_PatrimonyNumber);
 		
 		comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("BRAND") && o.getStatus().equals("ACTIVE"))
+				.filter(o -> o.getType().equals("BRAND-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
 				.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Brand.setSelectedIndex(-1);
 		comboBox_Brand.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(comboBox_Brand);
 		
 		comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("MODEL") && o.getStatus().equals("ACTIVE"))
+				.filter(o -> o.getType().equals("MODEL-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
 				.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Model.setSelectedIndex(-1);
 		comboBox_Model.setBounds(COLUMN2, 250, WIDTH, HEIGHT);

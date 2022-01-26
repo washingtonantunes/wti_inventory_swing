@@ -9,7 +9,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import model.gui.MainWindow;
-import model.gui.equipment.EquipmentsList;
+import model.gui.equipment.EquipmentList;
+import model.gui.monitor.MonitorList;
 
 public class MenuBar extends JMenuBar {
 
@@ -134,8 +135,8 @@ public class MenuBar extends JMenuBar {
 
 		public void actionPerformed(ActionEvent e) {
 			MainWindow.getMain().removeAll();
-			final EquipmentsList equipmentsList = new EquipmentsList();
-			MainWindow.getMain().add(equipmentsList);
+			final EquipmentList equipmentList = new EquipmentList();
+			MainWindow.getMain().add(equipmentList);
 			MainWindow.getMain().revalidate();
 		}
 	}
@@ -143,7 +144,10 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemMonitorsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("MenuItemMonitorsListener");
+			MainWindow.getMain().removeAll();
+			final MonitorList monitorList = new MonitorList();
+			MainWindow.getMain().add(monitorList);
+			MainWindow.getMain().revalidate();
 		}
 	}
 
