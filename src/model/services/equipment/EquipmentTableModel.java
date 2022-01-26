@@ -26,7 +26,7 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private static final int COL_DATE_ENTRY = 12;
 	private static final int COL_REASON = 13;
 
-	List<Equipment> lines;
+	List<Equipment> equipments;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
 			"<html><center>Host <br>Name</html>", "<html><center>Address<br>MAC</html>", "Type",
@@ -36,12 +36,12 @@ public class EquipmentTableModel extends AbstractTableModel {
 			"<html><center>Date <br>Enty</html>", "Reason" };
 	
 	public EquipmentTableModel(List<Equipment> equipments) {
-		this.lines = new ArrayList<>(equipments);
+		this.equipments = new ArrayList<>(equipments);
 	}
 
 	@Override
 	public int getRowCount() {
-		return lines.size();
+		return equipments.size();
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class EquipmentTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int column) {
 
-		Equipment e = lines.get(row);
+		Equipment e = equipments.get(row);
 
 		if (column == COL_SERIAL_NUMBER) {
 			return e.getSerialNumber();
@@ -97,22 +97,22 @@ public class EquipmentTableModel extends AbstractTableModel {
 	}
 
 	public Equipment getEquipment(int indexLine) {
-		return lines.get(indexLine);
+		return equipments.get(indexLine);
 	}
 
 	public void addEquipment(Equipment equipment) {
-		lines.add(equipment);
+		equipments.add(equipment);
 		int lastIndex = getRowCount() - 1;
 		fireTableRowsInserted(lastIndex, lastIndex);
 	}
 
 	public void updateEquipment(int indexLine, Equipment equipment) {
-		lines.set(indexLine, equipment);
+		equipments.set(indexLine, equipment);
 		fireTableRowsUpdated(indexLine, indexLine);
 	}
 
 	public void removeEquipment(int indexLine) {
-		lines.remove(indexLine);
+		equipments.remove(indexLine);
 		fireTableRowsDeleted(indexLine, indexLine);
 	}
 }

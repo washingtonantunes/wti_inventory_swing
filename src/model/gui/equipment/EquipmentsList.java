@@ -2,15 +2,12 @@ package model.gui.equipment;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -19,13 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 import model.entities.Equipment;
@@ -35,6 +26,7 @@ import model.services.OptionService;
 import model.services.equipment.CreateExlFileEquipment;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
+import model.services.equipment.TableEquipment;
 
 public class EquipmentsList extends JPanel {
 
@@ -49,7 +41,7 @@ public class EquipmentsList extends JPanel {
 	private final Color COLOR1 = new Color(4, 77, 92);
 
 	private JScrollPane scrollPane;
-	private JTable table;
+	private TableEquipment table;
 	private EquipmentTableModel model;
 
 	private List<Equipment> equipments;
@@ -135,13 +127,7 @@ public class EquipmentsList extends JPanel {
 	private JScrollPane createTable() {
 		model = new EquipmentTableModel(equipments);
 
-		table = new JTable(model);
-		table.setFillsViewportHeight(true);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		configureColumn();
-		sizeColumn();
-		configureDate();
+		table = new TableEquipment(model);
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -159,87 +145,6 @@ public class EquipmentsList extends JPanel {
 		List<Option> list = service.findAll();
 		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
 		return list;
-	}
-
-	private void sizeColumn() {
-		TableColumn column = null;
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			column = table.getColumnModel().getColumn(i);
-			if (i == 0) {
-				column.setPreferredWidth(110); // Serial Number
-			} 
-			else if (i == 1) {
-				column.setPreferredWidth(110); // Host Name
-			} 
-			else if (i == 2) {
-				column.setPreferredWidth(130); // Address MAC
-			} 
-			else if (i == 3) {
-				column.setPreferredWidth(90); // Type
-			} 
-			else if (i == 4) {
-				column.setPreferredWidth(90); // Patrimony Number
-			} 
-			else if (i == 5) {
-				column.setPreferredWidth(80); // Brand
-			} 
-			else if (i == 6) {
-				column.setPreferredWidth(180); // Model
-			} 
-			else if (i == 7) {
-				column.setPreferredWidth(60); // Memory Ram
-			} 
-			else if (i == 8) {
-				column.setPreferredWidth(60); // Hard Disk
-			} 
-			else if (i == 9) {
-				column.setPreferredWidth(90); // Cost Type
-			} 
-			else if (i == 10) {
-				column.setPreferredWidth(60); // Value
-			} 
-			else if (i == 11) {
-				column.setPreferredWidth(100); // Status
-			} 
-			else if (i == 12) {
-				column.setPreferredWidth(100); // Date Entry
-			} 
-			else if (i == 13) {
-				column.setPreferredWidth(90); // Reason
-			}
-		}
-	}
-
-	private void configureColumn() {
-		((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer())
-				.setHorizontalAlignment(SwingConstants.CENTER);
-		((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer()).setPreferredSize(new Dimension(0, 40));
-
-		for (int i = 0; i < table.getColumnCount(); i++) {
-			table.getColumnModel().getColumn(i).setResizable(false);
-			table.getTableHeader().setReorderingAllowed(false);
-		}
-	}
-	
-	private void configureDate() {
-		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-
-			private static final long serialVersionUID = 1L;
-			
-			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-
-		    public Component getTableCellRendererComponent(JTable table,
-		            Object value, boolean isSelected, boolean hasFocus,
-		            int row, int column) {
-		        if( value instanceof Date) {
-		            value = f.format(value);
-		        }
-		        return super.getTableCellRendererComponent(table, value, isSelected,
-		                hasFocus, row, column);
-		    }
-		};
-
-		table.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
 	}
 
 	private class buttonNewListener implements ActionListener {

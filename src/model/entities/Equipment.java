@@ -22,7 +22,7 @@ public class Equipment implements Serializable {
 	private Double value;
 	private String status;
 	private Date dateEntry;
-	private String reason;
+	private String reason;	
 
 	private List<Change> changes;
 
