@@ -24,8 +24,8 @@ public class Collaborator implements Serializable {
 	public Collaborator() {
 	}
 
-	public Collaborator(String name, String registration, String password, int privilege, String office,
-			String status, Date dateEntry) {
+	public Collaborator(String name, String registration, String password, int privilege, String office, String status,
+			Date dateEntry) {
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
@@ -33,18 +33,6 @@ public class Collaborator implements Serializable {
 		this.office = office;
 		this.status = status;
 		this.dateEntry = dateEntry;
-	}
-
-	public Collaborator(String name, String registration, String password, int privilege, String office,
-			String status, Date dateEntry, String reason) {
-		this.name = name;
-		this.registration = registration;
-		this.password = password;
-		this.privilege = privilege;
-		this.office = office;
-		this.status = status;
-		this.dateEntry = dateEntry;
-		this.reason = reason;
 	}
 
 	public String getName() {

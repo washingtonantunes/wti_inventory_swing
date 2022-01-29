@@ -50,6 +50,8 @@ public class MonitorList extends JPanel {
 	private List<Monitor> monitors;
 	private List<Option> options; 
 	
+	private JLabel label_Show__Quantity;
+	
 	private TableRowSorter<MonitorTableModel> sorter;
 
 	public MonitorList() {
@@ -86,6 +88,18 @@ public class MonitorList extends JPanel {
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
 		panel.add(label_Title);
+		
+		JLabel label_Quantity = new JLabel("Quantity:");
+		label_Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Quantity.setBounds(1200, 2, 100, 20);
+		label_Quantity.setForeground(Color.WHITE);
+		panel.add(label_Quantity);
+		
+		label_Show__Quantity = new JLabel(String.valueOf(monitors.size()));
+		label_Show__Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Show__Quantity.setBounds(1260, 2, 100, 20);
+		label_Show__Quantity.setForeground(Color.WHITE);
+		panel.add(label_Show__Quantity);
 		
 		return panel;
 	}
@@ -169,6 +183,8 @@ public class MonitorList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				new NewMonitorForm(model, options).setVisible(true);
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			}
 		}
 	}
@@ -190,7 +206,7 @@ public class MonitorList extends JPanel {
 				else  {
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This monitor is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new EditMonitorForm(model, monitor, options, modelRow).setVisible(true);
@@ -234,10 +250,10 @@ public class MonitorList extends JPanel {
 				else  {
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This monitor already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else if (monitor.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This monitor is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
 						new DisableMonitorForm(model, monitor, options, modelRow).setVisible(true);

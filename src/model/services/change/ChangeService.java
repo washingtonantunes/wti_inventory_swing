@@ -13,5 +13,4 @@ public class ChangeService {
 	public List<Change> findAll() {
 		return changeDao.findAll();
 	}
-
 }

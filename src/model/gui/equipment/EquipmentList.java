@@ -50,6 +50,8 @@ public class EquipmentList extends JPanel {
 	private List<Equipment> equipments;
 	private List<Option> options; 
 	
+	private JLabel label_Show__Quantity;
+	
 	private TableRowSorter<EquipmentTableModel> sorter;
 
 	public EquipmentList() {
@@ -86,6 +88,18 @@ public class EquipmentList extends JPanel {
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
 		panel.add(label_Title);
+		
+		JLabel label_Quantity = new JLabel("Quantity:");
+		label_Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Quantity.setBounds(1200, 2, 100, 20);
+		label_Quantity.setForeground(Color.WHITE);
+		panel.add(label_Quantity);
+		
+		label_Show__Quantity = new JLabel(String.valueOf(equipments.size()));
+		label_Show__Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Show__Quantity.setBounds(1260, 2, 100, 20);
+		label_Show__Quantity.setForeground(Color.WHITE);
+		panel.add(label_Show__Quantity);
 		
 		return panel;
 	}
@@ -157,7 +171,7 @@ public class EquipmentList extends JPanel {
 	private List<Option> loadDataOptions() {
 		final OptionService service = new OptionService();
 		List<Option> list = service.findAll();
-		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
+		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));		
 		return list;
 	}
 
@@ -169,6 +183,8 @@ public class EquipmentList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				new NewEquipmentForm(model, options).setVisible(true);
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			}
 		}
 	}

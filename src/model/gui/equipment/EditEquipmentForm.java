@@ -407,8 +407,14 @@ public class EditEquipmentForm extends JDialog {
 			equipment.setHardDisk(comboBox_HardDisk.getSelectedItem().toString());
 		}
 
-		// Insert CostType
-		equipment.setCostType(Utils.tryParseToString(comboBox_CostType));
+		// Validation CostType
+		if (comboBox_CostType.getSelectedIndex() < 0
+				|| comboBox_CostType.getSelectedItem() == null) {
+			exception.addError("costType", "Field can't be empty");
+		} 
+		else {
+			equipment.setHardDisk(comboBox_CostType.getSelectedItem().toString());
+		}
 
 		// Insert Value
 		equipment.setValue(Utils.tryParseToDouble(textField_Value.getText()));
