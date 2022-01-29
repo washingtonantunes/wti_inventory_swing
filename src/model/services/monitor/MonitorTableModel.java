@@ -19,7 +19,7 @@ public class MonitorTableModel extends AbstractTableModel {
 	private static final int COL_DATE_ENTRY = 5;
 	private static final int COL_REASON = 6;
 
-	List<Monitor> monitors;
+	private List<Monitor> monitors;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>","Brand", "Model",
 			"<html><center>Patrimony <br>Number</html>", "Status", "<html><center>Date <br>Enty</html>", "Reason" };

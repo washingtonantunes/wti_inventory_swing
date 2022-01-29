@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.entities.Equipment;
-import model.gui.ChangesPanel;
+import model.gui.change.ChangesPanel;
 
 public class ViewEquipmentForm extends JDialog {
 

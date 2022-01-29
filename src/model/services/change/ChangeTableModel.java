@@ -1,4 +1,4 @@
-package model.services;
+package model.services.change;
 
 import java.util.List;
 
@@ -15,11 +15,9 @@ public class ChangeTableModel extends AbstractTableModel {
 	private static final int COL_CHANGES = 2;
 	private static final int COL_AUTHOR = 3;
 
-	List<Change> lines;
+	private List<Change> lines;
 
-	private String[] columns = new String[] { "Date",
-			"Type", "Changes",
-			"Autor" };
+	private String[] columns = new String[] { "Date", "Type", "Changes", "Autor" };
 
 	public ChangeTableModel(List<Change> changes) {
 		this.lines = changes;

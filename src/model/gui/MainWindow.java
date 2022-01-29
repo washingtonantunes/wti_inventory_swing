@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -12,9 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.entities.Change;
 import model.entities.Collaborator;
-import model.services.ChangeService;
 import model.util.MenuBar;
 
 public class MainWindow extends JFrame {
@@ -27,12 +24,9 @@ public class MainWindow extends JFrame {
 
 	private static JDesktopPane main;
 	
-	private static List<Change> changes;
-	
 	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
 
 	public MainWindow() {
-		MainWindow.changes = loadDataChanges();
 		initComponents();
 	}
 
@@ -84,15 +78,5 @@ public class MainWindow extends JFrame {
 
 	public static JDesktopPane getMain() {
 		return main;
-	}
-	
-	private List<Change> loadDataChanges() {
-		final ChangeService service = new ChangeService();
-		List<Change> list = service.findAll();
-		return list;
-	}
-	
-	public static List<Change> getChanges() {
-		return changes;
 	}
 }

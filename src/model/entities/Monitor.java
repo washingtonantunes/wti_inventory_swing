@@ -1,11 +1,12 @@
 package model.entities;
 
+import java.beans.Beans;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Monitor implements Serializable {
+public class Monitor extends Beans implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,26 +21,6 @@ public class Monitor implements Serializable {
 	private List<Change> changes;
 
 	public Monitor() {
-	}
-
-	public Monitor(String serialNumber, String model, String patrimonyNumber, String status,
-			Date dateEntry) {
-		this.serialNumber = serialNumber;
-		this.model = model;
-		this.patrimonyNumber = patrimonyNumber;
-		this.status = status;
-		this.dateEntry = dateEntry;
-	}
-
-	public Monitor(String serialNumber, String model, String patrimonyNumber, String status,
-			Date dateEntry, String reason, List<model.entities.Change> changes) {
-		this.serialNumber = serialNumber;
-		this.model = model;
-		this.patrimonyNumber = patrimonyNumber;
-		this.status = status;
-		this.dateEntry = dateEntry;
-		this.reason = reason;
-		this.changes = changes;
 	}
 
 	public String getSerialNumber() {
@@ -127,4 +108,13 @@ public class Monitor implements Serializable {
 	public String toString() {
 		return serialNumber;
 	}
+	
+	@Override
+	public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

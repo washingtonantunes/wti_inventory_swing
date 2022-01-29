@@ -1,4 +1,4 @@
-package model.gui.equipment;
+package model.gui.monitor;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,12 +19,12 @@ import javax.swing.JPanel;
 
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Option;
-import model.services.equipment.EquipmentService;
-import model.services.equipment.EquipmentTableModel;
+import model.services.monitor.MonitorService;
+import model.services.monitor.MonitorTableModel;
 
-public class DisableEquipmentForm extends JDialog {
+public class DisableMonitorForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,14 +34,14 @@ public class DisableEquipmentForm extends JDialog {
 	
 	private JLabel labelError_Reason;
 
-	private EquipmentTableModel model;
-	private Equipment equipment;
+	private MonitorTableModel model;
+	private Monitor monitor;
 	private List<Option> options;
 	private int lineSelected;
 
-	public DisableEquipmentForm(EquipmentTableModel model, Equipment equipment, List<Option> options, int lineSelected) {
+	public DisableMonitorForm(MonitorTableModel model, Monitor monitor, List<Option> options, int lineSelected) {
 		this.model = model;
-		this.equipment = equipment;
+		this.monitor = monitor;
 		this.options = options;
 		this.lineSelected = lineSelected;
 		initComponents();
@@ -108,12 +108,12 @@ public class DisableEquipmentForm extends JDialog {
 		
 		public void actionPerformed(ActionEvent event) {
 			try {
-				equipment = getFormData();
-				EquipmentService service = new EquipmentService();
-				service.disable(equipment);
-				model.updateEquipment(lineSelected, equipment);
+				monitor = getFormData();
+				MonitorService service = new MonitorService();
+				service.disable(monitor);
+				model.updateMonitor(lineSelected, monitor);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Equipment successfully disabled", "Success disabling object", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Monitor successfully disabled", "Success disabling object", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -131,13 +131,13 @@ public class DisableEquipmentForm extends JDialog {
 		}
 	}
 	
-	private Equipment getFormData() {
-		Equipment equipment = this.equipment;
+	private Monitor getFormData() {
+		Monitor monitor = this.monitor;
 		
 		ValidationException exception = new ValidationException("Validation error");
 		
 		// Insert Status
-		equipment.setStatus("DISABLED");
+		monitor.setStatus("DISABLED");
 		
 		// Validation Reason
 		if (comboBox_Reason.getSelectedIndex() < 0
@@ -145,13 +145,13 @@ public class DisableEquipmentForm extends JDialog {
 			exception.addError("reason", "It is necessary to select a reason!");
 		} 
 		else {
-			equipment.setReason(comboBox_Reason.getSelectedItem().toString());
+			monitor.setReason(comboBox_Reason.getSelectedItem().toString());
 		}
 		
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
-		return equipment;
+		return monitor;
 	}
 	
 	private void setErrorMessages(Map<String, String> errors) {
@@ -160,3 +160,4 @@ public class DisableEquipmentForm extends JDialog {
 		labelError_Reason.setText(fields.contains("reason") ? errors.get("reason") : "");
 	}
 }
+

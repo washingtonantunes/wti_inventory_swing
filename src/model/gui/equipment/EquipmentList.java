@@ -19,10 +19,12 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import model.entities.Change;
 import model.entities.Equipment;
 import model.entities.Option;
 import model.gui.MainWindow;
 import model.services.OptionService;
+import model.services.change.ChangeService;
 import model.services.equipment.CreateExlFileEquipment;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
@@ -44,13 +46,15 @@ public class EquipmentList extends JPanel {
 	private TableEquipment table;
 	private EquipmentTableModel model;
 
+	private static List<Change> changes;
 	private List<Equipment> equipments;
 	private List<Option> options; 
 	
 	private TableRowSorter<EquipmentTableModel> sorter;
 
 	public EquipmentList() {
-		this.equipments = loadDataEquipments();
+		changes = loadDataChanges();
+		equipments = loadDataEquipments();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -131,6 +135,16 @@ public class EquipmentList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
+	}
+	
+	public static List<Change> getChanges() {
+		return changes;
+	}
+
+	private List<Change> loadDataChanges() {
+		final ChangeService service = new ChangeService();
+		List<Change> list = service.findAll();
+		return list;
 	}
 
 	private List<Equipment> loadDataEquipments() {

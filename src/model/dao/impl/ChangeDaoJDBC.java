@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +32,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 					+ "`date`,"
 					+ "`author`) "
 					+ "VALUES "
-					+ "(?, ?, ?, ?,  ?)",
-					Statement.RETURN_GENERATED_KEYS);
+					+ "(?, ?, ?, ?,  ?)");
 			
 			st.setString(1, obj.getObject());
 			st.setString(2, obj.getType());
@@ -42,22 +40,12 @@ public class ChangeDaoJDBC implements ChangeDao {
 			st.setDate(4, new java.sql.Date(obj.getDate().getTime()));
 			st.setString(5, obj.getAuthor());
 
-			int rowsAffected = st.executeUpdate();
-			
-			if (rowsAffected > 0) {
-				ResultSet rs = st.getGeneratedKeys();
-				if (rs.next()) {
-					int id = rs.getInt(1);
-					obj.setId(id);
-				}
-				DB.closeResultSet(rs);
-			}
-			else {
-				throw new DBException("Unexpected error! No rows affected!");
-			}
-		} catch (SQLException e) {
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
 			throw new DBException(e.getMessage());
-		} finally {
+		} 
+		finally {
 			DB.closeStatement(st);
 		}
 	}
@@ -76,7 +64,6 @@ public class ChangeDaoJDBC implements ChangeDao {
 			while (rs.next()) {
 				Change change = new Change();
 
-				change.setId(rs.getInt("id"));
 				change.setChanges(rs.getString("changes"));
 				change.setDate(rs.getDate("date"));
 				change.setObject(rs.getString("object"));

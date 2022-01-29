@@ -44,19 +44,28 @@ public class EditEquipmentForm extends JDialog {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 630);
 
+	private JTextField textField_HostName;
+	private JTextField textField_AddressMAC;
+	private JComboBox<String> comboBox_Type;
+	private JTextField textField_PatrimonyNumber;
+	private JComboBox<String> comboBox_Brand;
+	private JComboBox<String> comboBox_Model;
 	private JComboBox<String> comboBox_MemoryRam;
 	private JComboBox<String> comboBox_HardDisk;
 	private JComboBox<String> comboBox_CostType;
 	private JTextField textField_Value;
 
+	private JLabel labelError_HostName;
+	private JLabel labelError_AddressMAC;
+	private JLabel labelError_Type;
+	private JLabel labelError_PatrimonyNumber;
 	private JLabel labelError_Brand;
 	private JLabel labelError_Model;
 	private JLabel labelError_MemoryRam;
 	private JLabel labelError_HardDisk;
 
 	private EquipmentTableModel model;
-	private Equipment equipmentOld;
-	private Equipment equipmentNew;
+	private final Equipment equipmentOld;
 	private List<Option> options;
 	private int lineSelected;
 
@@ -153,29 +162,44 @@ public class EditEquipmentForm extends JDialog {
 		label_Show_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(label_Show_SerialNumber);
 
-		final JLabel label_Show_HostName = new JLabel(equipmentOld.getHostName());
-		label_Show_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
-		panel.add(label_Show_HostName);
+		textField_HostName = new JTextField();
+		textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 11));
+		textField_HostName.setText(equipmentOld.getHostName());
+		textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+		panel.add(textField_HostName);
 
-		final JLabel label_Show_AddressMAC = new JLabel(equipmentOld.getAddressMAC());
-		label_Show_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
-		panel.add(label_Show_AddressMAC);
+		textField_AddressMAC = new JTextField();
+		textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
+		textField_AddressMAC.setText(equipmentOld.getAddressMAC());
+		textField_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+		panel.add(textField_AddressMAC);
 		
-		final JLabel label_Show_Type = new JLabel(equipmentOld.getType());
-		label_Show_Type.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
-		panel.add(label_Show_Type);
+		comboBox_Type = new JComboBox<>(new Vector<>(options.stream()
+				.filter(o -> o.getType().equals("TYPE") && o.getStatus().equals("ACTIVE"))
+				.map(Option::getOption).collect(Collectors.toList())));
+		comboBox_Type.setSelectedItem(equipmentOld.getType());
+		comboBox_Type.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
+		panel.add(comboBox_Type);
 		
-		final JLabel label_Show_PatrimonyNumber = new JLabel(equipmentOld.getPatrimonyNumber());
-		label_Show_PatrimonyNumber.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
-		panel.add(label_Show_PatrimonyNumber);
+		textField_PatrimonyNumber = new JTextField();
+		textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
+		textField_PatrimonyNumber.setText(equipmentOld.getPatrimonyNumber());
+		textField_PatrimonyNumber.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
+		panel.add(textField_PatrimonyNumber);
 		
-		final JLabel label_Show_Brand = new JLabel(equipmentOld.getBrand());
-		label_Show_Brand.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
-		panel.add(label_Show_Brand);
+		comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
+				.filter(o -> o.getType().equals("BRAND-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
+				.map(Option::getOption).collect(Collectors.toList())));
+		comboBox_Brand.setSelectedItem(equipmentOld.getBrand());
+		comboBox_Brand.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
+		panel.add(comboBox_Brand);
 		
-		final JLabel label_Show_Model = new JLabel(equipmentOld.getModel());
-		label_Show_Model.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
-		panel.add(label_Show_Model);
+		comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
+				.filter(o -> o.getType().equals("MODEL-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
+				.map(Option::getOption).collect(Collectors.toList())));
+		comboBox_Model.setSelectedItem(equipmentOld.getModel());
+		comboBox_Model.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
+		panel.add(comboBox_Model);
 		
 		comboBox_MemoryRam = new JComboBox<>(new Vector<>(options.stream()
 				.filter(o -> o.getType().equals("MEMORY RAM") && o.getStatus().equals("ACTIVE"))
@@ -214,6 +238,26 @@ public class EditEquipmentForm extends JDialog {
 	}
 	
 	private void addLabelsError(JPanel panel) {		
+		labelError_HostName = new JLabel();
+		labelError_HostName.setForeground(Color.RED);
+		labelError_HostName.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
+		panel.add(labelError_HostName);
+
+		labelError_AddressMAC = new JLabel();
+		labelError_AddressMAC.setForeground(Color.RED);
+		labelError_AddressMAC.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
+		panel.add(labelError_AddressMAC);
+		
+		labelError_Type = new JLabel();
+		labelError_Type.setForeground(Color.RED);
+		labelError_Type.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
+		panel.add(labelError_Type);
+		
+		labelError_PatrimonyNumber = new JLabel();
+		labelError_PatrimonyNumber.setForeground(Color.RED);
+		labelError_PatrimonyNumber.setBounds(COLUMN3, 170, WIDTH + 90, HEIGHT);
+		panel.add(labelError_PatrimonyNumber);
+		
 		labelError_Brand = new JLabel();
 		labelError_Brand.setForeground(Color.RED);
 		labelError_Brand.setBounds(COLUMN3, 210, WIDTH + 90, HEIGHT);
@@ -251,7 +295,7 @@ public class EditEquipmentForm extends JDialog {
 
 		public void actionPerformed(ActionEvent event) {
 			try {
-				equipmentNew = getFormData();
+				final Equipment equipmentNew = getFormData();
 				EquipmentService service = new EquipmentService();
 				service.update(equipmentOld, equipmentNew);
 				model.updateEquipment(lineSelected, equipmentNew);
@@ -275,9 +319,75 @@ public class EditEquipmentForm extends JDialog {
 	}
 	
 	private Equipment getFormData() {
-		Equipment equipment = this.equipmentOld;
+		Equipment equipment = new Equipment();
+		equipment = (Equipment) equipmentOld.clone();
 
 		ValidationException exception = new ValidationException("Validation error");
+
+		// Validation HostName
+		if (textField_HostName.getText() == null || textField_HostName.getText().trim().equals("")) {
+			exception.addError("hostName", "Field can't be empty");
+		} 
+		else if (textField_HostName.getText().length() < 10) {
+			exception.addError("hostName", "Invalid HostName - Ex: > 10");
+		} 
+		else if (Utils.ToCheckHostName(textField_HostName.getText())) {
+			exception.addError("hostName", "Invalid format - Ex: 'SPODSK' or 'SPONTB'");
+		} 
+		else {
+			equipment.setHostName(textField_HostName.getText().trim().toUpperCase());
+		}
+
+		// Validation AddressMac
+		if (textField_AddressMAC.getText() == null || textField_AddressMAC.getText().trim().equals("")) {
+			exception.addError("addressMAC", "Field can't be empty");
+		} 
+		else if (textField_AddressMAC.getText().length() < 16) {
+			exception.addError("addressMAC", "Invalid Address MAC - Ex: > 16");
+		} 
+		else if (Utils.ToCheckAddressMAC(textField_AddressMAC.getText())) {
+			exception.addError("addressMAC", "Invalid format - Ex: '0A-00-27-00-00-0B'");
+		} 
+		else {
+			equipment.setAddressMAC(textField_AddressMAC.getText().trim().toUpperCase());
+		}
+
+		// Validation Type
+		if (comboBox_Type.getSelectedIndex() < 0 || comboBox_Type.getSelectedItem() == null) {
+			exception.addError("type", "Field can't be empty");
+		} 
+		else {
+			equipment.setType(comboBox_Type.getSelectedItem().toString());
+		}
+
+		// Validation Patrimony Number
+		if (textField_PatrimonyNumber.getText() == null || textField_PatrimonyNumber.getText().trim().equals("")) {
+			exception.addError("patrimonyNumber", "Field can't be empty");
+		} 
+		else if (textField_PatrimonyNumber.getText().length() < 4) {
+			exception.addError("patrimonyNumber", "Invalid Patrimony Number - Ex: > 4");
+		} 
+		else {
+			equipment.setPatrimonyNumber(textField_PatrimonyNumber.getText().trim().toUpperCase());
+		}
+
+		// Validation Brand
+		if (comboBox_Brand.getSelectedIndex() < 0
+				|| comboBox_Brand.getSelectedItem() == null) {
+			exception.addError("brand", "Field can't be empty");
+		} 
+		else {
+			equipment.setBrand(comboBox_Brand.getSelectedItem().toString());
+		}
+
+		// Validation Model
+		if (comboBox_Model.getSelectedIndex() < 0
+				|| comboBox_Model.getSelectedItem() == null) {
+			exception.addError("model", "Field can't be empty");
+		} 
+		else {
+			equipment.setModel(comboBox_Model.getSelectedItem().toString());
+		}
 
 		// Validation Memory Ram
 		if (comboBox_MemoryRam.getSelectedIndex() < 0
@@ -299,7 +409,7 @@ public class EditEquipmentForm extends JDialog {
 
 		// Insert CostType
 		equipment.setCostType(Utils.tryParseToString(comboBox_CostType));
-		
+
 		// Insert Value
 		equipment.setValue(Utils.tryParseToDouble(textField_Value.getText()));
 
@@ -313,6 +423,10 @@ public class EditEquipmentForm extends JDialog {
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
+		labelError_HostName.setText(fields.contains("hostName") ? errors.get("hostName") : "");
+		labelError_AddressMAC.setText(fields.contains("addressMAC") ? errors.get("addressMAC") : "");
+		labelError_Type.setText(fields.contains("type") ? errors.get("type") : "");
+		labelError_PatrimonyNumber.setText(fields.contains("patrimonyNumber") ? errors.get("patrimonyNumber") : "");
 		labelError_Brand.setText(fields.contains("brand") ? errors.get("brand") : ""); 
 		labelError_Model.setText(fields.contains("model") ? errors.get("model") : ""); 
 		labelError_MemoryRam.setText(fields.contains("memoryRam") ? errors.get("memoryRam") : "");

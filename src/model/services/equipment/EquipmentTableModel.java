@@ -26,7 +26,7 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private static final int COL_DATE_ENTRY = 12;
 	private static final int COL_REASON = 13;
 
-	List<Equipment> equipments;
+	private List<Equipment> equipments;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
 			"<html><center>Host <br>Name</html>", "<html><center>Address<br>MAC</html>", "Type",

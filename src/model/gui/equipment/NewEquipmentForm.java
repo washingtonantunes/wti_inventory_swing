@@ -63,6 +63,7 @@ public class NewEquipmentForm extends JDialog {
 	private JLabel labelError_Model;
 	private JLabel labelError_MemoryRam;
 	private JLabel labelError_HardDisk;
+	private JLabel labelError_CostType;
 
 	private EquipmentTableModel model;
 	private Equipment equipment;
@@ -260,6 +261,11 @@ public class NewEquipmentForm extends JDialog {
 		labelError_HardDisk.setForeground(Color.RED);
 		labelError_HardDisk.setBounds(COLUMN3, 330, WIDTH + 90, HEIGHT);
 		panel.add(labelError_HardDisk);
+		
+		labelError_CostType = new JLabel();
+		labelError_CostType.setForeground(Color.RED);
+		labelError_CostType.setBounds(COLUMN3, 370, WIDTH + 90, HEIGHT);
+		panel.add(labelError_CostType);
 	}
 
 	private void addButtons(JPanel panel) {
@@ -400,8 +406,14 @@ public class NewEquipmentForm extends JDialog {
 			equipment.setHardDisk(comboBox_HardDisk.getSelectedItem().toString());
 		}
 
-		// Insert CostType
-		equipment.setCostType(Utils.tryParseToString(comboBox_CostType));
+		// Validation CostType
+		if (comboBox_CostType.getSelectedIndex() < 0
+				|| comboBox_CostType.getSelectedItem() == null) {
+			exception.addError("costType", "Field can't be empty");
+		} 
+		else {
+			equipment.setHardDisk(comboBox_CostType.getSelectedItem().toString());
+		}
 		
 		// Insert Value
 		equipment.setValue(Utils.tryParseToDouble(textField_Value.getText()));
@@ -431,6 +443,7 @@ public class NewEquipmentForm extends JDialog {
 		labelError_Model.setText(fields.contains("model") ? errors.get("model") : ""); 
 		labelError_MemoryRam.setText(fields.contains("memoryRam") ? errors.get("memoryRam") : "");
 		labelError_HardDisk.setText(fields.contains("hardDisk") ?errors.get("hardDisk") : "");
+		labelError_CostType.setText(fields.contains("costType") ?errors.get("costType") : "");
 	}
 	
 	private void setErroMessagesDBException(DBException e) {

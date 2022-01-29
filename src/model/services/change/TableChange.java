@@ -1,4 +1,4 @@
-package model.services.monitor;
+package model.services.change;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,11 +13,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class TableMonitor extends JTable {
+public class TableChange extends JTable {
 
 	private static final long serialVersionUID = 1L;
 	
-	public TableMonitor(MonitorTableModel model) {
+	public TableChange(ChangeTableModel model) {
 		super(model);
 		initComponents();
 	}
@@ -42,31 +42,16 @@ public class TableMonitor extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(110); // Serial Number
+				column.setPreferredWidth(100);  //Date
 				column.setResizable(false);
-			} 
-			else if (i == 1) {
-				column.setPreferredWidth(80); // Brand
+			} else if (i == 1) {
+				column.setPreferredWidth(150); // Type
 				column.setResizable(false);
-			} 
-			else if (i == 2) {
-				column.setPreferredWidth(180); // Model
+			} else if (i == 2) {
+				column.setPreferredWidth(500); // Changes
 				column.setResizable(false);
-			} 
-			else if (i == 3) {
-				column.setPreferredWidth(90); // Patrimony Number
-				column.setResizable(false);
-			} 
-			else if (i == 4) {
-				column.setPreferredWidth(100); // Status
-				column.setResizable(false);
-			} 
-			else if (i == 5) {
-				column.setPreferredWidth(100); // Date Entry
-				column.setResizable(false);
-			} 
-			else if (i == 6) {
-				column.setPreferredWidth(90); // Reason
+			} else if (i == 3) {
+				column.setPreferredWidth(160); // Author
 				column.setResizable(false);
 			}
 		}
@@ -90,9 +75,9 @@ public class TableMonitor extends JTable {
 		    }
 		};
 
-		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(0).setCellRenderer(tableCellRenderer);
 	}
-
+	
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component c = super.prepareRenderer(renderer, row, column);
 		Color color1 = new Color(220,220,220);

@@ -24,7 +24,6 @@ public class TableEquipment extends JTable {
 	
 	private void initComponents() {
 		setFillsViewportHeight(true);
-		//setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		configureHeader();
 		configureSizeColumn();

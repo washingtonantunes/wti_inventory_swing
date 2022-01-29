@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class Equipment implements Serializable {
+public class Equipment implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,46 +27,7 @@ public class Equipment implements Serializable {
 	private List<Change> changes;
 
 	public Equipment() {
-	}
-
-	public Equipment(String serialNumber, String hostName, String addressMAC, String type,
-			String patrimonyNumber, String brand, String model, String memoryRam,
-			String hardDisk, String costType, Double value, String status, Date dateEntry) {
-		this.serialNumber = serialNumber;
-		this.hostName = hostName;
-		this.addressMAC = addressMAC;
-		this.type = type;
-		this.patrimonyNumber = patrimonyNumber;
-		this.brand = brand;
-		this.model = model;
-		this.memoryRam = memoryRam;
-		this.hardDisk = hardDisk;
-		this.costType = costType;
-		this.value = value;
-		this.status = status;
-		this.dateEntry = dateEntry;
-	}
-
-	public Equipment(String serialNumber, String hostName, String addressMAC, String type,
-			String patrimonyNumber, String brand, String model, String memoryRam,
-			String hardDisk, String costType, Double value, String status, Date dateEntry,
-			String reason, List<model.entities.Change> changes) {
-		this.serialNumber = serialNumber;
-		this.hostName = hostName;
-		this.addressMAC = addressMAC;
-		this.type = type;
-		this.patrimonyNumber = patrimonyNumber;
-		this.brand = brand;
-		this.model = model;
-		this.memoryRam = memoryRam;
-		this.hardDisk = hardDisk;
-		this.costType = costType;
-		this.value = value;
-		this.status = status;
-		this.dateEntry = dateEntry;
-		this.reason = reason;
-		this.changes = changes;
-	}
+	}	
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -210,4 +171,13 @@ public class Equipment implements Serializable {
 	public String toString() {
 		return serialNumber;
 	}
+	
+	@Override
+	public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package model.services.equipment;
+package model.services.monitor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,21 +9,21 @@ import db.DB;
 import db.DBException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
-import model.dao.EquipmentDao;
+import model.dao.MonitorDao;
 import model.entities.Change;
-import model.entities.Equipment;
+import model.entities.Monitor;
 import model.gui.MainWindow;
 
-public class EquipmentService {
+public class MonitorService {
 
-	private EquipmentDao equipmentDao = DaoFactory.createEquipmentDao();
+	private MonitorDao equipmentDao = DaoFactory.createMonitorDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<Equipment> findAll() {
+	public List<Monitor> findAll() {
 		return equipmentDao.findAll();
 	}
 
-	public void save(Equipment obj) {
+	public void save(Monitor obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -44,7 +44,7 @@ public class EquipmentService {
 		}
 	}
 
-	public void update(Equipment objOld, Equipment objNew) {
+	public void update(Monitor objOld, Monitor objNew) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -65,7 +65,7 @@ public class EquipmentService {
 		}
 	}
 
-	public void disable(Equipment obj) {
+	public void disable(Monitor obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -86,7 +86,7 @@ public class EquipmentService {
 		}
 	}
 	
-	private Change getChange(Equipment objOld, Equipment objNew, int type) {
+	private Change getChange(Monitor objOld, Monitor objNew, int type) {
 		Change change = new Change();
 		change.setObject(objOld.getSerialNumber());
 		change.setType(getTypeChange(type));
@@ -99,43 +99,34 @@ public class EquipmentService {
 	private String getTypeChange(int type) {
 		String typeChange = "";
 		if (type == 0) {
-			typeChange = "Equipment Input";
+			typeChange = "Monitor Input";
 		} else if (type == 1) {
-			typeChange = "Equipment Update";
+			typeChange = "Monitor Update";
 		} else if (type == 2) {
-			typeChange = "Equipment Update Status";
+			typeChange = "Monitor Update Status";
 		} else if (type == 3) {
-			typeChange = "Equipment Deactivation";
+			typeChange = "Monitor Deactivation";
 		}
 		return typeChange;
 	}
 	
-	private String getChanges(Equipment objOld, Equipment objNew, int type) {
+	private String getChanges(Monitor objOld, Monitor objNew, int type) {
 		String changes = "";
 		if (type == 0) {
-			changes = "New Equipment Added";
+			changes = "New Monitor Added";
 		} else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 2) {
 			
 		} else if (type == 3) {
-			changes = "Equipment Disabled for: " + objOld.getReason();
+			changes = "Monitor Disabled for: " + objOld.getReason();
 		}
 		return changes;
 	}
 	
-	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
+	private String getFieldsUpdated(Monitor objOld, Monitor objNew) {
 		String fieldsUpdated = "Fields Updated: ";
-
-		if (!objOld.getHostName().equals(objNew.getHostName())) {
-			fieldsUpdated += "'HostName Old: " + objOld.getHostName() + "', ";
-		}
-		if (!objOld.getAddressMAC().equals(objNew.getAddressMAC())) {
-			fieldsUpdated += "'AddressMAC Old: " + objOld.getAddressMAC() + "', ";
-		}
-		if (!objOld.getType().equals(objNew.getType())) {
-			fieldsUpdated += "'Type Old: " + objOld.getType() + "', ";
-		}		
+		
 		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
 			fieldsUpdated += "'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "', ";
 		}
@@ -144,20 +135,6 @@ public class EquipmentService {
 		}
 		if (!objOld.getModel().equals(objNew.getModel())) {
 			fieldsUpdated += "'Model Old: " + objOld.getModel() + "', ";
-		}
-		if (!objOld.getMemoryRam().equals(objNew.getMemoryRam())) {
-			fieldsUpdated += "'MemoryRam Old: " + objOld.getMemoryRam() + "', ";
-		}
-		if (!objOld.getHardDisk().equals(objNew.getHardDisk())) {
-			fieldsUpdated += "'HardDisk Old: " + objOld.getHardDisk() + "', ";
-		}
-		if (objOld.getCostType() == null && objNew.getCostType() != null) {
-			fieldsUpdated += "'CostType Old: " + " " + "', ";
-		} else if (!objOld.getCostType().equals(objNew.getCostType())) {
-			fieldsUpdated += "'CostType Old: " + objOld.getCostType() + "', ";
-		}
-		if (!objOld.getValue().equals(objNew.getValue())) {
-			fieldsUpdated += "'Value Old: " + objOld.getValue() + "' ";
 		}
 		return fieldsUpdated;
 	}

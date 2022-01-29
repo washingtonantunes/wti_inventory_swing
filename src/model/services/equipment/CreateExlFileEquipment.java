@@ -132,7 +132,8 @@ public class CreateExlFileEquipment {
 			fileOut.close();
 			workbook.close();
 			JOptionPane.showMessageDialog(null, "Excel file generated successfully!");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error exporting data: " + e.getMessage());
 		}
 	}

@@ -19,12 +19,14 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import model.entities.Change;
 import model.entities.Monitor;
 import model.entities.Option;
 import model.gui.MainWindow;
 import model.services.OptionService;
-//import model.services.monitor.CreateExlFileMonitor;
-//import model.services.monitor.MonitorService;
+import model.services.change.ChangeService;
+import model.services.monitor.CreateExlFileMonitor;
+import model.services.monitor.MonitorService;
 import model.services.monitor.MonitorTableModel;
 import model.services.monitor.TableMonitor;
 
@@ -44,14 +46,15 @@ public class MonitorList extends JPanel {
 	private TableMonitor table;
 	private MonitorTableModel model;
 
+	private static List<Change> changes;
 	private List<Monitor> monitors;
 	private List<Option> options; 
 	
 	private TableRowSorter<MonitorTableModel> sorter;
 
 	public MonitorList() {
-		this.monitors = new ArrayList<Monitor>();
-		//this.monitors = loadDataMonitors();
+		changes = loadDataChanges();
+		this.monitors = loadDataMonitors();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -78,7 +81,7 @@ public class MonitorList extends JPanel {
 		panel.setPreferredSize(DIMENSIONTITLEPANEL);
 		panel.setBackground(COLOR1);
 		
-		JLabel label_Title = new JLabel("Monitor");
+		JLabel label_Title = new JLabel("Monitors");
 		label_Title.setPreferredSize(DIMENSIONBUTTON);
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
@@ -133,6 +136,16 @@ public class MonitorList extends JPanel {
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
 	}
+	
+	public static List<Change> getChanges() {
+		return changes;
+	}
+	
+	private List<Change> loadDataChanges() {
+		final ChangeService service = new ChangeService();
+		List<Change> list = service.findAll();
+		return list;
+	}
 
 	private List<Monitor> loadDataMonitors() {
 		final MonitorService service = new MonitorService();
@@ -175,12 +188,12 @@ public class MonitorList extends JPanel {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else  {
-					Monitor equipment = model.getMonitor(modelRow);
-					if (equipment.getStatus().equals("DISABLED")) {
+					Monitor monitor = model.getMonitor(modelRow);
+					if (monitor.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditMonitorForm(model, equipment, options, modelRow).setVisible(true);
+						new EditMonitorForm(model, monitor, options, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -198,8 +211,8 @@ public class MonitorList extends JPanel {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else  {
-				Monitor equipment = model.getMonitor(modelRow);
-				new ViewMonitorForm(equipment).setVisible(true);
+				Monitor monitor = model.getMonitor(modelRow);
+				new ViewMonitorForm(monitor).setVisible(true);
 			}
 		}
 	}
@@ -219,15 +232,15 @@ public class MonitorList extends JPanel {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else  {
-					Monitor equipment = model.getMonitor(modelRow);
-					if (equipment.getStatus().equals("DISABLED")) {
+					Monitor monitor = model.getMonitor(modelRow);
+					if (monitor.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
-					else if (equipment.getStatus().equals("IN USE")) {
+					else if (monitor.getStatus().equals("IN USE")) {
 						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else {
-						new DisableMonitorForm(model, equipment, options, modelRow).setVisible(true);
+						new DisableMonitorForm(model, monitor, options, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -249,9 +262,9 @@ public class MonitorList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Monitor> equipments = new ArrayList<Monitor>();
+			List<Monitor> monitors = new ArrayList<Monitor>();
 			for(int row = 0; row < table.getRowCount();row++) {
-				equipments.add(model.getMonitor(row));
+				monitors.add(model.getMonitor(row));
             }
 					
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
@@ -260,7 +273,7 @@ public class MonitorList extends JPanel {
 
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileMonitor(equipments, selectedFile.getAbsolutePath());
+				new CreateExlFileMonitor(monitors, selectedFile.getAbsolutePath());
 			}
 		}
 	}

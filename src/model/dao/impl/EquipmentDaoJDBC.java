@@ -12,7 +12,7 @@ import db.DB;
 import db.DBException;
 import model.dao.EquipmentDao;
 import model.entities.Equipment;
-import model.gui.MainWindow;
+import model.gui.equipment.EquipmentList;
 
 public class EquipmentDaoJDBC implements EquipmentDao {
 
@@ -74,17 +74,29 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
-					+ "SET `memoryRam` = ?, "
+					+ "SET `hostName` = ?, "
+					+ "`addressMAC` = ?, "
+					+ "`type` = ?, "
+					+ "`patrimonyNumber` = ?, "
+					+ "`brand` = ?, "
+					+ "`model` = ?, "
+					+ "`memoryRam` = ?, "
 					+ "`hardDisk` = ?, "
 					+ "`costType` = ?, "
 					+ "`value` = ? "
 					+ "WHERE `serialNumber` = ?");
 
-			st.setString(1, obj.getMemoryRam());
-			st.setString(2, obj.getHardDisk());
-			st.setString(3, obj.getCostType());
-			st.setDouble(4, obj.getValue());
-			st.setString(5, obj.getSerialNumber());
+			st.setString(1, obj.getHostName());
+			st.setString(2, obj.getAddressMAC());
+			st.setString(3, obj.getType());
+			st.setString(4, obj.getPatrimonyNumber());
+			st.setString(5, obj.getBrand());
+			st.setString(6, obj.getModel());
+			st.setString(7, obj.getMemoryRam());
+			st.setString(8, obj.getHardDisk());
+			st.setString(9, obj.getCostType());
+			st.setDouble(10, obj.getValue());
+			st.setString(11, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -168,7 +180,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setValue(rs.getDouble("value"));
 				equipment.setStatus(rs.getString("status"));
 				equipment.setDateEntry(rs.getDate("dateEntry"));
-				equipment.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
+				equipment.setChanges(EquipmentList.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
 				equipment.setReason(rs.getString("reason"));
 				equipments.add(equipment);
 			}
