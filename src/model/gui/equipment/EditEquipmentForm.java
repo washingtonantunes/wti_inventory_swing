@@ -413,7 +413,7 @@ public class EditEquipmentForm extends JDialog {
 			exception.addError("costType", "Field can't be empty");
 		} 
 		else {
-			equipment.setHardDisk(comboBox_CostType.getSelectedItem().toString());
+			equipment.setCostType(comboBox_CostType.getSelectedItem().toString());
 		}
 
 		// Insert Value

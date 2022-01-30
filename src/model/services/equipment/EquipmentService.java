@@ -29,7 +29,7 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.insert(obj);
-			changeDao.insert(getChange(obj, null, 0));
+			changeDao.insert(getChange(obj, 0));
 
 			conn.commit();
 		} 
@@ -71,7 +71,7 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.disable(obj);
-			changeDao.insert(getChange(obj, null, 3));
+			changeDao.insert(getChange(obj, 3));
 
 			conn.commit();
 		} 
@@ -88,9 +88,19 @@ public class EquipmentService {
 	
 	private Change getChange(Equipment objOld, Equipment objNew, int type) {
 		Change change = new Change();
-		change.setObject(objOld.getSerialNumber());
+		change.setObject(objNew.getSerialNumber());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
+		change.setDate(new Date());
+		change.setAuthor(MainWindow.collaborator.getName());
+		return change;
+	}
+	
+	private Change getChange(Equipment obj, int type) {
+		Change change = new Change();
+		change.setObject(obj.getSerialNumber());
+		change.setType(getTypeChange(type));
+		change.setChanges(getChanges(null, null, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
@@ -128,37 +138,43 @@ public class EquipmentService {
 		String fieldsUpdated = "Fields Updated: ";
 
 		if (!objOld.getHostName().equals(objNew.getHostName())) {
-			fieldsUpdated += "'HostName Old: " + objOld.getHostName() + "', ";
+			fieldsUpdated += " 'HostName Old: " + objOld.getHostName() + "',";
 		}
 		if (!objOld.getAddressMAC().equals(objNew.getAddressMAC())) {
-			fieldsUpdated += "'AddressMAC Old: " + objOld.getAddressMAC() + "', ";
+			fieldsUpdated += " 'AddressMAC Old: " + objOld.getAddressMAC() + "',";
 		}
 		if (!objOld.getType().equals(objNew.getType())) {
-			fieldsUpdated += "'Type Old: " + objOld.getType() + "', ";
+			fieldsUpdated += " 'Type Old: " + objOld.getType() + "',";
 		}		
 		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
-			fieldsUpdated += "'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "', ";
+			fieldsUpdated += " 'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "',";
 		}
 		if (!objOld.getBrand().equals(objNew.getBrand())) {
-			fieldsUpdated += "'Brand Old: " + objOld.getBrand() + "', ";
+			fieldsUpdated += " 'Brand Old: " + objOld.getBrand() + "',";
 		}
 		if (!objOld.getModel().equals(objNew.getModel())) {
-			fieldsUpdated += "'Model Old: " + objOld.getModel() + "', ";
+			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "',";
 		}
 		if (!objOld.getMemoryRam().equals(objNew.getMemoryRam())) {
-			fieldsUpdated += "'MemoryRam Old: " + objOld.getMemoryRam() + "', ";
+			fieldsUpdated += " 'MemoryRam Old: " + objOld.getMemoryRam() + "',";
 		}
 		if (!objOld.getHardDisk().equals(objNew.getHardDisk())) {
-			fieldsUpdated += "'HardDisk Old: " + objOld.getHardDisk() + "', ";
+			fieldsUpdated += " 'HardDisk Old: " + objOld.getHardDisk() + "',";
 		}
 		if (objOld.getCostType() == null && objNew.getCostType() != null) {
-			fieldsUpdated += "'CostType Old: " + " " + "', ";
+			fieldsUpdated += " 'CostType Old: NULL " + "',";
 		} else if (!objOld.getCostType().equals(objNew.getCostType())) {
-			fieldsUpdated += "'CostType Old: " + objOld.getCostType() + "', ";
+			fieldsUpdated += " 'CostType Old: " + objOld.getCostType() + "',";
 		}
 		if (!objOld.getValue().equals(objNew.getValue())) {
-			fieldsUpdated += "'Value Old: " + objOld.getValue() + "' ";
+			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "'";
 		}
+		
+		int i = fieldsUpdated.lastIndexOf(",");
+		if(i + 1 == fieldsUpdated.length()) {
+			fieldsUpdated = fieldsUpdated.substring(0, i);
+		}
+		
 		return fieldsUpdated;
 	}
 }

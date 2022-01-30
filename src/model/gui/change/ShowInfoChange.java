@@ -2,6 +2,8 @@ package model.gui.change;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -12,11 +14,13 @@ public class ShowInfoChange extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
 	private String info;
+	private List<String> list;
 	private int size;
 	
 	public ShowInfoChange(String info) {
 		this.info = info;
-		this.size = (info.length() * 5) + 200;
+		this.list = formatedString();
+		this.size = (list.size() * 5) + 150;
 		initComponents();
 	}
 	
@@ -27,7 +31,7 @@ public class ShowInfoChange extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Changes");
-		setPreferredSize(new Dimension((size), 100));
+		setPreferredSize(new Dimension(300, size));
 		setResizable(false);
 
 		pack();
@@ -44,8 +48,28 @@ public class ShowInfoChange extends JDialog {
 	}
 	
 	private void addLabels(JPanel panel) {
-		final JLabel label_Info = new JLabel(info);
-		label_Info.setBounds(10, 20, size, 25);
-		panel.add(label_Info);
+		for (int i =0; i < list.size(); i++) {
+			final JLabel label_Info = new JLabel(list.get(i));
+			label_Info.setBounds(20, (i * 15), 250, 25);
+			panel.add(label_Info);
+		}
+	}
+	
+	private List<String> formatedString() {
+		List<String> list = new ArrayList<String>();
+		
+		String[] fields = info.split(",");
+		
+		for (String s : fields) {
+			if (s.contains("Fields Updated: ")) {
+				
+				list.add(s.substring(0, s.indexOf(":")+1));
+				list.add(s.substring(s.indexOf(":")+1, s.length()));
+			} else {
+				list.add(s);
+			}
+		}
+		
+		return list;
 	}
 }

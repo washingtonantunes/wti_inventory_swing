@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
@@ -34,13 +36,10 @@ public class MonitorList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension DIMENSIONBUTTON = new Dimension(140, 40);
+	private final Dimension DIMENSIONBUTTON = new Dimension(130, 35);
 
-	private final Dimension DIMENSIONBUTTONSPANEL = new Dimension(0, 70);
-	private final Dimension DIMENSIONNORTHPANEL = new Dimension(0, 95);
-	private final Dimension DIMENSIONTITLEPANEL = new Dimension(0, 25);
-
-	private final Color COLOR1 = new Color(4, 77, 92);
+	private final Color COLOR2 = new Color(0, 65, 83);
+	private final Color COLOR3 = new Color(2, 101, 124);
 
 	private JScrollPane scrollPane;
 	private TableMonitor table;
@@ -52,6 +51,7 @@ public class MonitorList extends JPanel {
 	
 	private JLabel label_Show__Quantity;
 	
+	private JTextField textField_Filter;
 	private TableRowSorter<MonitorTableModel> sorter;
 
 	public MonitorList() {
@@ -71,7 +71,7 @@ public class MonitorList extends JPanel {
 	
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setPreferredSize(DIMENSIONNORTHPANEL);
+		panel.setPreferredSize(new Dimension(0, 85));
 		panel.add(createPanelTitle(), BorderLayout.NORTH);
 		panel.add(createPanelButton(), BorderLayout.SOUTH);
 		return panel;
@@ -80,35 +80,34 @@ public class MonitorList extends JPanel {
 	private JPanel createPanelTitle() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setPreferredSize(DIMENSIONTITLEPANEL);
-		panel.setBackground(COLOR1);
+		panel.setPreferredSize(new Dimension(0, 25));
+		panel.setBackground(COLOR2);
 		
 		JLabel label_Title = new JLabel("Monitors");
-		label_Title.setPreferredSize(DIMENSIONBUTTON);
+		label_Title.setPreferredSize(new Dimension(130, 35));
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
 		panel.add(label_Title);
-		
-		JLabel label_Quantity = new JLabel("Quantity:");
-		label_Quantity.setPreferredSize(DIMENSIONBUTTON);
-		label_Quantity.setBounds(1200, 2, 100, 20);
-		label_Quantity.setForeground(Color.WHITE);
-		panel.add(label_Quantity);
-		
-		label_Show__Quantity = new JLabel(String.valueOf(monitors.size()));
-		label_Show__Quantity.setPreferredSize(DIMENSIONBUTTON);
-		label_Show__Quantity.setBounds(1260, 2, 100, 20);
-		label_Show__Quantity.setForeground(Color.WHITE);
-		panel.add(label_Show__Quantity);
 		
 		return panel;
 	}
 
 	private JPanel createPanelButton() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
-		panel.setPreferredSize(DIMENSIONBUTTONSPANEL);
-		panel.setBackground(COLOR1);
+		JPanel panel = new JPanel(new FlowLayout());
+		panel.setPreferredSize(new Dimension(0, 60));
+		panel.setBackground(COLOR2);
 
+		panel.add(createPanelButton1());
+		panel.add(createPanelButton2());
+
+		return panel;
+	}
+	
+	private JPanel createPanelButton1() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		panel.setPreferredSize(new Dimension(800, 60));
+		panel.setBackground(COLOR3);
+		
 		JButton buttonNew = new JButton("New");
 		buttonNew.setPreferredSize(DIMENSIONBUTTON);
 		buttonNew.addActionListener(new buttonNewListener());
@@ -129,16 +128,42 @@ public class MonitorList extends JPanel {
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonFilter = new JButton("Filter");
-		buttonFilter.setPreferredSize(DIMENSIONBUTTON);
-		buttonFilter.addActionListener(new buttonFilterListener());
-		panel.add(buttonFilter);
-
 		JButton buttonExport = new JButton("Export");
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
-
+		
+		return panel;
+	}
+	
+	private JPanel createPanelButton2() {
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setPreferredSize(new Dimension(450, 60));
+		panel.setBackground(COLOR3);
+		
+		final JLabel label_Search = new JLabel("Enter to filter");
+		label_Search.setBounds(20, 15, 100, 25);
+		label_Search.setForeground(Color.WHITE);
+		panel.add(label_Search);
+		
+		textField_Filter = new JTextField();
+		textField_Filter.setBounds(100, 15, 130, 25);
+		textField_Filter.addActionListener(new textFieldFilterListener());
+		panel.add(textField_Filter);
+		
+		JLabel label_Quantity = new JLabel("Quantity:");
+		label_Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Quantity.setBounds(340, 15, 80, 25);
+		label_Quantity.setForeground(Color.WHITE);
+		panel.add(label_Quantity);
+		
+		label_Show__Quantity = new JLabel(String.valueOf(monitors.size()));
+		label_Show__Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Show__Quantity.setBounds(400, 15, 50, 25);
+		label_Show__Quantity.setForeground(Color.WHITE);
+		panel.add(label_Show__Quantity);
+		
 		return panel;
 	}
 
@@ -263,14 +288,19 @@ public class MonitorList extends JPanel {
 		}
 	}
 
-	private class buttonFilterListener implements ActionListener {
+	private class textFieldFilterListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			sorter = new TableRowSorter<MonitorTableModel>(model);
 			table.setRowSorter(sorter);
-			new FilterMonitorForm(sorter).setVisible(true);
-			model.fireTableDataChanged();
+
+			String text = textField_Filter.getText().toUpperCase();  
+			if (text.length() == 0) {  
+				sorter.setRowFilter(null);  
+			} else {  
+				sorter.setRowFilter(RowFilter.regexFilter(text));  
+			} 
 		}
 	}
 

@@ -1,7 +1,5 @@
 package model.util;
 
-import javax.swing.JComboBox;
-
 public class Utils {
 
 	public static boolean ToCheckHostName(String hostNameToCheck) {
@@ -31,14 +29,6 @@ public class Utils {
 			return Double.parseDouble(str);
 		} catch (NumberFormatException e) {
 			return 0.0;
-		}
-	}
-
-	public static String tryParseToString(JComboBox<String> str) {
-		try {
-			return str.getSelectedItem().toString();
-		} catch (NullPointerException e) {
-			return null;
 		}
 	}
 }

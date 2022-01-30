@@ -180,7 +180,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setValue(rs.getDouble("value"));
 				equipment.setStatus(rs.getString("status"));
 				equipment.setDateEntry(rs.getDate("dateEntry"));
-				equipment.setChanges(EquipmentList.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
+				equipment.setChanges(EquipmentList.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber().toString())).collect(Collectors.toList()));
 				equipment.setReason(rs.getString("reason"));
 				equipments.add(equipment);
 			}

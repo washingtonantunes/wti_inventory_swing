@@ -29,7 +29,7 @@ public class MonitorService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.insert(obj);
-			changeDao.insert(getChange(obj, null, 0));
+			changeDao.insert(getChange(obj, 0));
 
 			conn.commit();
 		} 
@@ -71,7 +71,7 @@ public class MonitorService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.disable(obj);
-			changeDao.insert(getChange(obj, null, 3));
+			changeDao.insert(getChange(obj, 3));
 
 			conn.commit();
 		} 
@@ -91,6 +91,16 @@ public class MonitorService {
 		change.setObject(objOld.getSerialNumber());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
+		change.setDate(new Date());
+		change.setAuthor(MainWindow.collaborator.getName());
+		return change;
+	}
+	
+	private Change getChange(Monitor obj, int type) {
+		Change change = new Change();
+		change.setObject(obj.getSerialNumber());
+		change.setType(getTypeChange(type));
+		change.setChanges(getChanges(null, null, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
@@ -128,14 +138,20 @@ public class MonitorService {
 		String fieldsUpdated = "Fields Updated: ";
 		
 		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
-			fieldsUpdated += "'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "', ";
+			fieldsUpdated += " 'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "',";
 		}
 		if (!objOld.getBrand().equals(objNew.getBrand())) {
-			fieldsUpdated += "'Brand Old: " + objOld.getBrand() + "', ";
+			fieldsUpdated += " 'Brand Old: " + objOld.getBrand() + "',";
 		}
 		if (!objOld.getModel().equals(objNew.getModel())) {
-			fieldsUpdated += "'Model Old: " + objOld.getModel() + "', ";
+			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "'";
 		}
+		
+		int i = fieldsUpdated.lastIndexOf(",");
+		if(i + 1 == fieldsUpdated.length()) {
+			fieldsUpdated = fieldsUpdated.substring(0, i);
+		}
+		
 		return fieldsUpdated;
 	}
 }

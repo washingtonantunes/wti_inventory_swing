@@ -17,8 +17,6 @@ public class ChangesPanel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension DIMENSIONDISPLAYPANEL = new Dimension(948, 350);
-
 	private JTable table;
 	private JScrollPane scrollPane;
 
@@ -38,7 +36,7 @@ public class ChangesPanel extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Changes");
-		setPreferredSize(DIMENSIONDISPLAYPANEL);
+		setPreferredSize(new Dimension(948, 350));
 		setResizable(false);
 
 		pack();
@@ -54,7 +52,9 @@ public class ChangesPanel extends JDialog {
 			public void mouseClicked(MouseEvent arg0) {
 				int lineSelected = table.getSelectedRow();
 				String info = (String) table.getValueAt(lineSelected, 2);
-				new ShowInfoChange(info).setVisible(true);
+				if (info.length() > 80) {
+					new ShowInfoChange(info).setVisible(true);
+				}
 			}
 		});
 
