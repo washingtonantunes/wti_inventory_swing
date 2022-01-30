@@ -30,13 +30,13 @@ public class CreateExlFileMonitor {
 			HSSFSheet sheet = workbook.createSheet("Monitors");
 
 			sheet.setDefaultColumnWidth(15);
-			sheet.setDefaultRowHeight((short)400);
-			
+			sheet.setDefaultRowHeight((short) 400);
+
 			int rownum = 0;
 			int cellnum = 0;
 			Cell cell;
 			Row row;
-			
+
 			row = sheet.createRow(rownum++);
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Serial Number");
@@ -46,10 +46,10 @@ public class CreateExlFileMonitor {
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Model");
-			
+
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Patrimony Number");
-			
+
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Status");
 
@@ -58,14 +58,14 @@ public class CreateExlFileMonitor {
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Reason");
-			
+
 			for (Monitor monitor : monitors) {
 				row = sheet.createRow(rownum++);
 				cellnum = 0;
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getSerialNumber());
-				
+
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getBrand());
 
@@ -74,16 +74,16 @@ public class CreateExlFileMonitor {
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getPatrimonyNumber());
-				
+
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getStatus());
-				
+
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getDateEntry());
-				
+
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getReason());
-				}
+			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");
 			workbook.write(fileOut);
@@ -96,4 +96,3 @@ public class CreateExlFileMonitor {
 		}
 	}
 }
-

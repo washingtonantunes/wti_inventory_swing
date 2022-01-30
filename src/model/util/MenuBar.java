@@ -18,8 +18,7 @@ public class MenuBar extends JMenuBar {
 
 	private int privilege;
 
-	public MenuBar(int privilege) {
-		this.privilege = privilege;
+	public MenuBar() {
 		initComponents();
 	}
 

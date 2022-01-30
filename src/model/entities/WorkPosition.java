@@ -11,7 +11,7 @@ public class WorkPosition implements Serializable {
 
 	private String workPoint;
 	private String location;
-	private String floors;
+	private String floor;
 	private String netPoint;
 	private String status;
 	private Date dateEntry;
@@ -20,28 +20,6 @@ public class WorkPosition implements Serializable {
 	private List<Change> changes;
 
 	public WorkPosition() {
-	}
-
-	public WorkPosition(String workPoint, String location, String floors, String netPoint, String status,
-			Date dateEntry) {
-		this.workPoint = workPoint;
-		this.location = location;
-		this.floors = floors;
-		this.netPoint = netPoint;
-		this.status = status;
-		this.dateEntry = dateEntry;
-	}
-
-	public WorkPosition(String workPoint, String location, String floors, String netPoint, String status,
-			Date dateEntry, String reason, List<Change> changes) {
-		this.workPoint = workPoint;
-		this.location = location;
-		this.floors = floors;
-		this.netPoint = netPoint;
-		this.status = status;
-		this.dateEntry = dateEntry;
-		this.reason = reason;
-		this.changes = changes;
 	}
 
 	public String getWorkPoint() {
@@ -60,12 +38,12 @@ public class WorkPosition implements Serializable {
 		this.location = location;
 	}
 
-	public String getFloors() {
-		return floors;
+	public String getFloor() {
+		return floor;
 	}
 
-	public void setFloors(String floors) {
-		this.floors = floors;
+	public void setFloor(String floor) {
+		this.floor = floor;
 	}
 
 	public String getNetPoint() {
@@ -110,7 +88,7 @@ public class WorkPosition implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(floors, location, workPoint);
+		return Objects.hash(floor, location, workPoint);
 	}
 
 	@Override
@@ -122,7 +100,7 @@ public class WorkPosition implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		WorkPosition other = (WorkPosition) obj;
-		return Objects.equals(floors, other.floors) && Objects.equals(location, other.location)
+		return Objects.equals(floor, other.floor) && Objects.equals(location, other.location)
 				&& Objects.equals(workPoint, other.workPoint);
 	}
 

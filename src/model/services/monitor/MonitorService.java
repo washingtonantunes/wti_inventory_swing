@@ -85,7 +85,7 @@ public class MonitorService {
 			}
 		}
 	}
-	
+
 	private Change getChange(Monitor objOld, Monitor objNew, int type) {
 		Change change = new Change();
 		change.setObject(objOld.getSerialNumber());
@@ -95,7 +95,7 @@ public class MonitorService {
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
 	}
-	
+
 	private Change getChange(Monitor obj, int type) {
 		Change change = new Change();
 		change.setObject(obj.getSerialNumber());
@@ -105,38 +105,44 @@ public class MonitorService {
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
 	}
-	
+
 	private String getTypeChange(int type) {
 		String typeChange = "";
 		if (type == 0) {
 			typeChange = "Monitor Input";
-		} else if (type == 1) {
+		} 
+		else if (type == 1) {
 			typeChange = "Monitor Update";
-		} else if (type == 2) {
+		} 
+		else if (type == 2) {
 			typeChange = "Monitor Update Status";
-		} else if (type == 3) {
+		} 
+		else if (type == 3) {
 			typeChange = "Monitor Deactivation";
 		}
 		return typeChange;
 	}
-	
+
 	private String getChanges(Monitor objOld, Monitor objNew, int type) {
 		String changes = "";
 		if (type == 0) {
 			changes = "New Monitor Added";
-		} else if (type == 1) {
+		} 
+		else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
-		} else if (type == 2) {
-			
-		} else if (type == 3) {
+		} 
+		else if (type == 2) {
+
+		} 
+		else if (type == 3) {
 			changes = "Monitor Disabled for: " + objOld.getReason();
 		}
 		return changes;
 	}
-	
+
 	private String getFieldsUpdated(Monitor objOld, Monitor objNew) {
 		String fieldsUpdated = "Fields Updated: ";
-		
+
 		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
 			fieldsUpdated += " 'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "',";
 		}
@@ -146,12 +152,12 @@ public class MonitorService {
 		if (!objOld.getModel().equals(objNew.getModel())) {
 			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "'";
 		}
-		
+
 		int i = fieldsUpdated.lastIndexOf(",");
-		if(i + 1 == fieldsUpdated.length()) {
+		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i);
 		}
-		
+
 		return fieldsUpdated;
 	}
 }

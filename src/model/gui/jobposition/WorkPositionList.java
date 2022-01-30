@@ -1,4 +1,4 @@
-package model.gui.equipment;
+package model.gui.jobposition;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,17 +22,15 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
 import model.entities.Change;
-import model.entities.Equipment;
+import model.entities.WorkPosition;
 import model.entities.Option;
 import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.change.ChangeService;
-import model.services.equipment.CreateExlFileEquipment;
-import model.services.equipment.EquipmentService;
-import model.services.equipment.EquipmentTableModel;
-import model.services.equipment.TableEquipment;
+import model.services.workposition.WorkPositionTableModel;
+import model.services.workposition.TableWorkPosition;
 
-public class EquipmentList extends JPanel {
+public class WorkPositionList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,21 +40,21 @@ public class EquipmentList extends JPanel {
 	private final Color COLOR3 = new Color(2, 101, 124);
 
 	private JScrollPane scrollPane;
-	private TableEquipment table;
-	private EquipmentTableModel model;
+	private TableWorkPosition table;
+	private WorkPositionTableModel model;
 
 	private static List<Change> changes;
-	private List<Equipment> equipments;
+	private List<WorkPosition> workPositions;
 	private List<Option> options;
 
 	private JLabel label_Show__Quantity;
 
 	private JTextField textField_Filter;
-	private TableRowSorter<EquipmentTableModel> sorter;
+	private TableRowSorter<WorkPositionTableModel> sorter;
 
-	public EquipmentList() {
+	public WorkPositionList() {
 		changes = loadDataChanges();
-		equipments = loadDataEquipments();
+		workPositions = loadDataWorkPositions();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -83,7 +81,7 @@ public class EquipmentList extends JPanel {
 		panel.setPreferredSize(new Dimension(0, 25));
 		panel.setBackground(COLOR2);
 
-		JLabel label_Title = new JLabel("Equipments");
+		JLabel label_Title = new JLabel("Work Positions");
 		label_Title.setPreferredSize(new Dimension(130, 35));
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
@@ -158,8 +156,8 @@ public class EquipmentList extends JPanel {
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
 
-		label_Show__Quantity = new JLabel(String.valueOf(equipments.size()));
-		label_Show__Quantity.setPreferredSize(new Dimension(30, 35));
+		label_Show__Quantity = new JLabel(String.valueOf(workPositions.size()));
+		label_Show__Quantity.setPreferredSize(new Dimension(50, 35));
 		label_Show__Quantity.setBounds(400, 15, 50, 25);
 		label_Show__Quantity.setForeground(Color.WHITE);
 		panel.add(label_Show__Quantity);
@@ -168,9 +166,9 @@ public class EquipmentList extends JPanel {
 	}
 
 	private JScrollPane createTable() {
-		model = new EquipmentTableModel(equipments);
+		model = new WorkPositionTableModel(workPositions);
 
-		table = new TableEquipment(model);
+		table = new TableWorkPosition(model);
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -186,10 +184,10 @@ public class EquipmentList extends JPanel {
 		return list;
 	}
 
-	private List<Equipment> loadDataEquipments() {
-		final EquipmentService service = new EquipmentService();
-		List<Equipment> list = service.findAll();
-		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
+	private List<WorkPosition> loadDataWorkPositions() {
+		final WorkPositionService service = new WorkPositionService();
+		List<WorkPosition> list = service.findAll();
+		list.sort((w1, w2) -> w1.getWorkPoint().compareTo(w2.getWorkPoint()));
 		return list;
 	}
 
@@ -209,7 +207,7 @@ public class EquipmentList extends JPanel {
 						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewEquipmentForm(model, options).setVisible(true);
+				new NewWorkPositionForm(model, options).setVisible(true);
 				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
@@ -233,13 +231,13 @@ public class EquipmentList extends JPanel {
 							JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
-					Equipment equipment = model.getEquipment(modelRow);
-					if (equipment.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit",
+					WorkPosition workPosition = model.getWorkPosition(modelRow);
+					if (workPosition.getStatus().equals("DISABLED")) {
+						JOptionPane.showMessageDialog(null, "This work position is disabled", "Unable to Edit",
 								JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditEquipmentForm(model, equipment, options, modelRow).setVisible(true);
+						new EditWorkPositionForm(model, workPosition, options, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -258,8 +256,8 @@ public class EquipmentList extends JPanel {
 						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				Equipment equipment = model.getEquipment(modelRow);
-				new ViewEquipmentForm(equipment).setVisible(true);
+				WorkPosition workPosition = model.getWorkPosition(modelRow);
+				new ViewWorkPositionForm(workPosition).setVisible(true);
 			}
 		}
 	}
@@ -281,17 +279,17 @@ public class EquipmentList extends JPanel {
 							JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
-					Equipment equipment = model.getEquipment(modelRow);
-					if (equipment.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
+					WorkPosition workPosition = model.getWorkPosition(modelRow);
+					if (workPosition.getStatus().equals("DISABLED")) {
+						JOptionPane.showMessageDialog(null, "This work position already is disabled",
+								"Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
-					else if (equipment.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable",
+					else if (workPosition.getStatus().equals("IN USE")) {
+						JOptionPane.showMessageDialog(null, "This work position is in use", "Unable to Disable",
 								JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new DisableEquipmentForm(model, equipment, options, modelRow).setVisible(true);
+						new DisableWorkPositionForm(model, workPosition, options, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -302,7 +300,7 @@ public class EquipmentList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			sorter = new TableRowSorter<EquipmentTableModel>(model);
+			sorter = new TableRowSorter<WorkPositionTableModel>(model);
 			table.setRowSorter(sorter);
 
 			String text = textField_Filter.getText().toUpperCase();
@@ -319,9 +317,9 @@ public class EquipmentList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Equipment> equipments = new ArrayList<Equipment>();
+			List<WorkPosition> workPositions = new ArrayList<WorkPosition>();
 			for (int row = 0; row < table.getRowCount(); row++) {
-				equipments.add(model.getEquipment(row));
+				workPositions.add(model.getWorkPosition(row));
 			}
 
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
@@ -330,7 +328,7 @@ public class EquipmentList extends JPanel {
 
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileEquipment(equipments, selectedFile.getAbsolutePath());
+				new CreateExlFileWorkPosition(workPositions, selectedFile.getAbsolutePath());
 			}
 		}
 	}

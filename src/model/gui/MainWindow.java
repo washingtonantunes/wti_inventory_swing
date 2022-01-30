@@ -20,11 +20,12 @@ public class MainWindow extends JFrame {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(1350, 710);
 
-	private final MenuBar menu = new MenuBar(1);
+	private final MenuBar menu = new MenuBar();
 
 	private static JDesktopPane main;
-	
-	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
+
+	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista",
+			"ACTIVE", null);
 
 	public MainWindow() {
 		initComponents();
@@ -61,7 +62,7 @@ public class MainWindow extends JFrame {
 		JLabel label_author = new JLabel("Author: Washington Antunes");
 		label_author.setFont(new Font("fontLabel", ALLBITS, 10));
 		label_author.setForeground(new Color(4, 77, 92));
-		label_author.setBounds(1100, 630, 600, 50);
+		label_author.setBounds(1100, 610, 600, 50);
 		panel.add(label_author);
 
 		return panel;

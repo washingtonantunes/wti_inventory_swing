@@ -85,7 +85,7 @@ public class EquipmentService {
 			}
 		}
 	}
-	
+
 	private Change getChange(Equipment objOld, Equipment objNew, int type) {
 		Change change = new Change();
 		change.setObject(objNew.getSerialNumber());
@@ -95,7 +95,7 @@ public class EquipmentService {
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
 	}
-	
+
 	private Change getChange(Equipment obj, int type) {
 		Change change = new Change();
 		change.setObject(obj.getSerialNumber());
@@ -105,35 +105,41 @@ public class EquipmentService {
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
 	}
-	
+
 	private String getTypeChange(int type) {
 		String typeChange = "";
 		if (type == 0) {
 			typeChange = "Equipment Input";
-		} else if (type == 1) {
+		} 
+		else if (type == 1) {
 			typeChange = "Equipment Update";
-		} else if (type == 2) {
+		} 
+		else if (type == 2) {
 			typeChange = "Equipment Update Status";
-		} else if (type == 3) {
+		} 
+		else if (type == 3) {
 			typeChange = "Equipment Deactivation";
 		}
 		return typeChange;
 	}
-	
+
 	private String getChanges(Equipment objOld, Equipment objNew, int type) {
 		String changes = "";
 		if (type == 0) {
 			changes = "New Equipment Added";
-		} else if (type == 1) {
+		} 
+		else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
-		} else if (type == 2) {
-			
-		} else if (type == 3) {
+		} 
+		else if (type == 2) {
+
+		} 
+		else if (type == 3) {
 			changes = "Equipment Disabled for: " + objOld.getReason();
 		}
 		return changes;
 	}
-	
+
 	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
@@ -145,7 +151,7 @@ public class EquipmentService {
 		}
 		if (!objOld.getType().equals(objNew.getType())) {
 			fieldsUpdated += " 'Type Old: " + objOld.getType() + "',";
-		}		
+		}
 		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
 			fieldsUpdated += " 'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "',";
 		}
@@ -169,12 +175,12 @@ public class EquipmentService {
 		if (!objOld.getValue().equals(objNew.getValue())) {
 			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "'";
 		}
-		
+
 		int i = fieldsUpdated.lastIndexOf(",");
-		if(i + 1 == fieldsUpdated.length()) {
+		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i);
 		}
-		
+
 		return fieldsUpdated;
 	}
 }

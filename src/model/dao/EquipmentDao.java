@@ -11,7 +11,7 @@ public interface EquipmentDao {
 	void update(Equipment obj);
 
 	void updateStatus(Equipment obj);
-	
+
 	void disable(Equipment obj);
 
 	List<Equipment> findAll();

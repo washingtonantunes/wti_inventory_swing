@@ -23,11 +23,12 @@ public class Utils {
 		}
 		return true;
 	}
-	
+
 	public static Double tryParseToDouble(String str) {
 		try {
 			return Double.parseDouble(str);
-		} catch (NumberFormatException e) {
+		} 
+		catch (NumberFormatException e) {
 			return 0.0;
 		}
 	}

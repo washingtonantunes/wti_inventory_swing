@@ -16,12 +16,12 @@ import javax.swing.table.TableColumn;
 public class TableMonitor extends JTable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public TableMonitor(MonitorTableModel model) {
 		super(model);
 		initComponents();
 	}
-	
+
 	private void initComponents() {
 		setFillsViewportHeight(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -29,14 +29,15 @@ public class TableMonitor extends JTable {
 		configureSizeColumn();
 		configureColumnDate();
 	}
-	
+
 	private void configureHeader() {
 		this.getTableHeader().setPreferredSize(new Dimension(0, 40));
 		this.getTableHeader().setReorderingAllowed(false);
 
-		((DefaultTableCellRenderer) this.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		((DefaultTableCellRenderer) this.getTableHeader().getDefaultRenderer())
+				.setHorizontalAlignment(SwingConstants.CENTER);
 	}
-	
+
 	private void configureSizeColumn() {
 		TableColumn column = null;
 		for (int i = 0; i < this.getColumnCount(); i++) {
@@ -71,23 +72,21 @@ public class TableMonitor extends JTable {
 			}
 		}
 	}
-	
+
 	private void configureColumnDate() {
 		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
 
 			private static final long serialVersionUID = 1L;
-			
+
 			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 
-		    public Component getTableCellRendererComponent(JTable table,
-		            Object value, boolean isSelected, boolean hasFocus,
-		            int row, int column) {
-		        if( value instanceof Date) {
-		            value = f.format(value);
-		        }
-		        return super.getTableCellRendererComponent(table, value, isSelected,
-		                hasFocus, row, column);
-		    }
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				if (value instanceof Date) {
+					value = f.format(value);
+				}
+				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			}
 		};
 
 		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
@@ -95,9 +94,9 @@ public class TableMonitor extends JTable {
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component c = super.prepareRenderer(renderer, row, column);
-		Color color1 = new Color(220,220,220);
+		Color color1 = new Color(220, 220, 220);
 		Color color2 = Color.WHITE;
-		if(!c.getBackground().equals(getSelectionBackground())) {
+		if (!c.getBackground().equals(getSelectionBackground())) {
 			Color coleur = (row % 2 == 0 ? color1 : color2);
 			c.setBackground(coleur);
 			coleur = null;

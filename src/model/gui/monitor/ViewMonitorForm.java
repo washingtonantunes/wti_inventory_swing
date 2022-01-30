@@ -14,11 +14,10 @@ import javax.swing.JPanel;
 import model.entities.Monitor;
 import model.gui.change.ChangesPanel;
 
-
 public class ViewMonitorForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private static final int COLUMN1 = 20;
@@ -35,7 +34,7 @@ public class ViewMonitorForm extends JDialog {
 		this.monitor = monitor;
 		initComponents();
 	}
-	
+
 	private void initComponents() {
 		setModal(true);
 
@@ -49,7 +48,7 @@ public class ViewMonitorForm extends JDialog {
 		pack();
 		setLocationRelativeTo(null);
 	}
-	
+
 	private JPanel createPanelMain() {
 		final JPanel panel = new JPanel(new FlowLayout());
 		panel.setLayout(null);
@@ -60,12 +59,12 @@ public class ViewMonitorForm extends JDialog {
 
 		return panel;
 	}
-	
+
 	private void addLabels(JPanel panel) {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
-		
+
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
@@ -73,24 +72,24 @@ public class ViewMonitorForm extends JDialog {
 		final JLabel label_Brand = new JLabel("Brand:");
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
-		
+
 		final JLabel label_Model = new JLabel("Model:");
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
-		
+
 		final JLabel label_Status = new JLabel("Status:");
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
-		
+
 		final JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
-		
+
 		final JLabel label_Reason = new JLabel("Reason:");
 		label_Reason.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Reason);
 	}
-	
+
 	private void addLabelsShow(JPanel panel) {
 		final JLabel label_Show_SerialNumber = new JLabel(monitor.getSerialNumber());
 		label_Show_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
@@ -99,23 +98,23 @@ public class ViewMonitorForm extends JDialog {
 		final JLabel label_Show_PatrimonyNumber = new JLabel(monitor.getPatrimonyNumber());
 		label_Show_PatrimonyNumber.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(label_Show_PatrimonyNumber);
-		
+
 		final JLabel label_Show_Brand = new JLabel(monitor.getBrand());
 		label_Show_Brand.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(label_Show_Brand);
-		
+
 		final JLabel label_Show_Model = new JLabel(monitor.getModel());
 		label_Show_Model.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
 		panel.add(label_Show_Model);
-		
+
 		final JLabel label_Show_Status = new JLabel(monitor.getStatus());
 		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
 		panel.add(label_Show_Status);
-		
+
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(monitor.getDateEntry()));
 		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
-		
+
 		final JLabel label_Show_Reason = new JLabel(monitor.getReason());
 		label_Show_Reason.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
 		panel.add(label_Show_Reason);
@@ -132,11 +131,12 @@ public class ViewMonitorForm extends JDialog {
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
-	
+
 	private class buttonChangesListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			new ChangesPanel(monitor.getChanges()).setVisible(true);;
+			new ChangesPanel(monitor.getChanges()).setVisible(true);
+			;
 		}
 	}
 
@@ -147,4 +147,3 @@ public class ViewMonitorForm extends JDialog {
 		}
 	}
 }
-

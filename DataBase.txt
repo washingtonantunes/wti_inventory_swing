@@ -52,3 +52,16 @@ CREATE TABLE `monitors` (
   PRIMARY KEY (`serialNumber`),
   UNIQUE KEY `serialNumber_UNIQUE` (`serialNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `work_positions` (
+  `workPoint` varchar(45) NOT NULL,
+  `location` varchar(30) NOT NULL,
+  `floor` varchar(30) NOT NULL,
+  `netPoint` varchar(20) DEFAULT NULL,
+  `status` varchar(30) NOT NULL,
+  `reason` varchar(50) DEFAULT NULL,
+  `dateEntry` date NOT NULL,
+  PRIMARY KEY (`workPoint`),
+  UNIQUE KEY `workPoint_UNIQUE` (`workPoint`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

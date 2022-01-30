@@ -31,7 +31,7 @@ import model.util.JTextFieldFilter;
 public class EditMonitorForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private static final int COLUMN1 = 20;
@@ -46,7 +46,7 @@ public class EditMonitorForm extends JDialog {
 	private JTextField textField_PatrimonyNumber;
 	private JComboBox<String> comboBox_Brand;
 	private JComboBox<String> comboBox_Model;
-	
+
 	private JLabel labelError_PatrimonyNumber;
 	private JLabel labelError_Brand;
 	private JLabel labelError_Model;
@@ -94,7 +94,7 @@ public class EditMonitorForm extends JDialog {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
-		
+
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
@@ -102,15 +102,15 @@ public class EditMonitorForm extends JDialog {
 		final JLabel label_Brand = new JLabel("Brand:");
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
-		
+
 		final JLabel label_Model = new JLabel("Model:");
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
-		
+
 		JLabel label_Status = new JLabel("Status:");
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
-		
+
 		JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
@@ -121,30 +121,30 @@ public class EditMonitorForm extends JDialog {
 		label_Show_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(label_Show_SerialNumber);
 
-		comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("BRAND-MONITOR") && o.getStatus().equals("ACTIVE"))
-				.map(Option::getOption).collect(Collectors.toList())));
+		comboBox_Brand = new JComboBox<>(new Vector<>(
+				options.stream().filter(o -> o.getType().equals("BRAND-MONITOR") && o.getStatus().equals("ACTIVE"))
+						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Brand.setSelectedItem(monitorOld.getBrand());
 		comboBox_Brand.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(comboBox_Brand);
-		
-		comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("MODEL-MONITOR") && o.getStatus().equals("ACTIVE"))
-				.map(Option::getOption).collect(Collectors.toList())));
+
+		comboBox_Model = new JComboBox<>(new Vector<>(
+				options.stream().filter(o -> o.getType().equals("MODEL-MONITOR") && o.getStatus().equals("ACTIVE"))
+						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Model.setSelectedItem(monitorOld.getModel());
 		comboBox_Model.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(comboBox_Model);
-		
+
 		textField_PatrimonyNumber = new JTextField(monitorOld.getPatrimonyNumber());
 		textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
 		textField_PatrimonyNumber.setText(monitorOld.getPatrimonyNumber());
 		textField_PatrimonyNumber.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
 		panel.add(textField_PatrimonyNumber);
-		
+
 		final JLabel label_Show_Status = new JLabel(monitorOld.getStatus());
 		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
 		panel.add(label_Show_Status);
-		
+
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(monitorOld.getDateEntry()));
 		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
@@ -155,12 +155,12 @@ public class EditMonitorForm extends JDialog {
 		labelError_Brand.setForeground(Color.RED);
 		labelError_Brand.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
 		panel.add(labelError_Brand);
-		
+
 		labelError_Model = new JLabel();
 		labelError_Model.setForeground(Color.RED);
 		labelError_Model.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
 		panel.add(labelError_Model);
-		
+
 		labelError_PatrimonyNumber = new JLabel();
 		labelError_PatrimonyNumber.setForeground(Color.RED);
 		labelError_PatrimonyNumber.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
@@ -188,7 +188,8 @@ public class EditMonitorForm extends JDialog {
 				service.update(monitorOld, monitorNew);
 				model.updateMonitor(lineSelected, monitorNew);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Monitor successfully updated", "Success updating object", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Monitor successfully updated", "Success updating object",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -207,7 +208,7 @@ public class EditMonitorForm extends JDialog {
 	}
 
 	private Monitor getFormData() {
-		Monitor monitor =  new Monitor();
+		Monitor monitor = new Monitor();
 		monitor = (Monitor) monitorOld.clone();
 
 		ValidationException exception = new ValidationException("Validation error");
@@ -224,8 +225,7 @@ public class EditMonitorForm extends JDialog {
 		}
 
 		// Validation Brand
-		if (comboBox_Brand.getSelectedIndex() < 0
-				|| comboBox_Brand.getSelectedItem() == null) {
+		if (comboBox_Brand.getSelectedIndex() < 0 || comboBox_Brand.getSelectedItem() == null) {
 			exception.addError("brand", "Field can't be empty");
 		} 
 		else {
@@ -233,8 +233,7 @@ public class EditMonitorForm extends JDialog {
 		}
 
 		// Validation Model
-		if (comboBox_Model.getSelectedIndex() < 0
-				|| comboBox_Model.getSelectedItem() == null) {
+		if (comboBox_Model.getSelectedIndex() < 0 || comboBox_Model.getSelectedItem() == null) {
 			exception.addError("model", "Field can't be empty");
 		} 
 		else {
@@ -252,20 +251,23 @@ public class EditMonitorForm extends JDialog {
 		Set<String> fields = errors.keySet();
 
 		labelError_PatrimonyNumber.setText(fields.contains("patrimonyNumber") ? errors.get("patrimonyNumber") : "");
-		labelError_Brand.setText(fields.contains("brand") ? errors.get("brand") : ""); 
-		labelError_Model.setText(fields.contains("model") ? errors.get("model") : ""); 
+		labelError_Brand.setText(fields.contains("brand") ? errors.get("brand") : "");
+		labelError_Model.setText(fields.contains("model") ? errors.get("model") : "");
 	}
-	
+
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("monitors.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
-			}  
+				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
+			} 
 			else if (e.getMessage().contains("monitors.patrimonyNumber_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

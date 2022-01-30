@@ -21,9 +21,9 @@ public class MonitorTableModel extends AbstractTableModel {
 
 	private List<Monitor> monitors;
 
-	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>","Brand", "Model",
+	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>", "Brand", "Model",
 			"<html><center>Patrimony <br>Number</html>", "Status", "<html><center>Date <br>Enty</html>", "Reason" };
-	
+
 	public MonitorTableModel(List<Monitor> monitors) {
 		this.monitors = new ArrayList<>(monitors);
 	}

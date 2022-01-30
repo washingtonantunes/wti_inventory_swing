@@ -195,15 +195,15 @@ public class InventoryDaoJDBC implements InventoryDao {
 		WorkPosition workPosition = new WorkPosition();
 		workPosition.setWorkPoint(rs.getString("workPoint"));
 		workPosition.setLocation(rs.getString("location"));
-		workPosition.setFloors(rs.getString("floors"));
+		workPosition.setFloor(rs.getString("floor"));
 		workPosition.setNetPoint(rs.getString("netPoint"));
 		return workPosition;
 	}
 	
 	private Project instatiateProject(ResultSet rs) throws SQLException {
 		Project project = new Project();
-		project.setId(rs.getInt("idProject"));
-		project.setName(rs.getString("nameProject"));
+		project.setId(rs.getInt("id"));
+		project.setName(rs.getString("name"));
 		project.setLocality(rs.getString("locality"));
 		project.setCostCenter(rs.getString("costCenter"));
 		return project;
@@ -212,7 +212,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	private User instatiateUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setRegistration(rs.getString("registration"));
-		user.setNameUser(rs.getString("nameUser"));
+		user.setNameUser(rs.getString("name"));
 		user.setCPF(rs.getString("cpf"));
 		user.setPhone(rs.getString("phone"));
 		user.setProject(rs.getString("project"));
@@ -226,14 +226,14 @@ public class InventoryDaoJDBC implements InventoryDao {
 		equipment.setSerialNumber(rs.getString("serialNumber"));
 		equipment.setHostName(rs.getString("hostname"));
 		equipment.setAddressMAC(rs.getString("addressMAC"));
-		equipment.setType(rs.getString("typeEquipment"));
-		equipment.setPatrimonyNumber(rs.getString("patrimonyNumberEquipment"));
-		equipment.setBrand(rs.getString("brandEquipment"));
-		equipment.setModel(rs.getString("modelEquipment"));
+		equipment.setType(rs.getString("type"));
+		equipment.setPatrimonyNumber(rs.getString("patrimonyNumber"));
+		equipment.setBrand(rs.getString("brand"));
+		equipment.setModel(rs.getString("model"));
 		equipment.setMemoryRam(rs.getString("memoryRam"));
 		equipment.setHardDisk(rs.getString("hardDisk"));
 		equipment.setCostType(rs.getString("costType"));
-		equipment.setValue(rs.getDouble("valueEquipment"));
+		equipment.setValue(rs.getDouble("value"));
 		return equipment;
 	}
 	

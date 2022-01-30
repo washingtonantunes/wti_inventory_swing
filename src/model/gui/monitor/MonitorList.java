@@ -47,10 +47,10 @@ public class MonitorList extends JPanel {
 
 	private static List<Change> changes;
 	private List<Monitor> monitors;
-	private List<Option> options; 
-	
+	private List<Option> options;
+
 	private JLabel label_Show__Quantity;
-	
+
 	private JTextField textField_Filter;
 	private TableRowSorter<MonitorTableModel> sorter;
 
@@ -64,11 +64,11 @@ public class MonitorList extends JPanel {
 	private void initComponents() {
 		setLayout(new BorderLayout());
 		setVisible(true);
-		
+
 		add(createPanelNorth(), BorderLayout.NORTH);
 		add(createTable(), BorderLayout.CENTER);
 	}
-	
+
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setPreferredSize(new Dimension(0, 85));
@@ -76,19 +76,19 @@ public class MonitorList extends JPanel {
 		panel.add(createPanelButton(), BorderLayout.SOUTH);
 		return panel;
 	}
-	
+
 	private JPanel createPanelTitle() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(0, 25));
 		panel.setBackground(COLOR2);
-		
+
 		JLabel label_Title = new JLabel("Monitors");
 		label_Title.setPreferredSize(new Dimension(130, 35));
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
 		panel.add(label_Title);
-		
+
 		return panel;
 	}
 
@@ -102,12 +102,12 @@ public class MonitorList extends JPanel {
 
 		return panel;
 	}
-	
+
 	private JPanel createPanelButton1() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		panel.setPreferredSize(new Dimension(800, 60));
 		panel.setBackground(COLOR3);
-		
+
 		JButton buttonNew = new JButton("New");
 		buttonNew.setPreferredSize(DIMENSIONBUTTON);
 		buttonNew.addActionListener(new buttonNewListener());
@@ -132,38 +132,38 @@ public class MonitorList extends JPanel {
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
-		
+
 		return panel;
 	}
-	
+
 	private JPanel createPanelButton2() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(450, 60));
 		panel.setBackground(COLOR3);
-		
+
 		final JLabel label_Search = new JLabel("Enter to filter");
 		label_Search.setBounds(20, 15, 100, 25);
 		label_Search.setForeground(Color.WHITE);
 		panel.add(label_Search);
-		
+
 		textField_Filter = new JTextField();
 		textField_Filter.setBounds(100, 15, 130, 25);
 		textField_Filter.addActionListener(new textFieldFilterListener());
 		panel.add(textField_Filter);
-		
+
 		JLabel label_Quantity = new JLabel("Quantity:");
-		label_Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Quantity.setPreferredSize(new Dimension(80, 35));
 		label_Quantity.setBounds(340, 15, 80, 25);
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
-		
+
 		label_Show__Quantity = new JLabel(String.valueOf(monitors.size()));
-		label_Show__Quantity.setPreferredSize(DIMENSIONBUTTON);
+		label_Show__Quantity.setPreferredSize(new Dimension(30, 35));
 		label_Show__Quantity.setBounds(400, 15, 50, 25);
 		label_Show__Quantity.setForeground(Color.WHITE);
 		panel.add(label_Show__Quantity);
-		
+
 		return panel;
 	}
 
@@ -175,11 +175,11 @@ public class MonitorList extends JPanel {
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
 	}
-	
+
 	public static List<Change> getChanges() {
 		return changes;
 	}
-	
+
 	private List<Change> loadDataChanges() {
 		final ChangeService service = new ChangeService();
 		List<Change> list = service.findAll();
@@ -192,7 +192,7 @@ public class MonitorList extends JPanel {
 		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
 		return list;
 	}
-	
+
 	private List<Option> loadDataOptions() {
 		final OptionService service = new OptionService();
 		List<Option> list = service.findAll();
@@ -205,8 +205,10 @@ public class MonitorList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
-			} else {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
+						JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
 				new NewMonitorForm(model, options).setVisible(true);
 				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
@@ -219,19 +221,21 @@ public class MonitorList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
-			} 
-			else {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
+							JOptionPane.INFORMATION_MESSAGE);
 				} 
-				else  {
+				else {
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This monitor is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This monitor is disabled", "Unable to Edit",
+								JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new EditMonitorForm(model, monitor, options, modelRow).setVisible(true);
@@ -249,9 +253,10 @@ public class MonitorList extends JPanel {
 			lineSelected = table.getSelectedRow();
 			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
-			else  {
+			else {
 				Monitor monitor = model.getMonitor(modelRow);
 				new ViewMonitorForm(monitor).setVisible(true);
 			}
@@ -263,23 +268,27 @@ public class MonitorList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
+							JOptionPane.INFORMATION_MESSAGE);
 				} 
-				else  {
+				else {
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This monitor already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This monitor already is disabled", "Unable to Disable",
+								JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else if (monitor.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This monitor is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
-					}
+						JOptionPane.showMessageDialog(null, "This monitor is in use", "Unable to Disable",
+								JOptionPane.INFORMATION_MESSAGE);
+					} 
 					else {
 						new DisableMonitorForm(model, monitor, options, modelRow).setVisible(true);
 					}
@@ -295,12 +304,13 @@ public class MonitorList extends JPanel {
 			sorter = new TableRowSorter<MonitorTableModel>(model);
 			table.setRowSorter(sorter);
 
-			String text = textField_Filter.getText().toUpperCase();  
-			if (text.length() == 0) {  
-				sorter.setRowFilter(null);  
-			} else {  
-				sorter.setRowFilter(RowFilter.regexFilter(text));  
+			String text = textField_Filter.getText().toUpperCase();
+			if (text.length() == 0) {
+				sorter.setRowFilter(null);
 			} 
+			else {
+				sorter.setRowFilter(RowFilter.regexFilter(text));
+			}
 		}
 	}
 
@@ -309,10 +319,10 @@ public class MonitorList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			List<Monitor> monitors = new ArrayList<Monitor>();
-			for(int row = 0; row < table.getRowCount();row++) {
+			for (int row = 0; row < table.getRowCount(); row++) {
 				monitors.add(model.getMonitor(row));
-            }
-					
+			}
+
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
 			int returnValue = jfc.showSaveDialog(null);

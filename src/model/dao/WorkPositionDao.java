@@ -10,9 +10,9 @@ public interface WorkPositionDao {
 
 	void update(WorkPosition obj);
 
-	void updateStatus(String workPoint, String status);
+	void updateStatus(WorkPosition obj);
 
-	void disable(String workPoint, String status, String reason);
+	void disable(WorkPosition obj);
 
 	List<WorkPosition> findAll();
 }

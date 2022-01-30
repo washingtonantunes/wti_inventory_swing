@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import db.DB;
 import db.DBException;
 import model.dao.WorkPositionDao;
 import model.entities.WorkPosition;
+import model.gui.equipment.EquipmentList;
 
 public class WorkPositionDaoJDBC implements WorkPositionDao {
 	
@@ -28,16 +30,16 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 					"INSERT INTO `work_positions` "
 					+ "(`workPoint`,"
 					+ "`location`,"
-					+ "`floors`,"
+					+ "`floor`,"
 					+ "`netPoint`,"
-					+ "`statusWorkPosition`,"
+					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?, ?)");
 			
 			st.setString(1, obj.getWorkPoint());
 			st.setString(2, obj.getLocation());
-			st.setString(3, obj.getFloors());
+			st.setString(3, obj.getFloor());
 			st.setString(4, obj.getNetPoint());
 			st.setString(5, obj.getStatus());
 			st.setDate(6, new java.sql.Date(obj.getDateEntry().getTime()));
@@ -56,11 +58,15 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `work_positions` "
-					+ "SET `netPoint` =  ? "
+					+ "SET `location` = ?, "
+					+ "`floor` = ?, "
+					+ "`netPoint` =  ? "
 					+ "WHERE `workPoint` = ?");
 
-			st.setString(1, obj.getNetPoint());
-			st.setString(2, obj.getWorkPoint());
+			st.setString(1, obj.getLocation());
+			st.setString(2, obj.getFloor());
+			st.setString(3, obj.getNetPoint());
+			st.setString(4, obj.getWorkPoint());
 			
 			st.executeUpdate();
 		} 
@@ -73,16 +79,16 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 	}
 
 	@Override
-	public void updateStatus(String workPoint, String status) {
+	public void updateStatus(WorkPosition obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `work_positions` "
-					+ "SET `statusWorkPosition` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `workPoint` = ?");
 
-			st.setString(1, status);
-			st.setString(2, workPoint);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getWorkPoint());
 
 			st.executeUpdate();
 		} 
@@ -95,17 +101,17 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 	}
 
 	@Override
-	public void disable(String workPoint, String status, String reason) {
+	public void disable(WorkPosition obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `work_positions` " 
-					+ "SET `statusWorkPosition` = ?, `reason` = ? "
+					+ "SET `status` = ?, `reason` = ? "
 					+ "WHERE `workPoint` = ?");
 
-			st.setString(1, status);
-			st.setString(2, reason);
-			st.setString(3, workPoint);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getReason());
+			st.setString(3, obj.getWorkPoint());
 			
 			st.executeUpdate();
 		} 
@@ -133,11 +139,11 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 
 				workPosition.setWorkPoint(rs.getString("workPoint"));
 				workPosition.setLocation(rs.getString("location"));
-				workPosition.setFloors(rs.getString("floors"));
+				workPosition.setFloor(rs.getString("floor"));
 				workPosition.setNetPoint(rs.getString("netPoint"));
-				workPosition.setStatus(rs.getString("statusWorkPosition"));
+				workPosition.setStatus(rs.getString("status"));
 				workPosition.setDateEntry(rs.getDate("dateEntry"));
-				//workPosition.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
+				workPosition.setChanges(EquipmentList.getChanges().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
 				workPosition.setReason(rs.getString("reason"));
 				workPositions.add(workPosition);
 			}

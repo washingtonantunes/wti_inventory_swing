@@ -45,12 +45,12 @@ public class NewMonitorForm extends JDialog {
 	private JTextField textField_PatrimonyNumber;
 	private JComboBox<String> comboBox_Brand;
 	private JComboBox<String> comboBox_Model;
-	
+
 	private JLabel labelError_SerialNumber;
 	private JLabel labelError_PatrimonyNumber;
 	private JLabel labelError_Brand;
 	private JLabel labelError_Model;
-	
+
 	private MonitorTableModel model;
 	private Monitor monitor;
 	private List<Option> options;
@@ -91,7 +91,7 @@ public class NewMonitorForm extends JDialog {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
-		
+
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
@@ -99,12 +99,11 @@ public class NewMonitorForm extends JDialog {
 		final JLabel label_Brand = new JLabel("Brand:");
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
-		
+
 		final JLabel label_Model = new JLabel("Model:");
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
-		
-		
+
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
@@ -112,22 +111,22 @@ public class NewMonitorForm extends JDialog {
 		textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 15));
 		textField_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(textField_SerialNumber);
-		
+
 		textField_PatrimonyNumber = new JTextField();
 		textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
 		textField_PatrimonyNumber.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(textField_PatrimonyNumber);
 
-		comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("BRAND-MONITOR") && o.getStatus().equals("ACTIVE"))
-				.map(Option::getOption).collect(Collectors.toList())));
+		comboBox_Brand = new JComboBox<>(new Vector<>(
+				options.stream().filter(o -> o.getType().equals("BRAND-MONITOR") && o.getStatus().equals("ACTIVE"))
+						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Brand.setSelectedIndex(-1);
 		comboBox_Brand.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(comboBox_Brand);
-		
-		comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
-				.filter(o -> o.getType().equals("MODEL-MONITOR") && o.getStatus().equals("ACTIVE"))
-				.map(Option::getOption).collect(Collectors.toList())));
+
+		comboBox_Model = new JComboBox<>(new Vector<>(
+				options.stream().filter(o -> o.getType().equals("MODEL-MONITOR") && o.getStatus().equals("ACTIVE"))
+						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Model.setSelectedIndex(-1);
 		comboBox_Model.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
 		panel.add(comboBox_Model);
@@ -138,7 +137,7 @@ public class NewMonitorForm extends JDialog {
 		labelError_SerialNumber.setForeground(Color.RED);
 		labelError_SerialNumber.setBounds(COLUMN3, 10, WIDTH + 90, HEIGHT);
 		panel.add(labelError_SerialNumber);
-		
+
 		labelError_PatrimonyNumber = new JLabel();
 		labelError_PatrimonyNumber.setForeground(Color.RED);
 		labelError_PatrimonyNumber.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
@@ -148,7 +147,7 @@ public class NewMonitorForm extends JDialog {
 		labelError_Brand.setForeground(Color.RED);
 		labelError_Brand.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
 		panel.add(labelError_Brand);
-		
+
 		labelError_Model = new JLabel();
 		labelError_Model.setForeground(Color.RED);
 		labelError_Model.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
@@ -176,7 +175,8 @@ public class NewMonitorForm extends JDialog {
 				service.save(monitor);
 				model.addMonitor(monitor);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Monitor successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Monitor successfully added", "Success saving object",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -222,8 +222,7 @@ public class NewMonitorForm extends JDialog {
 		}
 
 		// Validation Brand
-		if (comboBox_Brand.getSelectedIndex() < 0
-				|| comboBox_Brand.getSelectedItem() == null) {
+		if (comboBox_Brand.getSelectedIndex() < 0 || comboBox_Brand.getSelectedItem() == null) {
 			exception.addError("brand", "Field can't be empty");
 		} 
 		else {
@@ -231,8 +230,7 @@ public class NewMonitorForm extends JDialog {
 		}
 
 		// Validation Model
-		if (comboBox_Model.getSelectedIndex() < 0
-				|| comboBox_Model.getSelectedItem() == null) {
+		if (comboBox_Model.getSelectedIndex() < 0 || comboBox_Model.getSelectedItem() == null) {
 			exception.addError("model", "Field can't be empty");
 		} 
 		else {
@@ -257,20 +255,23 @@ public class NewMonitorForm extends JDialog {
 
 		labelError_SerialNumber.setText(fields.contains("serialNumber") ? errors.get("serialNumber") : "");
 		labelError_PatrimonyNumber.setText(fields.contains("patrimonyNumber") ? errors.get("patrimonyNumber") : "");
-		labelError_Brand.setText(fields.contains("brand") ? errors.get("brand") : ""); 
-		labelError_Model.setText(fields.contains("model") ? errors.get("model") : ""); 
+		labelError_Brand.setText(fields.contains("brand") ? errors.get("brand") : "");
+		labelError_Model.setText(fields.contains("model") ? errors.get("model") : "");
 	}
-	
+
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("monitors.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
-			}  
+				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
+			} 
 			else if (e.getMessage().contains("monitors.patrimonyNumber_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

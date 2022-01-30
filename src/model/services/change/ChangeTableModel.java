@@ -9,7 +9,7 @@ import model.entities.Change;
 public class ChangeTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final int COL_DATE = 0;
 	private static final int COL_TYPE = 1;
 	private static final int COL_CHANGES = 2;
@@ -50,11 +50,14 @@ public class ChangeTableModel extends AbstractTableModel {
 
 		if (column == COL_DATE) {
 			return c.getDate();
-		} else if (column == COL_TYPE) {
+		} 
+		else if (column == COL_TYPE) {
 			return c.getType();
-		} else if (column == COL_CHANGES) {
+		} 
+		else if (column == COL_CHANGES) {
 			return c.getChanges();
-		} else if (column == COL_AUTHOR) {
+		} 
+		else if (column == COL_AUTHOR) {
 			return c.getAuthor();
 		}
 		return "";

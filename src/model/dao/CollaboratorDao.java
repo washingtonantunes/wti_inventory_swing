@@ -9,7 +9,7 @@ public interface CollaboratorDao {
 	void insert(Collaborator obj);
 
 	void update(Collaborator obj);
-	
+
 	void disable(String registration, String status, String reason);
 
 	Map<String, Collaborator> findAll();
