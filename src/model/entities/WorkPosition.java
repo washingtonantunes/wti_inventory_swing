@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class WorkPosition implements Serializable {
+public class WorkPosition implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -108,4 +108,13 @@ public class WorkPosition implements Serializable {
 	public String toString() {
 		return workPoint;
 	}
+	
+	@Override
+	public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

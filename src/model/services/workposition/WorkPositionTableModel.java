@@ -21,8 +21,8 @@ public class WorkPositionTableModel extends AbstractTableModel {
 
 	List<WorkPosition> lines;
 
-	private String[] columns = new String[] { "Work Point", "Location", "Floor", "<html><center>Net<br>Point</html>",
-			"Status", "<html><center>Date<br>Entry</html>", "Reason" };
+	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point",
+			"Status", "Date Enty", "Reason" };
 
 	public WorkPositionTableModel(List<WorkPosition> workPositions) {
 		this.lines = workPositions;

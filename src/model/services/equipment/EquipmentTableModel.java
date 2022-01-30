@@ -31,8 +31,8 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
 			"<html><center>Host <br>Name</html>", "<html><center>Address<br>MAC</html>", "Type",
 			"<html><center>Patrimony <br>Number</html>", "Brand", "Model", "<html><center>Memory <br>RAM</html>",
-			"<html><center>Hard <br>Disk</html>", "<html><center>Cost <br>Type</html>", "Value", "Status",
-			"<html><center>Date <br>Enty</html>", "Reason" };
+			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Status",
+			"Date Enty", "Reason" };
 
 	public EquipmentTableModel(List<Equipment> equipments) {
 		this.equipments = new ArrayList<>(equipments);

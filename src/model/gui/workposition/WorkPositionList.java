@@ -1,4 +1,4 @@
-package model.gui.jobposition;
+package model.gui.workposition;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,6 +29,7 @@ import model.services.OptionService;
 import model.services.change.ChangeService;
 import model.services.workposition.WorkPositionTableModel;
 import model.services.workposition.TableWorkPosition;
+import model.services.workposition.WorkPositionService;
 
 public class WorkPositionList extends JPanel {
 

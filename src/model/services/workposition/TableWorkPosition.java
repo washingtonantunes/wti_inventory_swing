@@ -89,7 +89,7 @@ public class TableWorkPosition extends JTable {
 			}
 		};
 
-		this.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
