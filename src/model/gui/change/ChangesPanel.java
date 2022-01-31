@@ -28,7 +28,7 @@ public class ChangesPanel extends JDialog {
 		this.changes = changes;
 		initComponents();
 	}
-	
+
 	private void initComponents() {
 		setModal(true);
 
@@ -42,23 +42,28 @@ public class ChangesPanel extends JDialog {
 		pack();
 		setLocationRelativeTo(null);
 	}
-	
+
 	private JScrollPane createTable() {
 		model = new ChangeTableModel(changes);
 
 		table = new TableChange(model);
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
+		table.addMouseListener(new MouseListener());
+
+		scrollPane = new JScrollPane(table);
+		return scrollPane;
+	}
+
+	private class MouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			if (evt.getClickCount() == 2) {
 				int lineSelected = table.getSelectedRow();
 				String info = (String) table.getValueAt(lineSelected, 2);
 				if (info.length() > 80) {
 					new ShowInfoChange(info).setVisible(true);
 				}
 			}
-		});
-
-		scrollPane = new JScrollPane(table);
-		return scrollPane;
+		}
 	}
 }

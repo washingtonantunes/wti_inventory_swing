@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +24,15 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
 import model.entities.Change;
-import model.entities.WorkPosition;
 import model.entities.Option;
+import model.entities.WorkPosition;
 import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.change.ChangeService;
-import model.services.workposition.WorkPositionTableModel;
+import model.services.workposition.CreateExlFileWorkPosition;
 import model.services.workposition.TableWorkPosition;
 import model.services.workposition.WorkPositionService;
+import model.services.workposition.WorkPositionTableModel;
 
 public class WorkPositionList extends JPanel {
 
@@ -170,6 +173,7 @@ public class WorkPositionList extends JPanel {
 		model = new WorkPositionTableModel(workPositions);
 
 		table = new TableWorkPosition(model);
+		table.addMouseListener(new MouseListener());
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -204,8 +208,7 @@ public class WorkPositionList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				new NewWorkPositionForm(model, options).setVisible(true);
@@ -220,22 +223,19 @@ public class WorkPositionList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
 					WorkPosition workPosition = model.getWorkPosition(modelRow);
 					if (workPosition.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This work position is disabled", "Unable to Edit",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This work position is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new EditWorkPositionForm(model, workPosition, options, modelRow).setVisible(true);
@@ -253,8 +253,7 @@ public class WorkPositionList extends JPanel {
 			lineSelected = table.getSelectedRow();
 			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				WorkPosition workPosition = model.getWorkPosition(modelRow);
@@ -268,26 +267,22 @@ public class WorkPositionList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
 					WorkPosition workPosition = model.getWorkPosition(modelRow);
 					if (workPosition.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This work position already is disabled",
-								"Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This work position already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else if (workPosition.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This work position is in use", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This work position is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new DisableWorkPositionForm(model, workPosition, options, modelRow).setVisible(true);
@@ -307,9 +302,13 @@ public class WorkPositionList extends JPanel {
 			String text = textField_Filter.getText().toUpperCase();
 			if (text.length() == 0) {
 				sorter.setRowFilter(null);
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			} 
 			else {
 				sorter.setRowFilter(RowFilter.regexFilter(text));
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			}
 		}
 	}
@@ -330,6 +329,19 @@ public class WorkPositionList extends JPanel {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jfc.getSelectedFile();
 				new CreateExlFileWorkPosition(workPositions, selectedFile.getAbsolutePath());
+			}
+		}
+	}
+	
+	private class MouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			if (evt.getClickCount() == 2) {
+				int lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
+				WorkPosition workPosition = model.getWorkPosition(modelRow);
+				new ViewWorkPositionForm(workPosition).setVisible(true);
 			}
 		}
 	}

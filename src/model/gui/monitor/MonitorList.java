@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,6 +173,7 @@ public class MonitorList extends JPanel {
 		model = new MonitorTableModel(monitors);
 
 		table = new TableMonitor(model);
+		table.addMouseListener(new MouseListener());
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -307,9 +310,13 @@ public class MonitorList extends JPanel {
 			String text = textField_Filter.getText().toUpperCase();
 			if (text.length() == 0) {
 				sorter.setRowFilter(null);
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			} 
 			else {
 				sorter.setRowFilter(RowFilter.regexFilter(text));
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			}
 		}
 	}
@@ -330,6 +337,19 @@ public class MonitorList extends JPanel {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jfc.getSelectedFile();
 				new CreateExlFileMonitor(monitors, selectedFile.getAbsolutePath());
+			}
+		}
+	}
+
+	private class MouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			if (evt.getClickCount() == 2) {
+				int lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
+				Monitor monitor = model.getMonitor(modelRow);
+				new ViewMonitorForm(monitor).setVisible(true);
 			}
 		}
 	}

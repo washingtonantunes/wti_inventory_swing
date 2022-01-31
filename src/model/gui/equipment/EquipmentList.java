@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,27 +110,27 @@ public class EquipmentList extends JPanel {
 		panel.setPreferredSize(new Dimension(800, 60));
 		panel.setBackground(COLOR3);
 
-		JButton buttonNew = new JButton("New");
+		JButton buttonNew = new JButton("  New");
 		buttonNew.setPreferredSize(DIMENSIONBUTTON);
 		buttonNew.addActionListener(new buttonNewListener());
 		panel.add(buttonNew);
 
-		JButton buttonEdit = new JButton("Edit");
+		JButton buttonEdit = new JButton("  Edit");
 		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
 		buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
-		JButton buttonView = new JButton("View");
+		JButton buttonView = new JButton("  View");
 		buttonView.setPreferredSize(DIMENSIONBUTTON);
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonDisable = new JButton("Disable");
+		JButton buttonDisable = new JButton("  Disable");
 		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonExport = new JButton("Export");
+		JButton buttonExport = new JButton("  Export");
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
@@ -171,6 +173,7 @@ public class EquipmentList extends JPanel {
 		model = new EquipmentTableModel(equipments);
 
 		table = new TableEquipment(model);
+		table.addMouseListener(new MouseListener());
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
@@ -205,8 +208,7 @@ public class EquipmentList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				new NewEquipmentForm(model, options).setVisible(true);
@@ -221,22 +223,19 @@ public class EquipmentList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
 					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new EditEquipmentForm(model, equipment, options, modelRow).setVisible(true);
@@ -254,8 +253,7 @@ public class EquipmentList extends JPanel {
 			lineSelected = table.getSelectedRow();
 			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				Equipment equipment = model.getEquipment(modelRow);
@@ -269,26 +267,22 @@ public class EquipmentList extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
 					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else if (equipment.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
 						new DisableEquipmentForm(model, equipment, options, modelRow).setVisible(true);
@@ -308,9 +302,13 @@ public class EquipmentList extends JPanel {
 			String text = textField_Filter.getText().toUpperCase();
 			if (text.length() == 0) {
 				sorter.setRowFilter(null);
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			} 
 			else {
 				sorter.setRowFilter(RowFilter.regexFilter(text));
+				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				repaint();
 			}
 		}
 	}
@@ -331,6 +329,19 @@ public class EquipmentList extends JPanel {
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = jfc.getSelectedFile();
 				new CreateExlFileEquipment(equipments, selectedFile.getAbsolutePath());
+			}
+		}
+	}
+
+	private class MouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			if (evt.getClickCount() == 2) {
+				int lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
+				Equipment equipment = model.getEquipment(modelRow);
+				new ViewEquipmentForm(equipment).setVisible(true);
 			}
 		}
 	}

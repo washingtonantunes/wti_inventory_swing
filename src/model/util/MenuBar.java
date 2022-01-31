@@ -3,6 +3,7 @@ package model.util;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -16,10 +17,13 @@ import model.gui.workposition.WorkPositionList;
 public class MenuBar extends JMenuBar {
 
 	private static final long serialVersionUID = 1L;
+	
+	private JDesktopPane mainDesktopPane;
 
 	private int privilege;
 
-	public MenuBar() {
+	public MenuBar(JDesktopPane mainDesktopPane) {
+		this.mainDesktopPane = mainDesktopPane;
 		initComponents();
 	}
 
@@ -27,6 +31,7 @@ public class MenuBar extends JMenuBar {
 		add(createMenuFile());
 		add(createMenuObjects());
 		add(createMenuTools());
+		add(createMenuWork());
 		add(createMenuProperties());
 	}
 
@@ -77,15 +82,33 @@ public class MenuBar extends JMenuBar {
 	private JMenu createMenuTools() {
 		final JMenu menuTools = new JMenu("Tools");
 
-		final JMenuItem menuItemCollaboratos = new JMenuItem("Collaboratos");
-		menuItemCollaboratos.addActionListener(new MenuItemCollaboratosListener());
-		menuTools.add(menuItemCollaboratos);
+		final JMenuItem menuItemCollaborators = new JMenuItem("Collaborators");
+		menuItemCollaborators.addActionListener(new MenuItemCollaboratorsListener());
+		menuTools.add(menuItemCollaborators);
 
 		final JMenuItem menuItemOptions = new JMenuItem("Options");
 		menuItemOptions.addActionListener(new MenuItemOptionsListener());
 		menuTools.add(menuItemOptions);
 
 		return menuTools;
+	}
+	
+	private JMenu createMenuWork() {
+		final JMenu menuWork = new JMenu("Work");
+		
+		final JMenuItem menuItemDashboard = new JMenuItem("Dashboard");
+		menuItemDashboard.addActionListener(new MenuItemDashboardListener());
+		menuWork.add(menuItemDashboard);
+		
+		final JMenuItem menuItemInventory = new JMenuItem("Inventory");
+		menuItemInventory.addActionListener(new MenuItemInventoryListener());
+		menuWork.add(menuItemInventory);
+		
+		final JMenuItem menuItemLayout = new JMenuItem("Layout");
+		menuItemLayout.addActionListener(new MenuItemLayoutListener());
+		menuWork.add(menuItemLayout);
+		
+		return menuWork;
 	}
 
 	private JMenu createMenuProperties() {
@@ -113,7 +136,10 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemHomeListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("MenuItemHomeListener");
+			mainDesktopPane.removeAll();
+			final MainWindow mainWindow = new MainWindow();
+			mainDesktopPane.add(mainWindow.createPanelMain());
+			mainDesktopPane.revalidate();
 		}
 	}
 
@@ -134,30 +160,30 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemEquipmentsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			MainWindow.getMain().removeAll();
+			mainDesktopPane.removeAll();
 			final EquipmentList equipmentList = new EquipmentList();
-			MainWindow.getMain().add(equipmentList);
-			MainWindow.getMain().revalidate();
+			mainDesktopPane.add(equipmentList);
+			mainDesktopPane.revalidate();
 		}
 	}
 
 	private class MenuItemMonitorsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			MainWindow.getMain().removeAll();
+			mainDesktopPane.removeAll();
 			final MonitorList monitorList = new MonitorList();
-			MainWindow.getMain().add(monitorList);
-			MainWindow.getMain().revalidate();
+			mainDesktopPane.add(monitorList);
+			mainDesktopPane.revalidate();
 		}
 	}
 
 	private class MenuItemWorkPositionsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			MainWindow.getMain().removeAll();
+			mainDesktopPane.removeAll();
 			final WorkPositionList workPositionList = new WorkPositionList();
-			MainWindow.getMain().add(workPositionList);
-			MainWindow.getMain().revalidate();
+			mainDesktopPane.add(workPositionList);
+			mainDesktopPane.revalidate();
 		}
 	}
 
@@ -175,7 +201,7 @@ public class MenuBar extends JMenuBar {
 		}
 	}
 
-	private class MenuItemCollaboratosListener implements ActionListener {
+	private class MenuItemCollaboratorsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemCollaboratosListener");
@@ -186,6 +212,27 @@ public class MenuBar extends JMenuBar {
 
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemOptionsListener");
+		}
+	}
+	
+	private class MenuItemDashboardListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("MenuItemDashboardListener");
+		}
+	}
+	
+	private class MenuItemInventoryListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("MenuItemInventoryListener");
+		}
+	}
+	
+	private class MenuItemLayoutListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("MenuItemLayoutListener");
 		}
 	}
 

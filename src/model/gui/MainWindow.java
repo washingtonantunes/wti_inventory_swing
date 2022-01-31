@@ -20,9 +20,9 @@ public class MainWindow extends JFrame {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(1350, 710);
 
-	private final MenuBar menu = new MenuBar();
+	private MenuBar menu;
 
-	private static JDesktopPane main;
+	private JDesktopPane main;
 
 	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista",
 			"ACTIVE", null);
@@ -32,9 +32,10 @@ public class MainWindow extends JFrame {
 	}
 
 	private void initComponents() {
-		setJMenuBar(menu);
-
 		add(create());
+		
+		menu = new MenuBar(main);
+		setJMenuBar(menu);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("wTI Inventory");
@@ -45,7 +46,7 @@ public class MainWindow extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-	private JPanel createPanelMain() {
+	public JPanel createPanelMain() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 
@@ -55,7 +56,7 @@ public class MainWindow extends JFrame {
 		label_text.setBounds(120, 305, 600, 50);
 		panel.add(label_text);
 
-		JLabel label_icon = new JLabel((new ImageIcon(getClass().getResource("/model/icon/iconMain.jpg"))));
+		JLabel label_icon = new JLabel(new ImageIcon(getClass().getResource("/model/icon/iconMain.jpg")));
 		label_icon.setBounds(820, 220, 330, 210);
 		panel.add(label_icon);
 
@@ -77,7 +78,7 @@ public class MainWindow extends JFrame {
 		return main;
 	}
 
-	public static JDesktopPane getMain() {
+	public JDesktopPane getMain() {
 		return main;
 	}
 }

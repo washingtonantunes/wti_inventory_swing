@@ -106,6 +106,14 @@ public class EditWorkPositionForm extends JDialog {
 		final JLabel label_NetPoint = new JLabel("NetPoint:");
 		label_NetPoint.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_NetPoint);
+		
+		final JLabel label_Status = new JLabel("Status:");
+		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
+		panel.add(label_Status);
+
+		final JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
+		panel.add(label_DateEntry);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
