@@ -212,7 +212,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	private User instatiateUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setRegistration(rs.getString("registration"));
-		user.setNameUser(rs.getString("name"));
+		user.setName(rs.getString("name"));
 		user.setCPF(rs.getString("cpf"));
 		user.setPhone(rs.getString("phone"));
 		user.setProject(rs.getString("project"));

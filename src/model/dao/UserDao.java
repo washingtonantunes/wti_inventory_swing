@@ -10,7 +10,7 @@ public interface UserDao {
 
 	void update(User obj);
 
-	void disable(String registration, String status, String reason);
+	void disable(User obj);
 
 	List<User> findAll();
 }

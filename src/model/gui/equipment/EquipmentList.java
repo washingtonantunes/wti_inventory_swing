@@ -110,27 +110,27 @@ public class EquipmentList extends JPanel {
 		panel.setPreferredSize(new Dimension(800, 60));
 		panel.setBackground(COLOR3);
 
-		JButton buttonNew = new JButton("  New");
+		JButton buttonNew = new JButton("New");
 		buttonNew.setPreferredSize(DIMENSIONBUTTON);
 		buttonNew.addActionListener(new buttonNewListener());
 		panel.add(buttonNew);
 
-		JButton buttonEdit = new JButton("  Edit");
+		JButton buttonEdit = new JButton("Edit");
 		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
 		buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
-		JButton buttonView = new JButton("  View");
+		JButton buttonView = new JButton("View");
 		buttonView.setPreferredSize(DIMENSIONBUTTON);
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonDisable = new JButton("  Disable");
+		JButton buttonDisable = new JButton("Disable");
 		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonExport = new JButton("  Export");
+		JButton buttonExport = new JButton("Export");
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);

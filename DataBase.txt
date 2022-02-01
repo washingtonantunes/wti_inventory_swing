@@ -65,3 +65,20 @@ CREATE TABLE `work_positions` (
   PRIMARY KEY (`workPoint`),
   UNIQUE KEY `workPoint_UNIQUE` (`workPoint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users` (
+  `registration` varchar(20) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `cpf` varchar(20) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `project` varchar(30) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `department` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL,
+  `reason` varchar(50) DEFAULT NULL,
+  `dateEntry` date NOT NULL,
+  PRIMARY KEY (`registration`),
+  UNIQUE KEY `matricula_UNIQUE` (`registration`),
+  UNIQUE KEY `cpf_UNIQUE` (`cpf`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

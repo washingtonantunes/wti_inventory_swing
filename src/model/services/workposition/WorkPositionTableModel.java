@@ -19,18 +19,17 @@ public class WorkPositionTableModel extends AbstractTableModel {
 	private static final int COL_DATE_ENTRY = 5;
 	private static final int COL_REASON = 6;
 
-	List<WorkPosition> lines;
+	List<WorkPosition> workPositions;
 
-	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point",
-			"Status", "Date Enty", "Reason" };
+	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point", "Status", "Date Enty", "Reason" };
 
 	public WorkPositionTableModel(List<WorkPosition> workPositions) {
-		this.lines = workPositions;
+		this.workPositions = workPositions;
 	}
 
 	@Override
 	public int getRowCount() {
-		return lines.size();
+		return workPositions.size();
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class WorkPositionTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int column) {
 
-		WorkPosition w = lines.get(row);
+		WorkPosition w = workPositions.get(row);
 
 		if (column == COL_WORK_POINT) {
 			return w.getWorkPoint();
@@ -86,22 +85,22 @@ public class WorkPositionTableModel extends AbstractTableModel {
 	}
 
 	public WorkPosition getWorkPosition(int indexLine) {
-		return lines.get(indexLine);
+		return workPositions.get(indexLine);
 	}
 
 	public void addWorkPosition(WorkPosition workPosition) {
-		lines.add(workPosition);
+		workPositions.add(workPosition);
 		int lastIndex = getRowCount() - 1;
 		fireTableRowsInserted(lastIndex, lastIndex);
 	}
 
 	public void updateWorkPosition(int indexLine, WorkPosition workPosition) {
-		lines.set(indexLine, workPosition);
+		workPositions.set(indexLine, workPosition);
 		fireTableRowsUpdated(indexLine, indexLine);
 	}
 
 	public void removeWorkPosition(int indexLine) {
-		lines.remove(indexLine);
+		workPositions.remove(indexLine);
 		fireTableRowsDeleted(indexLine, indexLine);
 	}
 }

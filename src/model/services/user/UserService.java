@@ -1,4 +1,4 @@
-package model.services.monitor;
+package model.services.user;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,26 +9,26 @@ import db.DB;
 import db.DBException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
-import model.dao.MonitorDao;
+import model.dao.UserDao;
 import model.entities.Change;
-import model.entities.Monitor;
+import model.entities.User;
 import model.gui.MainWindow;
 
-public class MonitorService {
+public class UserService {
 
-	private MonitorDao monitorDao = DaoFactory.createMonitorDao();
+	private UserDao userDao = DaoFactory.createUserDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<Monitor> findAll() {
-		return monitorDao.findAll();
+	public List<User> findAll() {
+		return userDao.findAll();
 	}
 
-	public void save(Monitor obj) {
+	public void save(User obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			monitorDao.insert(obj);
+			userDao.insert(obj);
 			changeDao.insert(getChange(obj, 0));
 
 			conn.commit();
@@ -44,12 +44,12 @@ public class MonitorService {
 		}
 	}
 
-	public void update(Monitor objOld, Monitor objNew) {
+	public void update(User objOld, User objNew) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			monitorDao.update(objNew);
+			userDao.update(objNew);
 			changeDao.insert(getChange(objOld, objNew, 1));
 
 			conn.commit();
@@ -65,12 +65,12 @@ public class MonitorService {
 		}
 	}
 
-	public void disable(Monitor obj) {
+	public void disable(User obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			monitorDao.disable(obj);
+			userDao.disable(obj);
 			changeDao.insert(getChange(obj, 3));
 
 			conn.commit();
@@ -86,9 +86,9 @@ public class MonitorService {
 		}
 	}
 
-	private Change getChange(Monitor objOld, Monitor objNew, int type) {
+	private Change getChange(User objOld, User objNew, int type) {
 		Change change = new Change();
-		change.setObject(objOld.getSerialNumber());
+		change.setObject(objOld.getRegistration());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
@@ -96,9 +96,9 @@ public class MonitorService {
 		return change;
 	}
 
-	private Change getChange(Monitor obj, int type) {
+	private Change getChange(User obj, int type) {
 		Change change = new Change();
-		change.setObject(obj.getSerialNumber());
+		change.setObject(obj.getRegistration());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(null, null, type));
 		change.setDate(new Date());
@@ -109,24 +109,24 @@ public class MonitorService {
 	private String getTypeChange(int type) {
 		String typeChange = "";
 		if (type == 0) {
-			typeChange = "Monitor Input";
+			typeChange = "User Input";
 		} 
 		else if (type == 1) {
-			typeChange = "Monitor Update";
+			typeChange = "User Update";
 		} 
 		else if (type == 2) {
-			typeChange = "Monitor Update Status";
+			typeChange = "User Update Status";
 		} 
 		else if (type == 3) {
-			typeChange = "Monitor Deactivation";
+			typeChange = "User Deactivation";
 		}
 		return typeChange;
 	}
 
-	private String getChanges(Monitor objOld, Monitor objNew, int type) {
+	private String getChanges(User objOld, User objNew, int type) {
 		String changes = "";
 		if (type == 0) {
-			changes = "New Monitor Added";
+			changes = "New User Added";
 		} 
 		else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
@@ -135,22 +135,31 @@ public class MonitorService {
 
 		} 
 		else if (type == 3) {
-			changes = "Monitor Disabled for: " + objOld.getReason();
+			changes = "User Disabled for: " + objOld.getReason();
 		}
 		return changes;
 	}
 
-	private String getFieldsUpdated(Monitor objOld, Monitor objNew) {
+	private String getFieldsUpdated(User objOld, User objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
-		if (!objOld.getPatrimonyNumber().equals(objNew.getPatrimonyNumber())) {
-			fieldsUpdated += " 'PatrimonyNumber Old: " + objOld.getPatrimonyNumber() + "',";
+		if (!objOld.getName().equals(objNew.getName())) {
+			fieldsUpdated += " 'Name Old: " + objOld.getName() + "',";
 		}
-		if (!objOld.getBrand().equals(objNew.getBrand())) {
-			fieldsUpdated += " 'Brand Old: " + objOld.getBrand() + "',";
+		if (!objOld.getCPF().equals(objNew.getCPF())) {
+			fieldsUpdated += " 'CPF Old: " + objOld.getCPF() + "',";
 		}
-		if (!objOld.getModel().equals(objNew.getModel())) {
-			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "'";
+		if (!objOld.getPhone().equals(objNew.getPhone())) {
+			fieldsUpdated += " 'Phone Old: " + objOld.getPhone() + "'";
+		}
+		if (!objOld.getProject().equals(objNew.getProject())) {
+			fieldsUpdated += " 'Project Old: " + objOld.getProject() + "'";
+		}
+		if (!objOld.getEmail().equals(objNew.getEmail())) {
+			fieldsUpdated += " 'Email Old: " + objOld.getEmail() + "'";
+		}
+		if (!objOld.getDepartment().equals(objNew.getDepartment())) {
+			fieldsUpdated += " 'Department Old: " + objOld.getDepartment() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");

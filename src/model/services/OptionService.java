@@ -8,9 +8,9 @@ import model.entities.Option;
 
 public class OptionService {
 
-	private OptionDao equipmentDao = DaoFactory.createOptionDao();
+	private OptionDao optionDao = DaoFactory.createOptionDao();
 
 	public List<Option> findAll() {
-		return equipmentDao.findAll();
+		return optionDao.findAll();
 	}
 }

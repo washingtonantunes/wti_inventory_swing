@@ -10,7 +10,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String registration;
-	private String nameUser;
+	private String name;
 	private String cpf;
 	private String phone;
 	private String email;
@@ -25,33 +25,6 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
-			String department, String status, Date dateEntry) {
-		this.registration = registration;
-		this.nameUser = nameUser;
-		this.cpf = cpf;
-		this.phone = phone;
-		this.email = email;
-		this.project = project;
-		this.department = department;
-		this.status = status;
-		this.dateEntry = dateEntry;
-	}
-
-	public User(String registration, String nameUser, String cpf, String phone, String email, String project,
-			String department, String status, String reason, Date dateEntry) {
-		this.registration = registration;
-		this.nameUser = nameUser;
-		this.cpf = cpf;
-		this.phone = phone;
-		this.email = email;
-		this.project = project;
-		this.department = department;
-		this.status = status;
-		this.reason = reason;
-		this.dateEntry = dateEntry;
-	}
-
 	public String getRegistration() {
 		return registration;
 	}
@@ -60,12 +33,12 @@ public class User implements Serializable {
 		this.registration = registration;
 	}
 
-	public String getNameUser() {
-		return nameUser;
+	public String getName() {
+		return name;
 	}
 
-	public void setNameUser(String nameUser) {
-		this.nameUser = nameUser;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getCPF() {
