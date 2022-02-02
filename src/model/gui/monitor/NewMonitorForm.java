@@ -40,6 +40,8 @@ public class NewMonitorForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 270);
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_SerialNumber;
 	private JTextField textField_PatrimonyNumber;
@@ -89,21 +91,24 @@ public class NewMonitorForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
+		label_SerialNumber.setForeground(COLOR1);
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		label_PatrimonyNumber.setForeground(COLOR1);
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 
 		final JLabel label_Brand = new JLabel("Brand:");
+		label_Brand.setForeground(COLOR1);
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 
 		final JLabel label_Model = new JLabel("Model:");
+		label_Model.setForeground(COLOR1);
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
-
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {

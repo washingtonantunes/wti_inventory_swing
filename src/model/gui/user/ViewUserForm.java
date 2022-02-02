@@ -28,7 +28,7 @@ public class ViewUserForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 510);
-	
+
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
 
@@ -74,12 +74,12 @@ public class ViewUserForm extends JDialog {
 		label_Name.setForeground(COLOR1);
 		label_Name.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_Name);
-		
+
 		final JLabel label_CPF = new JLabel("CPF:");
 		label_CPF.setForeground(COLOR1);
 		label_CPF.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_CPF);
-		
+
 		final JLabel label_Phone = new JLabel("Phone:");
 		label_Phone.setForeground(COLOR1);
 		label_Phone.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
@@ -89,7 +89,7 @@ public class ViewUserForm extends JDialog {
 		label_Project.setForeground(COLOR1);
 		label_Project.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Project);
-		
+
 		final JLabel label_Email = new JLabel("Email:");
 		label_Email.setForeground(COLOR1);
 		label_Email.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
@@ -126,7 +126,7 @@ public class ViewUserForm extends JDialog {
 		label_Show_Name.setForeground(COLOR2);
 		label_Show_Name.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(label_Show_Name);
-		
+
 		final JLabel label_Show_Phone = new JLabel(user.getPhone());
 		label_Show_Phone.setForeground(COLOR2);
 		label_Show_Phone.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
@@ -141,12 +141,12 @@ public class ViewUserForm extends JDialog {
 		label_Show_Project.setForeground(COLOR2);
 		label_Show_Project.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
 		panel.add(label_Show_Project);
-		
+
 		final JLabel label_Show_Email = new JLabel(user.getEmail());
 		label_Show_Email.setForeground(COLOR2);
 		label_Show_Email.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(label_Show_Email);
-		
+
 		final JLabel label_Show_Department = new JLabel(user.getDepartment());
 		label_Show_Department.setForeground(COLOR2);
 		label_Show_Department.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
@@ -170,12 +170,12 @@ public class ViewUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(180, 430, 120, 25);
+		buttonChanges.setBounds(165, 310, 120, 25);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 430, 120, 25);
+		buttonClose.setBounds(305, 310, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}

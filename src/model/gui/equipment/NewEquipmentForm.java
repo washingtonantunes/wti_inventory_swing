@@ -37,13 +37,15 @@ public class NewEquipmentForm extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private static final int COLUMN1 = 20;
-	private static final int COLUMN2 = 170;
+	private static final int COLUMN2 = 150;
 	private static final int COLUMN3 = 330;
 
-	private static final int WIDTH = 150;
+	private static final int WIDTH = 170;
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 550);
+
+	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_SerialNumber;
 	private JTextField textField_HostName;
@@ -106,121 +108,131 @@ public class NewEquipmentForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
+		label_SerialNumber.setForeground(COLOR1);
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
 		final JLabel label_HostName = new JLabel("Host Name:");
+		label_HostName.setForeground(COLOR1);
 		label_HostName.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_HostName);
 
 		final JLabel label_AddressMAC = new JLabel("Address MAC:");
+		label_AddressMAC.setForeground(COLOR1);
 		label_AddressMAC.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_AddressMAC);
 
 		final JLabel label_Type = new JLabel("Type:");
+		label_Type.setForeground(COLOR1);
 		label_Type.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Type);
 
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		label_PatrimonyNumber.setForeground(COLOR1);
 		label_PatrimonyNumber.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 
 		final JLabel label_Brand = new JLabel("Brand:");
+		label_Brand.setForeground(COLOR1);
 		label_Brand.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 
 		final JLabel label_Model = new JLabel("Model:");
+		label_Model.setForeground(COLOR1);
 		label_Model.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Model);
 
 		final JLabel label_MemoryRam = new JLabel("MemoryRam:");
+		label_MemoryRam.setForeground(COLOR1);
 		label_MemoryRam.setBounds(COLUMN1, 290, WIDTH, HEIGHT);
 		panel.add(label_MemoryRam);
 
 		final JLabel label_HardDisk = new JLabel("HardDisk:");
+		label_HardDisk.setForeground(COLOR1);
 		label_HardDisk.setBounds(COLUMN1, 330, WIDTH, HEIGHT);
 		panel.add(label_HardDisk);
 
 		final JLabel label_CostType = new JLabel("CostType:");
+		label_CostType.setForeground(COLOR1);
 		label_CostType.setBounds(COLUMN1, 370, WIDTH, HEIGHT);
 		panel.add(label_CostType);
 
 		final JLabel label_Value = new JLabel("Value:");
+		label_Value.setForeground(COLOR1);
 		label_Value.setBounds(COLUMN1, 410, WIDTH, HEIGHT);
 		panel.add(label_Value);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 		try {
-		textField_SerialNumber = new JTextField();
-		textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
-		textField_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
-		panel.add(textField_SerialNumber);
+			textField_SerialNumber = new JTextField();
+			textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
+			textField_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
+			panel.add(textField_SerialNumber);
 
-		textField_HostName = new JTextField();
-		textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 11));
-		textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
-		panel.add(textField_HostName);
+			textField_HostName = new JTextField();
+			textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 11));
+			textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+			panel.add(textField_HostName);
 
-		textField_AddressMAC = new JFormattedTextField(new MaskFormatter("AA-AA-AA-AA-AA-AA"));
-		//textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
-		textField_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
-		panel.add(textField_AddressMAC);
+			textField_AddressMAC = new JFormattedTextField(new MaskFormatter("AA-AA-AA-AA-AA-AA"));
+			textField_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+			panel.add(textField_AddressMAC);
 
-		comboBox_Type = new JComboBox<>(
-				new Vector<>(options.stream().filter(o -> o.getType().equals("TYPE") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Type.setSelectedIndex(-1);
-		comboBox_Type.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
-		panel.add(comboBox_Type);
+			comboBox_Type = new JComboBox<>(new Vector<>(
+					options.stream().filter(o -> o.getType().equals("TYPE") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Type.setSelectedIndex(-1);
+			comboBox_Type.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
+			panel.add(comboBox_Type);
 
-		textField_PatrimonyNumber = new JTextField();
-		textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
-		textField_PatrimonyNumber.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
-		panel.add(textField_PatrimonyNumber);
+			textField_PatrimonyNumber = new JTextField();
+			textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
+			textField_PatrimonyNumber.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
+			panel.add(textField_PatrimonyNumber);
 
-		comboBox_Brand = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("BRAND-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Brand.setSelectedIndex(-1);
-		comboBox_Brand.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
-		panel.add(comboBox_Brand);
+			comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
+					.filter(o -> o.getType().equals("BRAND-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
+					.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Brand.setSelectedIndex(-1);
+			comboBox_Brand.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
+			panel.add(comboBox_Brand);
 
-		comboBox_Model = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("MODEL-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Model.setSelectedIndex(-1);
-		comboBox_Model.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
-		panel.add(comboBox_Model);
+			comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
+					.filter(o -> o.getType().equals("MODEL-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
+					.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Model.setSelectedIndex(-1);
+			comboBox_Model.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
+			panel.add(comboBox_Model);
 
-		comboBox_MemoryRam = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("MEMORY RAM") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_MemoryRam.setSelectedIndex(-1);
-		comboBox_MemoryRam.setBounds(COLUMN2, 290, WIDTH, HEIGHT);
-		panel.add(comboBox_MemoryRam);
+			comboBox_MemoryRam = new JComboBox<>(new Vector<>(
+					options.stream().filter(o -> o.getType().equals("MEMORY RAM") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_MemoryRam.setSelectedIndex(-1);
+			comboBox_MemoryRam.setBounds(COLUMN2, 290, WIDTH, HEIGHT);
+			panel.add(comboBox_MemoryRam);
 
-		comboBox_HardDisk = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("HARD DISK") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_HardDisk.setSelectedIndex(-1);
-		comboBox_HardDisk.setBounds(COLUMN2, 330, WIDTH, HEIGHT);
-		panel.add(comboBox_HardDisk);
+			comboBox_HardDisk = new JComboBox<>(new Vector<>(
+					options.stream().filter(o -> o.getType().equals("HARD DISK") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_HardDisk.setSelectedIndex(-1);
+			comboBox_HardDisk.setBounds(COLUMN2, 330, WIDTH, HEIGHT);
+			panel.add(comboBox_HardDisk);
 
-		comboBox_CostType = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("COST TYPE") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_CostType.setSelectedIndex(-1);
-		comboBox_CostType.setBounds(COLUMN2, 370, WIDTH, HEIGHT);
-		panel.add(comboBox_CostType);
+			comboBox_CostType = new JComboBox<>(new Vector<>(
+					options.stream().filter(o -> o.getType().equals("COST TYPE") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_CostType.setSelectedIndex(-1);
+			comboBox_CostType.setBounds(COLUMN2, 370, WIDTH, HEIGHT);
+			panel.add(comboBox_CostType);
 
-		textField_Value = new JTextField();
-		textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 6));
-		textField_Value.setBounds(COLUMN2, 410, WIDTH, HEIGHT);
-		panel.add(textField_Value);
-		}
-		catch(ParseException e) {
-			
+			textField_Value = new JTextField();
+			textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 5));
+			textField_Value.setBounds(COLUMN2, 410, WIDTH, HEIGHT);
+			panel.add(textField_Value);
+		} 
+		catch (ParseException e) {
+
 		}
 	}
 
@@ -278,12 +290,12 @@ public class NewEquipmentForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 470, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(165, 470, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 470, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(305, 470,125, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -347,7 +359,7 @@ public class NewEquipmentForm extends JDialog {
 		}
 
 		// Validation AddressMac
-		if (textField_AddressMAC.getText() == null || textField_AddressMAC.getText().trim().equals("")) {
+		if (Utils.ToCheckAddressMACNull(textField_AddressMAC.getText())) {
 			exception.addError("addressMAC", "Field can't be empty");
 		} 
 		else if (textField_AddressMAC.getText().length() < 16) {

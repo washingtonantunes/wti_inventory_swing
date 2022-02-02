@@ -1,5 +1,6 @@
 package model.gui.monitor;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,9 @@ public class ViewMonitorForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 390);
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private Monitor monitor;
 
@@ -62,60 +66,74 @@ public class ViewMonitorForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
+		label_SerialNumber.setForeground(COLOR1);
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		label_PatrimonyNumber.setForeground(COLOR1);
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 
 		final JLabel label_Brand = new JLabel("Brand:");
+		label_Brand.setForeground(COLOR1);
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 
 		final JLabel label_Model = new JLabel("Model:");
+		label_Model.setForeground(COLOR1);
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
 
 		final JLabel label_Status = new JLabel("Status:");
+		label_Status.setForeground(COLOR1);
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
 
 		final JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setForeground(COLOR1);
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 
 		final JLabel label_Reason = new JLabel("Reason:");
+		label_Reason.setForeground(COLOR1);
 		label_Reason.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Reason);
 	}
 
 	private void addLabelsShow(JPanel panel) {
 		final JLabel label_Show_SerialNumber = new JLabel(monitor.getSerialNumber());
+		label_Show_SerialNumber.setForeground(COLOR2);
 		label_Show_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(label_Show_SerialNumber);
 
 		final JLabel label_Show_PatrimonyNumber = new JLabel(monitor.getPatrimonyNumber());
+		label_Show_PatrimonyNumber.setForeground(COLOR2);
 		label_Show_PatrimonyNumber.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(label_Show_PatrimonyNumber);
 
 		final JLabel label_Show_Brand = new JLabel(monitor.getBrand());
+		label_Show_Brand.setForeground(COLOR2);
 		label_Show_Brand.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(label_Show_Brand);
 
 		final JLabel label_Show_Model = new JLabel(monitor.getModel());
+		label_Show_Model.setForeground(COLOR2);
 		label_Show_Model.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
 		panel.add(label_Show_Model);
 
 		final JLabel label_Show_Status = new JLabel(monitor.getStatus());
+		label_Show_Status.setForeground(COLOR2);
 		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
 		panel.add(label_Show_Status);
 
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(monitor.getDateEntry()));
+		label_Show_DateEntry.setForeground(COLOR2);
 		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
 
 		final JLabel label_Show_Reason = new JLabel(monitor.getReason());
+		label_Show_Reason.setForeground(COLOR2);
 		label_Show_Reason.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
 		panel.add(label_Show_Reason);
 	}

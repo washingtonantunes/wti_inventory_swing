@@ -30,6 +30,8 @@ public class DisableEquipmentForm extends JDialog {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
 
+	private final Color COLOR1 = new Color(0, 65, 83);
+
 	private JComboBox<String> comboBox_Reason;
 
 	private JLabel labelError_Reason;
@@ -75,6 +77,7 @@ public class DisableEquipmentForm extends JDialog {
 
 	private void addLabelsAndComboBoxes(JPanel panel) {
 		final JLabel label_Reason = new JLabel("Reason:");
+		label_Reason.setForeground(COLOR1);
 		label_Reason.setBounds(20, 20, 50, 25);
 		panel.add(label_Reason);
 

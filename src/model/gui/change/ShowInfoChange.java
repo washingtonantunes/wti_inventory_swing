@@ -1,5 +1,6 @@
 package model.gui.change;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import javax.swing.JPanel;
 public class ShowInfoChange extends JDialog {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
 	
 	private String info;
 	private List<String> list;
@@ -50,6 +53,7 @@ public class ShowInfoChange extends JDialog {
 	private void addLabels(JPanel panel) {
 		for (int i =0; i < list.size(); i++) {
 			final JLabel label_Info = new JLabel(list.get(i));
+			label_Info.setForeground(COLOR1);
 			label_Info.setBounds(20, (i * 15), 350, 25);
 			panel.add(label_Info);
 		}

@@ -44,6 +44,8 @@ public class EditWorkPositionForm extends JDialog {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
 
+	private final Color COLOR1 = new Color(0, 65, 83);
+
 	private JComboBox<String> comboBox_Location;
 	private JComboBox<String> comboBox_Floor;
 	private JTextField textField_NetPoint;
@@ -93,26 +95,32 @@ public class EditWorkPositionForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_WorkPoint = new JLabel("Work Point:");
+		label_WorkPoint.setForeground(COLOR1);
 		label_WorkPoint.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_WorkPoint);
 
 		final JLabel label_Location = new JLabel("Location:");
+		label_Location.setForeground(COLOR1);
 		label_Location.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_Location);
 
 		final JLabel label_Floor = new JLabel("Floor:");
+		label_Floor.setForeground(COLOR1);
 		label_Floor.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Floor);
 
 		final JLabel label_NetPoint = new JLabel("NetPoint:");
+		label_NetPoint.setForeground(COLOR1);
 		label_NetPoint.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_NetPoint);
-		
+
 		final JLabel label_Status = new JLabel("Status:");
+		label_Status.setForeground(COLOR1);
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
 
 		final JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setForeground(COLOR1);
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 	}
@@ -226,7 +234,7 @@ public class EditWorkPositionForm extends JDialog {
 		}
 
 		// validation Net Point
-				workPosition.setNetPoint(Utils.tryParseToString(textField_NetPoint.getText().trim().toUpperCase()));
+		workPosition.setNetPoint(Utils.tryParseToString(textField_NetPoint.getText().trim().toUpperCase()));
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;
@@ -245,12 +253,10 @@ public class EditWorkPositionForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("work_positions.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

@@ -1,5 +1,6 @@
 package model.gui.workposition;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,9 @@ public class ViewWorkPositionForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 390);
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private WorkPosition workPosition;
 
@@ -62,60 +66,74 @@ public class ViewWorkPositionForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_WorkPoint = new JLabel("Work Point:");
+		label_WorkPoint.setForeground(COLOR1);
 		label_WorkPoint.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_WorkPoint);
 
 		final JLabel label_Location = new JLabel("Location:");
+		label_Location.setForeground(COLOR1);
 		label_Location.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_Location);
 
 		final JLabel label_Floor = new JLabel("Floor:");
+		label_Floor.setForeground(COLOR1);
 		label_Floor.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Floor);
 
 		final JLabel label_NetPoint = new JLabel("NetPoint:");
+		label_NetPoint.setForeground(COLOR1);
 		label_NetPoint.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_NetPoint);
 
 		final JLabel label_Status = new JLabel("Status:");
+		label_Status.setForeground(COLOR1);
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
 
 		final JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setForeground(COLOR1);
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 
 		final JLabel label_Reason = new JLabel("Reason:");
+		label_Reason.setForeground(COLOR1);
 		label_Reason.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Reason);
 	}
 
 	private void addLabelsShow(JPanel panel) {
 		final JLabel label_WorkPoint = new JLabel(workPosition.getWorkPoint());
+		label_WorkPoint.setForeground(COLOR2);
 		label_WorkPoint.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(label_WorkPoint);
 
 		final JLabel label_Show_Location = new JLabel(workPosition.getLocation());
+		label_Show_Location.setForeground(COLOR2);
 		label_Show_Location.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(label_Show_Location);
 
 		final JLabel label_Show_Floor = new JLabel(workPosition.getFloor());
+		label_Show_Floor.setForeground(COLOR2);
 		label_Show_Floor.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(label_Show_Floor);
 
 		final JLabel label_Show_NetPoint = new JLabel(workPosition.getNetPoint());
+		label_Show_NetPoint.setForeground(COLOR2);
 		label_Show_NetPoint.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
 		panel.add(label_Show_NetPoint);
 
 		final JLabel label_Show_Status = new JLabel(workPosition.getStatus());
+		label_Show_Status.setForeground(COLOR2);
 		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
 		panel.add(label_Show_Status);
 
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(workPosition.getDateEntry()));
+		label_Show_DateEntry.setForeground(COLOR2);
 		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
 
 		final JLabel label_Show_Reason = new JLabel(workPosition.getReason());
+		label_Show_Reason.setForeground(COLOR2);
 		label_Show_Reason.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
 		panel.add(label_Show_Reason);
 	}

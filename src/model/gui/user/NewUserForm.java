@@ -284,7 +284,7 @@ public class NewUserForm extends JDialog {
 		}
 		
 		// Validation CPF
-		if (Utils.ToCheckCPF(textField_CPF.getText())) {
+		if (Utils.ToCheckCPFNull(textField_CPF.getText())) {
 			exception.addError("CPF", "Field can't be empty");
 		} 
 		else if (textField_CPF.getText().length() < 14) {
@@ -295,7 +295,7 @@ public class NewUserForm extends JDialog {
 		}
 
 		// Validation Phone
-		if (Utils.ToCheckPhone(textField_Phone.getText())) {
+		if (Utils.ToCheckPhoneNull(textField_Phone.getText())) {
 			exception.addError("phone", "Field can't be empty");
 		} 
 		else if (textField_Phone.getText().length() < 14) {
@@ -320,7 +320,7 @@ public class NewUserForm extends JDialog {
 		else if (textField_Email.getText().length() < 11) {
 			exception.addError("email", "Invalid Email - Ex: > 11");
 		}
-		else if (Utils.ToCheckEmail(textField_Email.getText())) {
+		else if (Utils.ToCheckEmailNull(textField_Email.getText())) {
 			exception.addError("email", "Invalid Domain - Ex: @MINSAIT.COM");
 		}
 		else {

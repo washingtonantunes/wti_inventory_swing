@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 import db.DBException;
 import exception.ValidationException;
@@ -36,13 +39,15 @@ public class EditEquipmentForm extends JDialog {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private static final int COLUMN1 = 20;
-	private static final int COLUMN2 = 170;
+	private static final int COLUMN2 = 150;
 	private static final int COLUMN3 = 330;
 
-	private static final int WIDTH = 150;
+	private static final int WIDTH = 170;
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 630);
+
+	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_HostName;
 	private JTextField textField_AddressMAC;
@@ -105,60 +110,74 @@ public class EditEquipmentForm extends JDialog {
 	}
 
 	private void addLabels(JPanel panel) {
-		JLabel label_SerialNumber = new JLabel("Serial Number:");
+		final JLabel label_SerialNumber = new JLabel("Serial Number:");
+		label_SerialNumber.setForeground(COLOR1);
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
-		JLabel label_HostName = new JLabel("Host Name:");
+		final JLabel label_HostName = new JLabel("Host Name:");
+		label_HostName.setForeground(COLOR1);
 		label_HostName.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_HostName);
 
-		JLabel label_AddressMAC = new JLabel("Address MAC:");
+		final JLabel label_AddressMAC = new JLabel("Address MAC:");
+		label_AddressMAC.setForeground(COLOR1);
 		label_AddressMAC.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_AddressMAC);
 
-		JLabel label_Type = new JLabel("Type:");
+		final JLabel label_Type = new JLabel("Type:");
+		label_Type.setForeground(COLOR1);
 		label_Type.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Type);
 
-		JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		label_PatrimonyNumber.setForeground(COLOR1);
 		label_PatrimonyNumber.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 
-		JLabel label_Brand = new JLabel("Brand:");
+		final JLabel label_Brand = new JLabel("Brand:");
+		label_Brand.setForeground(COLOR1);
 		label_Brand.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 
-		JLabel label_Model = new JLabel("Model:");
+		final JLabel label_Model = new JLabel("Model:");
+		label_Model.setForeground(COLOR1);
 		label_Model.setBounds(COLUMN1, 250, WIDTH, HEIGHT);
 		panel.add(label_Model);
 
-		JLabel label_MemoryRam = new JLabel("MemoryRam:");
+		final JLabel label_MemoryRam = new JLabel("MemoryRam:");
+		label_MemoryRam.setForeground(COLOR1);
 		label_MemoryRam.setBounds(COLUMN1, 290, WIDTH, HEIGHT);
 		panel.add(label_MemoryRam);
 
-		JLabel label_HardDisk = new JLabel("HardDisk:");
+		final JLabel label_HardDisk = new JLabel("HardDisk:");
+		label_HardDisk.setForeground(COLOR1);
 		label_HardDisk.setBounds(COLUMN1, 330, WIDTH, HEIGHT);
 		panel.add(label_HardDisk);
 
-		JLabel label_CostType = new JLabel("CostType:");
+		final JLabel label_CostType = new JLabel("CostType:");
+		label_CostType.setForeground(COLOR1);
 		label_CostType.setBounds(COLUMN1, 370, WIDTH, HEIGHT);
 		panel.add(label_CostType);
 
-		JLabel label_Value = new JLabel("Value:");
+		final JLabel label_Value = new JLabel("Value:");
+		label_Value.setForeground(COLOR1);
 		label_Value.setBounds(COLUMN1, 410, WIDTH, HEIGHT);
 		panel.add(label_Value);
 
 		JLabel label_Status = new JLabel("Status:");
+		label_Status.setForeground(COLOR1);
 		label_Status.setBounds(COLUMN1, 450, WIDTH, HEIGHT);
 		panel.add(label_Status);
 
 		JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setForeground(COLOR1);
 		label_DateEntry.setBounds(COLUMN1, 490, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
+		try {
 		final JLabel label_Show_SerialNumber = new JLabel(equipmentOld.getSerialNumber());
 		label_Show_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
 		panel.add(label_Show_SerialNumber);
@@ -169,8 +188,7 @@ public class EditEquipmentForm extends JDialog {
 		textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(textField_HostName);
 
-		textField_AddressMAC = new JTextField();
-		textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
+		textField_AddressMAC = new JFormattedTextField(new MaskFormatter("AA-AA-AA-AA-AA-AA"));
 		textField_AddressMAC.setText(equipmentOld.getAddressMAC());
 		textField_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(textField_AddressMAC);
@@ -224,7 +242,7 @@ public class EditEquipmentForm extends JDialog {
 		panel.add(comboBox_CostType);
 
 		textField_Value = new JTextField();
-		textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 6));
+		textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 5));
 		textField_Value.setText(String.valueOf(equipmentOld.getValue()));
 		textField_Value.setBounds(COLUMN2, 410, WIDTH, HEIGHT);
 		panel.add(textField_Value);
@@ -236,6 +254,10 @@ public class EditEquipmentForm extends JDialog {
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(equipmentOld.getDateEntry()));
 		label_Show_DateEntry.setBounds(COLUMN2, 490, WIDTH, HEIGHT);
 		panel.add(label_Show_DateEntry);
+		}
+		catch (ParseException e) {
+			
+		}
 	}
 
 	private void addLabelsError(JPanel panel) {
@@ -282,12 +304,12 @@ public class EditEquipmentForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 550, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(165, 550, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 550, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(305, 550, 125, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -341,7 +363,7 @@ public class EditEquipmentForm extends JDialog {
 		}
 
 		// Validation AddressMac
-		if (textField_AddressMAC.getText() == null || textField_AddressMAC.getText().trim().equals("")) {
+		if (Utils.ToCheckAddressMACNull(textField_AddressMAC.getText())) {
 			exception.addError("addressMAC", "Field can't be empty");
 		} 
 		else if (textField_AddressMAC.getText().length() < 16) {
@@ -439,20 +461,16 @@ public class EditEquipmentForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("equipments.hostname_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This host name already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This host name already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
-			else if (e.getMessage().contains("equipments.addressMAC_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This address MAC already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+			else if (e.getMessage().contains("equipments.addressMAC_UNIQUE")) { 
+				JOptionPane.showMessageDialog(rootPane, "This address MAC already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else if (e.getMessage().contains("equipments.patrimonyNumberEquipment_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

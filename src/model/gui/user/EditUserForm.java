@@ -46,7 +46,7 @@ public class EditUserForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 470);
-	
+
 	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_Name;
@@ -112,12 +112,12 @@ public class EditUserForm extends JDialog {
 		label_Name.setForeground(COLOR1);
 		label_Name.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_Name);
-		
+
 		final JLabel label_CPF = new JLabel("CPF:");
 		label_CPF.setForeground(COLOR1);
 		label_CPF.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_CPF);
-		
+
 		final JLabel label_Phone = new JLabel("Phone:");
 		label_Phone.setForeground(COLOR1);
 		label_Phone.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
@@ -127,7 +127,7 @@ public class EditUserForm extends JDialog {
 		label_Project.setForeground(COLOR1);
 		label_Project.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Project);
-		
+
 		final JLabel label_Email = new JLabel("Email:");
 		label_Email.setForeground(COLOR1);
 		label_Email.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
@@ -151,57 +151,57 @@ public class EditUserForm extends JDialog {
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 		try {
-		final JLabel label_Show_Registration = new JLabel(userOld.getRegistration());
-		label_Show_Registration.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
-		panel.add(label_Show_Registration);
+			final JLabel label_Show_Registration = new JLabel(userOld.getRegistration());
+			label_Show_Registration.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
+			panel.add(label_Show_Registration);
 
-		textField_Name = new JTextField();
-		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.NAME, 50));
-		textField_Name.setText(userOld.getName());
-		textField_Name.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
-		panel.add(textField_Name);
-		
-		textField_CPF = new JFormattedTextField(new MaskFormatter("###.###.###-##"));
-		textField_CPF.setText(userOld.getCPF());
-		textField_CPF.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
-		panel.add(textField_CPF);
-		
-		textField_Phone = new JFormattedTextField(new MaskFormatter("(##) #####-####"));
-		textField_Phone.setText(userOld.getPhone());
-		textField_Phone.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
-		panel.add(textField_Phone);
+			textField_Name = new JTextField();
+			textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.NAME, 50));
+			textField_Name.setText(userOld.getName());
+			textField_Name.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+			panel.add(textField_Name);
 
-		comboBox_Project = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Project.addItem("TECNOLOGIA");
-		comboBox_Project.setSelectedItem(userOld.getProject());
-		comboBox_Project.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
-		panel.add(comboBox_Project);
-		
-		textField_Email = new JTextField();
-		textField_Email.setDocument(new JTextFieldFilter(JTextFieldFilter.MYEMAIL, 50));
-		textField_Email.setText(userOld.getEmail());
-		textField_Email.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
-		panel.add(textField_Email);
+			textField_CPF = new JFormattedTextField(new MaskFormatter("###.###.###-##"));
+			textField_CPF.setText(userOld.getCPF());
+			textField_CPF.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+			panel.add(textField_CPF);
 
-		comboBox_Department = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Department.setSelectedItem(userOld.getDepartment());;
-		comboBox_Department.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
-		panel.add(comboBox_Department);
+			textField_Phone = new JFormattedTextField(new MaskFormatter("(##) #####-####"));
+			textField_Phone.setText(userOld.getPhone());
+			textField_Phone.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
+			panel.add(textField_Phone);
 
-		final JLabel label_Show_Status = new JLabel(userOld.getStatus());
-		label_Show_Status.setBounds(COLUMN2, 290, WIDTH, HEIGHT);
-		panel.add(label_Show_Status);
+			comboBox_Project = new JComboBox<>(
+					new Vector<>(options.stream().filter(o -> o.getType().equals("") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Project.addItem("TECNOLOGIA");
+			comboBox_Project.setSelectedItem(userOld.getProject());
+			comboBox_Project.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
+			panel.add(comboBox_Project);
 
-		final JLabel label_Show_DateEntry = new JLabel(sdf.format(userOld.getDateEntry()));
-		label_Show_DateEntry.setBounds(COLUMN2, 330, WIDTH, HEIGHT);
-		panel.add(label_Show_DateEntry);
-		}
-		catch(ParseException e) {
-			
+			textField_Email = new JTextField();
+			textField_Email.setDocument(new JTextFieldFilter(JTextFieldFilter.MYEMAIL, 50));
+			textField_Email.setText(userOld.getEmail());
+			textField_Email.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
+			panel.add(textField_Email);
+
+			comboBox_Department = new JComboBox<>(new Vector<>(
+					options.stream().filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
+							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Department.setSelectedItem(userOld.getDepartment());
+			;
+			comboBox_Department.setBounds(COLUMN2, 250, WIDTH, HEIGHT);
+			panel.add(comboBox_Department);
+
+			final JLabel label_Show_Status = new JLabel(userOld.getStatus());
+			label_Show_Status.setBounds(COLUMN2, 290, WIDTH, HEIGHT);
+			panel.add(label_Show_Status);
+
+			final JLabel label_Show_DateEntry = new JLabel(sdf.format(userOld.getDateEntry()));
+			label_Show_DateEntry.setBounds(COLUMN2, 330, WIDTH, HEIGHT);
+			panel.add(label_Show_DateEntry);
+		} catch (ParseException e) {
+
 		}
 	}
 
@@ -215,7 +215,7 @@ public class EditUserForm extends JDialog {
 		labelError_CPF.setForeground(Color.RED);
 		labelError_CPF.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
 		panel.add(labelError_CPF);
-		
+
 		labelError_Phone = new JLabel();
 		labelError_Phone.setForeground(Color.RED);
 		labelError_Phone.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
@@ -239,12 +239,12 @@ public class EditUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 390, 120, 25);
+		buttonSave.setBounds(165, 310, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 390, 120, 25);
+		buttonClose.setBounds(305, 310, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -258,7 +258,8 @@ public class EditUserForm extends JDialog {
 				service.update(userOld, userNew);
 				model.updateUser(lineSelected, userNew);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "User successfully updated", "Success updating object", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "User successfully updated", "Success updating object",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -294,7 +295,7 @@ public class EditUserForm extends JDialog {
 		}
 
 		// Validation CPF
-		if (Utils.ToCheckCPF(textField_CPF.getText())) {
+		if (Utils.ToCheckCPFNull(textField_CPF.getText())) {
 			exception.addError("CPF", "Field can't be empty");
 		} 
 		else if (textField_CPF.getText().length() < 14) {
@@ -305,7 +306,7 @@ public class EditUserForm extends JDialog {
 		}
 
 		// Validation Phone
-		if (Utils.ToCheckPhone(textField_Phone.getText())) {
+		if (Utils.ToCheckPhoneNull(textField_Phone.getText())) {
 			exception.addError("phone", "Field can't be empty");
 		} 
 		else if (textField_Phone.getText().length() < 14) {
@@ -330,7 +331,7 @@ public class EditUserForm extends JDialog {
 		else if (textField_Email.getText().length() < 11) {
 			exception.addError("email", "Invalid Email - Ex: > 11");
 		} 
-		else if (Utils.ToCheckEmail(textField_Email.getText())) {
+		else if (Utils.ToCheckEmailNull(textField_Email.getText())) {
 			exception.addError("email", "Invalid Domain - Ex: @MINSAIT.COM");
 		} 
 		else {
@@ -366,13 +367,16 @@ public class EditUserForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("users.cpf_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This CPF already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This CPF already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			} 
 			else if (e.getMessage().contains("users.email_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This email already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This email already exists", "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

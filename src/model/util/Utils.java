@@ -33,17 +33,17 @@ public class Utils {
 		}
 	}
 	
-	public static String tryParseToString(String str) {
+	public static String tryParseToString(String strToCheck) {
 		try {
-			return str;
+			return strToCheck;
 		} 
 		catch (NumberFormatException e) {
 			return null;
 		}
 	}
 	
-	public static boolean ToCheckEmail(String email) {
-		String a = email.toUpperCase();
+	public static boolean ToCheckEmailNull(String emailToCheck) {
+		String a = emailToCheck.toUpperCase();
 		
 		if (a.contains("@MINSAIT.COM")) {
 			return false;
@@ -51,8 +51,8 @@ public class Utils {
 		return true;
 	}
 	
-	public static boolean ToCheckCPF(String CPF) {
-		String a = CPF.replace(".", "");
+	public static boolean ToCheckCPFNull(String CPFToCheck) {
+		String a = CPFToCheck.replace(".", "");
 		a = a.replace("-", "");
 		if (a == null || a.trim().equals("")) {
 			return true;
@@ -60,10 +60,19 @@ public class Utils {
 		return false;
 	}
 	
-	public static boolean ToCheckPhone(String Phone) {
-		String a = Phone.replace("(", "");
+	public static boolean ToCheckPhoneNull(String PhoneToCheck) {
+		String a = PhoneToCheck.replace("(", "");
 		a = a.replace(")", "");
 		a = a.replace("-", "");
+		if (a == null || a.trim().equals("")) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean ToCheckAddressMACNull(String addressMACToCheck) {
+		String a = addressMACToCheck.replace("-", "");
+
 		if (a == null || a.trim().equals("")) {
 			return true;
 		}

@@ -40,8 +40,8 @@ public class WorkPositionList extends JPanel {
 
 	private final Dimension DIMENSIONBUTTON = new Dimension(130, 35);
 
-	private final Color COLOR2 = new Color(0, 65, 83);
-	private final Color COLOR3 = new Color(2, 101, 124);
+	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private JScrollPane scrollPane;
 	private TableWorkPosition table;
@@ -83,7 +83,7 @@ public class WorkPositionList extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(0, 25));
-		panel.setBackground(COLOR2);
+		panel.setBackground(COLOR1);
 
 		JLabel label_Title = new JLabel("Work Positions");
 		label_Title.setPreferredSize(new Dimension(130, 35));
@@ -97,7 +97,7 @@ public class WorkPositionList extends JPanel {
 	private JPanel createPanelButton() {
 		JPanel panel = new JPanel(new FlowLayout());
 		panel.setPreferredSize(new Dimension(0, 60));
-		panel.setBackground(COLOR2);
+		panel.setBackground(COLOR1);
 
 		panel.add(createPanelButton1());
 		panel.add(createPanelButton2());
@@ -108,7 +108,7 @@ public class WorkPositionList extends JPanel {
 	private JPanel createPanelButton1() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		panel.setPreferredSize(new Dimension(800, 60));
-		panel.setBackground(COLOR3);
+		panel.setBackground(COLOR2);
 
 		JButton buttonNew = new JButton("New");
 		buttonNew.setPreferredSize(DIMENSIONBUTTON);
@@ -142,7 +142,7 @@ public class WorkPositionList extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(450, 60));
-		panel.setBackground(COLOR3);
+		panel.setBackground(COLOR2);
 
 		final JLabel label_Search = new JLabel("Enter to filter");
 		label_Search.setBounds(20, 15, 100, 25);

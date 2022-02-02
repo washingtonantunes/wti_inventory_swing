@@ -30,6 +30,8 @@ public class DisableWorkPositionForm extends JDialog {
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
 
+	private final Color COLOR1 = new Color(0, 65, 83);
+
 	private JComboBox<String> comboBox_Reason;
 
 	private JLabel labelError_Reason;
@@ -39,7 +41,8 @@ public class DisableWorkPositionForm extends JDialog {
 	private List<Option> options;
 	private int lineSelected;
 
-	public DisableWorkPositionForm(WorkPositionTableModel model, WorkPosition workPosition, List<Option> options, int lineSelected) {
+	public DisableWorkPositionForm(WorkPositionTableModel model, WorkPosition workPosition, List<Option> options,
+			int lineSelected) {
 		this.model = model;
 		this.workPosition = workPosition;
 		this.options = options;
@@ -71,9 +74,10 @@ public class DisableWorkPositionForm extends JDialog {
 
 		return panel;
 	}
-	
+
 	private void addLabelsAndComboBoxes(JPanel panel) {
 		final JLabel label_Reason = new JLabel("Reason:");
+		label_Reason.setForeground(COLOR1);
 		label_Reason.setBounds(20, 20, 50, 25);
 		panel.add(label_Reason);
 
@@ -103,7 +107,7 @@ public class DisableWorkPositionForm extends JDialog {
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
-	
+
 	private class buttonSaveListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
@@ -113,8 +117,8 @@ public class DisableWorkPositionForm extends JDialog {
 				service.disable(workPosition);
 				model.updateWorkPosition(lineSelected, workPosition);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Work Position successfully disabled", "Success disabling object",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Work Position successfully disabled",
+						"Success disabling object", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -132,7 +136,7 @@ public class DisableWorkPositionForm extends JDialog {
 			dispose();
 		}
 	}
-	
+
 	private WorkPosition getFormData() {
 		WorkPosition workPosition = this.workPosition;
 

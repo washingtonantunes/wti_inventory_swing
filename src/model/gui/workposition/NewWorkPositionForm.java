@@ -41,6 +41,8 @@ public class NewWorkPositionForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 270);
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_WorkPoint;
 	private JComboBox<String> comboBox_Location;
@@ -89,18 +91,22 @@ public class NewWorkPositionForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_WorkPoint = new JLabel("Work Point:");
+		label_WorkPoint.setForeground(COLOR1);
 		label_WorkPoint.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_WorkPoint);
 
 		final JLabel label_Location = new JLabel("Location:");
+		label_Location.setForeground(COLOR1);
 		label_Location.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_Location);
 
 		final JLabel label_Floor = new JLabel("Floor:");
+		label_Floor.setForeground(COLOR1);
 		label_Floor.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Floor);
 
 		final JLabel label_NetPoint = new JLabel("NetPoint:");
+		label_NetPoint.setForeground(COLOR1);
 		label_NetPoint.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_NetPoint);
 	}
@@ -169,8 +175,7 @@ public class NewWorkPositionForm extends JDialog {
 				service.save(workPosition);
 				model.addWorkPosition(workPosition);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Work Position successfully added", "Success saving object",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Work Position successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
 			} catch (DBException e) {
@@ -241,12 +246,10 @@ public class NewWorkPositionForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("work_positions.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

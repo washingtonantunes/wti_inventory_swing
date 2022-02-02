@@ -42,6 +42,8 @@ public class EditMonitorForm extends JDialog {
 	private static final int HEIGHT = 25;
 
 	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
+	
+	private final Color COLOR1 = new Color(0, 65, 83);
 
 	private JTextField textField_PatrimonyNumber;
 	private JComboBox<String> comboBox_Brand;
@@ -92,26 +94,32 @@ public class EditMonitorForm extends JDialog {
 
 	private void addLabels(JPanel panel) {
 		final JLabel label_SerialNumber = new JLabel("Serial Number:");
+		label_SerialNumber.setForeground(COLOR1);
 		label_SerialNumber.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
 		panel.add(label_SerialNumber);
 
 		final JLabel label_PatrimonyNumber = new JLabel("PatrimonyNumber:");
+		label_PatrimonyNumber.setForeground(COLOR1);
 		label_PatrimonyNumber.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
 		panel.add(label_PatrimonyNumber);
 
 		final JLabel label_Brand = new JLabel("Brand:");
+		label_Brand.setForeground(COLOR1);
 		label_Brand.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
 		panel.add(label_Brand);
 
 		final JLabel label_Model = new JLabel("Model:");
+		label_Model.setForeground(COLOR1);
 		label_Model.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
 		panel.add(label_Model);
 
 		JLabel label_Status = new JLabel("Status:");
+		label_Status.setForeground(COLOR1);
 		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
 		panel.add(label_Status);
 
 		JLabel label_DateEntry = new JLabel("DateEntry:");
+		label_DateEntry.setForeground(COLOR1);
 		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
 		panel.add(label_DateEntry);
 	}
