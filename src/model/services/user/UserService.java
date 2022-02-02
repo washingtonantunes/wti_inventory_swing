@@ -29,7 +29,7 @@ public class UserService {
 			conn.setAutoCommit(false);
 
 			userDao.insert(obj);
-			changeDao.insert(getChange(obj, 0));
+			changeDao.insert(getChange(obj,obj, 0));
 
 			conn.commit();
 		} 
@@ -71,7 +71,7 @@ public class UserService {
 			conn.setAutoCommit(false);
 
 			userDao.disable(obj);
-			changeDao.insert(getChange(obj, 3));
+			changeDao.insert(getChange(obj, obj, 3));
 
 			conn.commit();
 		} 
@@ -91,16 +91,6 @@ public class UserService {
 		change.setObject(objOld.getRegistration());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
-		change.setDate(new Date());
-		change.setAuthor(MainWindow.collaborator.getName());
-		return change;
-	}
-
-	private Change getChange(User obj, int type) {
-		Change change = new Change();
-		change.setObject(obj.getRegistration());
-		change.setType(getTypeChange(type));
-		change.setChanges(getChanges(null, null, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
@@ -150,13 +140,13 @@ public class UserService {
 			fieldsUpdated += " 'CPF Old: " + objOld.getCPF() + "',";
 		}
 		if (!objOld.getPhone().equals(objNew.getPhone())) {
-			fieldsUpdated += " 'Phone Old: " + objOld.getPhone() + "'";
+			fieldsUpdated += " 'Phone Old: " + objOld.getPhone() + "',";
 		}
 		if (!objOld.getProject().equals(objNew.getProject())) {
-			fieldsUpdated += " 'Project Old: " + objOld.getProject() + "'";
+			fieldsUpdated += " 'Project Old: " + objOld.getProject() + "',";
 		}
 		if (!objOld.getEmail().equals(objNew.getEmail())) {
-			fieldsUpdated += " 'Email Old: " + objOld.getEmail() + "'";
+			fieldsUpdated += " 'Email Old: " + objOld.getEmail() + "',";
 		}
 		if (!objOld.getDepartment().equals(objNew.getDepartment())) {
 			fieldsUpdated += " 'Department Old: " + objOld.getDepartment() + "'";

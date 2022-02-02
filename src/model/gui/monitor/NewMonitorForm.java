@@ -204,7 +204,7 @@ public class NewMonitorForm extends JDialog {
 			exception.addError("serialNumber", "Field can't be empty");
 		} 
 		else if (textField_SerialNumber.getText().length() < 6) {
-			exception.addError("serialNumber", "Invalid serial number - Ex: > 6");
+			exception.addError("serialNumber", "Invalid Serial Number - Ex: > 6");
 		} 
 		else {
 			monitor.setSerialNumber(textField_SerialNumber.getText().trim().toUpperCase());

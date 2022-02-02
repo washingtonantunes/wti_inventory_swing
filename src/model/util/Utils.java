@@ -32,4 +32,41 @@ public class Utils {
 			return 0.0;
 		}
 	}
+	
+	public static String tryParseToString(String str) {
+		try {
+			return str;
+		} 
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
+	
+	public static boolean ToCheckEmail(String email) {
+		String a = email.toUpperCase();
+		
+		if (a.contains("@MINSAIT.COM")) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean ToCheckCPF(String CPF) {
+		String a = CPF.replace(".", "");
+		a = a.replace("-", "");
+		if (a == null || a.trim().equals("")) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean ToCheckPhone(String Phone) {
+		String a = Phone.replace("(", "");
+		a = a.replace(")", "");
+		a = a.replace("-", "");
+		if (a == null || a.trim().equals("")) {
+			return true;
+		}
+		return false;
+	}
 }

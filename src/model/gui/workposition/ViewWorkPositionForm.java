@@ -136,7 +136,6 @@ public class ViewWorkPositionForm extends JDialog {
 
 		public void actionPerformed(ActionEvent event) {
 			new ChangesPanel(workPosition.getChanges()).setVisible(true);
-			;
 		}
 	}
 

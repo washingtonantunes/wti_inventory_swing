@@ -43,15 +43,15 @@ public class TableUser extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(110); // Registration
+				column.setPreferredWidth(70); // Registration
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(80); // Name
+				column.setPreferredWidth(200); // Name
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
-				column.setPreferredWidth(180); // CPF
+				column.setPreferredWidth(90); // CPF
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
@@ -63,7 +63,7 @@ public class TableUser extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 5) {
-				column.setPreferredWidth(90); // Email
+				column.setPreferredWidth(200); // Email
 				column.setResizable(false);
 			} 
 			else if (i == 6) {
@@ -71,11 +71,11 @@ public class TableUser extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 7) {
-				column.setPreferredWidth(100); // Status
+				column.setPreferredWidth(70); // Status
 				column.setResizable(false);
 			} 
 			else if (i == 8) {
-				column.setPreferredWidth(100); // Date Entry
+				column.setPreferredWidth(70); // Date Entry
 				column.setResizable(false);
 			} 
 			else if (i == 9) {

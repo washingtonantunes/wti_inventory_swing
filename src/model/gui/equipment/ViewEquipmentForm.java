@@ -192,7 +192,6 @@ public class ViewEquipmentForm extends JDialog {
 
 		public void actionPerformed(ActionEvent event) {
 			new ChangesPanel(equipment.getChanges()).setVisible(true);
-			;
 		}
 	}
 

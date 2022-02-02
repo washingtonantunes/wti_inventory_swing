@@ -136,7 +136,6 @@ public class ViewMonitorForm extends JDialog {
 
 		public void actionPerformed(ActionEvent event) {
 			new ChangesPanel(monitor.getChanges()).setVisible(true);
-			;
 		}
 	}
 

@@ -46,10 +46,13 @@ public class JTextFieldFilter extends PlainDocument {
 	/* MEUS TIPOS */
 	public static final String SERIALNUMBER = LOWERCASE.trim() + UPPERCASE.trim() + NUMERIC;
 	public static final String ADDRESS_MAC = SERIALNUMBER + NUMERIC + "-";
+	public static final String CPF = DECIMAL + "-";
+	public static final String MYEMAIL = LOWERCASE.trim() + UPPERCASE.trim() + "@.";
+	public static final String NAME = LOWERCASE + UPPERCASE;
 
 	protected String acceptedChars = null;
 	protected boolean negativeAccepted = false;
-	protected int maxLength = 100;
+	protected int maxLength = 50;
 
 	public JTextFieldFilter() {
 		this(ALPHA_NUMERIC);

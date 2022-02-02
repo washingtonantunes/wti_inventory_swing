@@ -31,7 +31,7 @@ public class ShowInfoChange extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Changes");
-		setPreferredSize(new Dimension(300, size));
+		setPreferredSize(new Dimension(350, size));
 		setResizable(false);
 
 		pack();
@@ -50,7 +50,7 @@ public class ShowInfoChange extends JDialog {
 	private void addLabels(JPanel panel) {
 		for (int i =0; i < list.size(); i++) {
 			final JLabel label_Info = new JLabel(list.get(i));
-			label_Info.setBounds(20, (i * 15), 250, 25);
+			label_Info.setBounds(20, (i * 15), 350, 25);
 			panel.add(label_Info);
 		}
 	}

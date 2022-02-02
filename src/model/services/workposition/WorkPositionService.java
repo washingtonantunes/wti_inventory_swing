@@ -29,7 +29,7 @@ public class WorkPositionService {
 			conn.setAutoCommit(false);
 
 			workPositionDao.insert(obj);
-			changeDao.insert(getChange(obj, 0));
+			changeDao.insert(getChange(obj, obj, 0));
 
 			conn.commit();
 		} 
@@ -71,7 +71,7 @@ public class WorkPositionService {
 			conn.setAutoCommit(false);
 
 			workPositionDao.disable(obj);
-			changeDao.insert(getChange(obj, 3));
+			changeDao.insert(getChange(obj, obj, 3));
 
 			conn.commit();
 		} 
@@ -91,16 +91,6 @@ public class WorkPositionService {
 		change.setObject(objNew.getWorkPoint());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
-		change.setDate(new Date());
-		change.setAuthor(MainWindow.collaborator.getName());
-		return change;
-	}
-
-	private Change getChange(WorkPosition obj, int type) {
-		Change change = new Change();
-		change.setObject(obj.getWorkPoint());
-		change.setType(getTypeChange(type));
-		change.setChanges(getChanges(null, null, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;

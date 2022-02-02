@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class User implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -135,4 +135,13 @@ public class User implements Serializable {
 	public String toString() {
 		return registration.toString();
 	}
+	
+	@Override
+	public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

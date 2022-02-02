@@ -27,6 +27,7 @@ import model.entities.WorkPosition;
 import model.services.workposition.WorkPositionService;
 import model.services.workposition.WorkPositionTableModel;
 import model.util.JTextFieldFilter;
+import model.util.Utils;
 
 public class NewWorkPositionForm extends JDialog {
 
@@ -194,7 +195,7 @@ public class NewWorkPositionForm extends JDialog {
 		if (textField_WorkPoint.getText() == null || textField_WorkPoint.getText().trim().equals("")) {
 			exception.addError("workPoint", "Field can't be empty");
 		} else if (textField_WorkPoint.getText().length() < 6) {
-			exception.addError("workPoint", "Invalid work point - Ex: > 6");
+			exception.addError("workPoint", "Invalid Work Point - Ex: > 6");
 		} else {
 			workPosition.setWorkPoint(textField_WorkPoint.getText().trim().toUpperCase());
 		}
@@ -214,12 +215,7 @@ public class NewWorkPositionForm extends JDialog {
 		}
 
 		// validation Net Point
-		if (textField_NetPoint.getText() == null || textField_NetPoint.getText().trim().equals("")) {
-			exception.addError("netPoint", "Field can't be empty");
-		} 
-		else {
-			workPosition.setNetPoint(textField_NetPoint.getText().trim().toUpperCase());
-		}
+		workPosition.setNetPoint(Utils.tryParseToString(textField_NetPoint.getText().trim().toUpperCase()));
 
 		// Insert Status
 		workPosition.setStatus("FREE");

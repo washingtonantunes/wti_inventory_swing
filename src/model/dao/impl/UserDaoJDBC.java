@@ -136,7 +136,7 @@ public class UserDaoJDBC implements UserDao {
 				user.setDepartment(rs.getString("department"));
 				user.setStatus(rs.getString("status"));
 				user.setDateEntry(rs.getDate("dateEntry"));
-				user.setChanges(UserList.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
+				user.setChanges(UserList.getChanges().stream().filter(c -> c.getObject().equals(user.getRegistration())).collect(Collectors.toList()));
 				user.setReason(rs.getString("reason"));
 				users.add(user);
 			}

@@ -27,6 +27,7 @@ import model.entities.WorkPosition;
 import model.services.workposition.WorkPositionService;
 import model.services.workposition.WorkPositionTableModel;
 import model.util.JTextFieldFilter;
+import model.util.Utils;
 
 public class EditWorkPositionForm extends JDialog {
 
@@ -225,12 +226,7 @@ public class EditWorkPositionForm extends JDialog {
 		}
 
 		// validation Net Point
-		if (textField_NetPoint.getText() == null || textField_NetPoint.getText().trim().equals("")) {
-			exception.addError("netPoint", "Field can't be empty");
-		} 
-		else {
-			workPosition.setNetPoint(textField_NetPoint.getText().trim().toUpperCase());
-		}
+				workPosition.setNetPoint(Utils.tryParseToString(textField_NetPoint.getText().trim().toUpperCase()));
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

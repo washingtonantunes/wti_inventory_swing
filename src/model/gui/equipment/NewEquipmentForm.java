@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,12 @@ import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 import db.DBException;
 import exception.ValidationException;
@@ -148,6 +151,7 @@ public class NewEquipmentForm extends JDialog {
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
+		try {
 		textField_SerialNumber = new JTextField();
 		textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
 		textField_SerialNumber.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
@@ -158,8 +162,8 @@ public class NewEquipmentForm extends JDialog {
 		textField_HostName.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
 		panel.add(textField_HostName);
 
-		textField_AddressMAC = new JTextField();
-		textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
+		textField_AddressMAC = new JFormattedTextField(new MaskFormatter("AA-AA-AA-AA-AA-AA"));
+		//textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
 		textField_AddressMAC.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
 		panel.add(textField_AddressMAC);
 
@@ -214,6 +218,10 @@ public class NewEquipmentForm extends JDialog {
 		textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 6));
 		textField_Value.setBounds(COLUMN2, 410, WIDTH, HEIGHT);
 		panel.add(textField_Value);
+		}
+		catch(ParseException e) {
+			
+		}
 	}
 
 	private void addLabelsError(JPanel panel) {
@@ -318,7 +326,7 @@ public class NewEquipmentForm extends JDialog {
 			exception.addError("serialNumber", "Field can't be empty");
 		} 
 		else if (textField_SerialNumber.getText().length() < 6) {
-			exception.addError("serialNumber", "Invalid serial number - Ex: > 6");
+			exception.addError("serialNumber", "Invalid Serial Number - Ex: > 6");
 		} 
 		else {
 			equipment.setSerialNumber(textField_SerialNumber.getText().trim().toUpperCase());

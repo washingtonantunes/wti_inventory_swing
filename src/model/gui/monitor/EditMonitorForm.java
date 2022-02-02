@@ -257,11 +257,7 @@ public class EditMonitorForm extends JDialog {
 
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
-			if (e.getMessage().contains("monitors.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
-			} 
-			else if (e.getMessage().contains("monitors.patrimonyNumber_UNIQUE")) {
+			if (e.getMessage().contains("monitors.patrimonyNumber_UNIQUE")) {
 				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object",
 						JOptionPane.ERROR_MESSAGE);
 			} 
