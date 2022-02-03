@@ -204,7 +204,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 		Project project = new Project();
 		project.setId(rs.getInt("id"));
 		project.setName(rs.getString("name"));
-		project.setLocality(rs.getString("locality"));
+		project.setCity(rs.getString("locality"));
 		project.setCostCenter(rs.getString("costCenter"));
 		return project;
 	}

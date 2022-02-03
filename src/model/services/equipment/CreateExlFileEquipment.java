@@ -1,6 +1,7 @@
 package model.services.equipment;
 
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -13,6 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.Equipment;
 
 public class CreateExlFileEquipment {
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<Equipment> equipments;
 
@@ -115,13 +118,13 @@ public class CreateExlFileEquipment {
 				cell.setCellValue(equipment.getCostType());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(equipment.getValue());
+				cell.setCellValue(String.format("R$ %.2f", equipment.getValue()));
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(equipment.getStatus());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(equipment.getDateEntry());
+				cell.setCellValue(sdf.format(equipment.getDateEntry()));
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(equipment.getReason());

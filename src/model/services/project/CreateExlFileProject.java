@@ -1,6 +1,6 @@
-package model.services.user;
+package model.services.project;
 
-import java.io.*;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -11,26 +11,26 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import model.entities.User;
+import model.entities.Project;
 
-public class CreateExlFileUser {
-	
+public class CreateExlFileProject {
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private List<User> users;
+	private List<Project> projects;
 
 	private String filePath = null;
 
-	public CreateExlFileUser(List<User> users, String path) {
-		this.users = users;
+	public CreateExlFileProject(List<Project> projects, String path) {
+		this.projects = projects;
 		this.filePath = path;
-		initComponentsUser();
+		initComponentsProject();
 	}
 
-	private void initComponentsUser() {
+	private void initComponentsProject() {
 		try {
 			HSSFWorkbook workbook = new HSSFWorkbook();
-			HSSFSheet sheet = workbook.createSheet("Users");
+			HSSFSheet sheet = workbook.createSheet("Projects");
 
 			sheet.setDefaultColumnWidth(15);
 			sheet.setDefaultRowHeight((short) 400);
@@ -42,25 +42,17 @@ public class CreateExlFileUser {
 
 			row = sheet.createRow(rownum++);
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Registration");
+			cell.setCellValue("ID");
 
+			row = sheet.createRow(rownum++);
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Name");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("CPF");
+			cell.setCellValue("City");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Phone");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Project");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Email");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Department");
+			cell.setCellValue("Cost Center");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Status");
@@ -71,39 +63,30 @@ public class CreateExlFileUser {
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Reason");
 
-			for (User user : users) {
+			for (Project project : projects) {
 				row = sheet.createRow(rownum++);
 				cellnum = 0;
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getRegistration());
+				cell.setCellValue(project.getId());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getName());
+				cell.setCellValue(project.getName());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getCPF());
+				cell.setCellValue(project.getCity());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getPhone());
+				cell.setCellValue(project.getCostCenter());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getProject());
+				cell.setCellValue(project.getStatus());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getEmail());
+				cell.setCellValue(sdf.format(project.getDateEntry()));
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getDepartment());
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getStatus());
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(sdf.format(user.getDateEntry()));
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getReason());
+				cell.setCellValue(project.getReason());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");
@@ -111,7 +94,8 @@ public class CreateExlFileUser {
 			fileOut.close();
 			workbook.close();
 			JOptionPane.showMessageDialog(null, "Excel file generated successfully!");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error exporting data: " + e.getMessage());
 		}
 	}

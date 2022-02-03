@@ -1,6 +1,7 @@
 package model.services.monitor;
 
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -13,6 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.Monitor;
 
 public class CreateExlFileMonitor {
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<Monitor> monitors;
 
@@ -79,7 +82,7 @@ public class CreateExlFileMonitor {
 				cell.setCellValue(monitor.getStatus());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(monitor.getDateEntry());
+				cell.setCellValue(sdf.format(monitor.getDateEntry()));
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getReason());

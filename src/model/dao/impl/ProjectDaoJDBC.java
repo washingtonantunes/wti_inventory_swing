@@ -27,17 +27,17 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO `projects` "
-					+ "(`nameProject`,"
+					+ "(`name`,"
 					+ "`locality`,"
 					+ "`costCenter`,"
-					+ "`statusProject`,"
+					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, obj.getName());
-			st.setString(2, obj.getLocality());
+			st.setString(2, obj.getCity());
 			st.setString(3, obj.getCostCenter());
 			st.setString(4, obj.getStatus());
 			st.setDate(5, new java.sql.Date(obj.getDateEntry().getTime()));
@@ -69,9 +69,9 @@ public class ProjectDaoJDBC implements ProjectDao {
 			st = conn.prepareStatement(
 					"UPDATE `projects` "
 					+ "SET `locality` = ?, `costCenter` = ? "
-					+ "WHERE `idProject` = ?");
+					+ "WHERE `id` = ?");
 
-			st.setString(1, obj.getLocality());
+			st.setString(1, obj.getCity());
 			st.setString(2, obj.getCostCenter());
 			st.setInt(3, obj.getId());
 
@@ -86,17 +86,17 @@ public class ProjectDaoJDBC implements ProjectDao {
 	}
 
 	@Override
-	public void disable(Integer idProject, String status, String reason) {
+	public void disable(Project obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `projects` "
-					+ "SET `statusProject` = ?, `reason` = ? "
-					+ "WHERE `idProject` = ?");
+					+ "SET `status` = ?, `reason` = ? "
+					+ "WHERE `id` = ?");
 
-			st.setString(1, status);
-			st.setString(2, reason);
-			st.setInt(3, idProject);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getReason());
+			st.setInt(3, obj.getId());
 
 			st.executeUpdate();
 		} 
@@ -122,11 +122,11 @@ public class ProjectDaoJDBC implements ProjectDao {
 			while (rs.next()) {
 				Project project = new Project();
 
-				project.setId(rs.getInt("idProject"));
-				project.setName(rs.getString("nameProject"));
-				project.setLocality(rs.getString("locality"));
+				project.setId(rs.getInt("id"));
+				project.setName(rs.getString("name"));
+				project.setCity(rs.getString("locality"));
 				project.setCostCenter(rs.getString("costCenter"));
-				project.setStatus(rs.getString("statusProject"));
+				project.setStatus(rs.getString("status"));
 				project.setDateEntry(rs.getDate("dateEntry"));
 				//project.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(project.getNameProject())).collect(Collectors.toList()));
 				project.setReason(rs.getString("reason"));

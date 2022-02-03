@@ -1,4 +1,4 @@
-package model.services.equipment;
+package model.services.project;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,11 +13,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class TableEquipment extends JTable {
+public class TableProject extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
-	public TableEquipment(EquipmentTableModel model) {
+	public TableProject(ProjectTableModel model) {
 		super(model);
 		initComponents();
 	}
@@ -28,7 +28,6 @@ public class TableEquipment extends JTable {
 		configureHeader();
 		configureSizeColumn();
 		configureColumnDate();
-		configureColumnValue();
 	}
 
 	private void configureHeader() {
@@ -44,58 +43,30 @@ public class TableEquipment extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(110); // Serial Number
+				column.setPreferredWidth(110); // ID
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(110); // Host Name
+				column.setPreferredWidth(110); // Name
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
-				column.setPreferredWidth(130); // Address MAC
+				column.setPreferredWidth(90); // Locality
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
-				column.setPreferredWidth(90); // Type
+				column.setPreferredWidth(80); // Cost Center
 				column.setResizable(false);
 			} 
 			else if (i == 4) {
-				column.setPreferredWidth(90); // Patrimony Number
-				column.setResizable(false);
-			} 
-			else if (i == 5) {
-				column.setPreferredWidth(80); // Brand
-				column.setResizable(false);
-			} 
-			else if (i == 6) {
-				column.setPreferredWidth(180); // Model
-				column.setResizable(false);
-			} 
-			else if (i == 7) {
-				column.setPreferredWidth(60); // Memory Ram
-				column.setResizable(false);
-			} 
-			else if (i == 8) {
-				column.setPreferredWidth(60); // Hard Disk
-				column.setResizable(false);
-			} 
-			else if (i == 9) {
-				column.setPreferredWidth(90); // Cost Type
-				column.setResizable(false);
-			} 
-			else if (i == 10) {
-				column.setPreferredWidth(60); // Value
-				column.setResizable(false);
-			} 
-			else if (i == 11) {
 				column.setPreferredWidth(100); // Status
 				column.setResizable(false);
 			} 
-			else if (i == 12) {
+			else if (i == 5) {
 				column.setPreferredWidth(100); // Date Entry
 				column.setResizable(false);
 			} 
-			else if (i == 13) {
+			else if (i == 6) {
 				column.setPreferredWidth(90); // Reason
 				column.setResizable(false);
 			}
@@ -118,23 +89,7 @@ public class TableEquipment extends JTable {
 			}
 		};
 
-		this.getColumnModel().getColumn(12).setCellRenderer(tableCellRenderer);
-	}
-
-	public void configureColumnValue() {
-		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-
-			private static final long serialVersionUID = 1L;
-
-			String format = "R$ %.1f";
-
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				value = String.format(format, value);
-				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			}
-		};
-		this.getColumnModel().getColumn(10).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

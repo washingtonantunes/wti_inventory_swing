@@ -11,7 +11,7 @@ public class Project implements Serializable {
 
 	private Integer id;
 	private String name;
-	private String locality;
+	private String city;
 	private String costCenter;
 	private String status;
 	private Date dateEntry;
@@ -20,26 +20,6 @@ public class Project implements Serializable {
 	private List<Change> changes;
 
 	public Project() {
-	}
-
-	public Project(String name, String locality, String costCenter, String status, Date dateEntry) {
-		this.name = name;
-		this.locality = locality;
-		this.costCenter = costCenter;
-		this.status = status;
-		this.dateEntry = dateEntry;
-	}
-
-	public Project(Integer id, String name, String locality, String costCenter, String status,
-			Date dateEntry, String reason, List<Change> changes) {
-		this.id = id;
-		this.name = name;
-		this.locality = locality;
-		this.costCenter = costCenter;
-		this.status = status;
-		this.dateEntry = dateEntry;
-		this.reason = reason;
-		this.changes = changes;
 	}
 
 	public Integer getId() {
@@ -58,12 +38,12 @@ public class Project implements Serializable {
 		this.name = name;
 	}
 
-	public String getLocality() {
-		return locality;
+	public String getCity() {
+		return city;
 	}
 
-	public void setLocality(String locality) {
-		this.locality = locality;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getCostCenter() {

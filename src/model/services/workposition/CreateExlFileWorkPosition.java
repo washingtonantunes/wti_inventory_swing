@@ -1,6 +1,7 @@
 package model.services.workposition;
 
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -13,6 +14,8 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.WorkPosition;
 
 public class CreateExlFileWorkPosition {
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<WorkPosition> workPositions;
 
@@ -79,7 +82,7 @@ public class CreateExlFileWorkPosition {
 				cell.setCellValue(workPosition.getStatus());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(workPosition.getDateEntry());
+				cell.setCellValue(sdf.format(workPosition.getDateEntry()));
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(workPosition.getReason());
