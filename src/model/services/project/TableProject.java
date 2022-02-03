@@ -43,7 +43,7 @@ public class TableProject extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(110); // ID
+				column.setPreferredWidth(50); // ID
 				column.setResizable(false);
 			} 
 			else if (i == 1) {

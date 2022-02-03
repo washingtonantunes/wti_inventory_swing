@@ -88,7 +88,7 @@ public class ProjectService {
 
 	private Change getChange(Project objOld, Project objNew, int type) {
 		Change change = new Change();
-		change.setObject(objOld.getName());
+		change.setObject(objOld.getId().toString());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());

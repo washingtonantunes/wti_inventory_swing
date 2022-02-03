@@ -180,8 +180,7 @@ public class NewMonitorForm extends JDialog {
 				service.save(monitor);
 				model.addMonitor(monitor);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Monitor successfully added", "Success saving object",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Monitor successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -267,16 +266,13 @@ public class NewMonitorForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("monitors.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This serial number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else if (e.getMessage().contains("monitors.patrimonyNumber_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {

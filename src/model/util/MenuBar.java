@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import model.gui.MainWindow;
 import model.gui.equipment.EquipmentList;
 import model.gui.monitor.MonitorList;
+import model.gui.project.ProjectList;
 import model.gui.user.UserList;
 import model.gui.workposition.WorkPositionList;
 
@@ -154,7 +155,7 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemCloseListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-
+			System.exit(0);
 		}
 	}
 
@@ -191,7 +192,10 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemProjectsListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("MenuItemProjectsListener");
+			mainDesktopPane.removeAll();
+			final ProjectList projectList = new ProjectList();
+			mainDesktopPane.add(projectList);
+			mainDesktopPane.revalidate();
 		}
 	}
 

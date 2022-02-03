@@ -49,6 +49,7 @@ public class JTextFieldFilter extends PlainDocument {
 	public static final String CPF = DECIMAL + "-";
 	public static final String MYEMAIL = LOWERCASE.trim() + UPPERCASE.trim() + "@.";
 	public static final String NAME = LOWERCASE + UPPERCASE;
+	public static final String PROJECT = LOWERCASE + UPPERCASE + NUMERIC;
 
 	protected String acceptedChars = null;
 	protected boolean negativeAccepted = false;

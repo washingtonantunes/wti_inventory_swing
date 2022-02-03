@@ -44,7 +44,6 @@ public class CreateExlFileProject {
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("ID");
 
-			row = sheet.createRow(rownum++);
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Name");
 

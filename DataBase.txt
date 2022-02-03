@@ -95,4 +95,4 @@ CREATE TABLE `projects` (
   PRIMARY KEY (`id`,`nameProject`),
   UNIQUE KEY `project_UNIQUE` (`nameProject`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

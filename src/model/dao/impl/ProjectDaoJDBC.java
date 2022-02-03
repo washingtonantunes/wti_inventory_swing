@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import db.DB;
 import db.DBException;
 import model.dao.ProjectDao;
 import model.entities.Project;
+import model.gui.project.ProjectList;
 
 public class ProjectDaoJDBC implements ProjectDao {
 
@@ -28,7 +30,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `projects` "
 					+ "(`name`,"
-					+ "`locality`,"
+					+ "`city`,"
 					+ "`costCenter`,"
 					+ "`status`,"
 					+ "`dateEntry`) "
@@ -68,12 +70,15 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `projects` "
-					+ "SET `locality` = ?, `costCenter` = ? "
+					+ "SET `name` = ?, "
+					+ "`city` = ?, "
+					+ "`costCenter` = ? "
 					+ "WHERE `id` = ?");
 
-			st.setString(1, obj.getCity());
-			st.setString(2, obj.getCostCenter());
-			st.setInt(3, obj.getId());
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getCity());
+			st.setString(3, obj.getCostCenter());
+			st.setInt(4, obj.getId());
 
 			st.executeUpdate();
 		} 
@@ -124,11 +129,11 @@ public class ProjectDaoJDBC implements ProjectDao {
 
 				project.setId(rs.getInt("id"));
 				project.setName(rs.getString("name"));
-				project.setCity(rs.getString("locality"));
+				project.setCity(rs.getString("city"));
 				project.setCostCenter(rs.getString("costCenter"));
 				project.setStatus(rs.getString("status"));
 				project.setDateEntry(rs.getDate("dateEntry"));
-				//project.setChanges(Window.getChange().stream().filter(c -> c.getObject().equals(project.getNameProject())).collect(Collectors.toList()));
+				project.setChanges(ProjectList.getChanges().stream().filter(c -> c.getObject().equals(project.getId().toString())).collect(Collectors.toList()));
 				project.setReason(rs.getString("reason"));
 				projects.add(project);
 			}
