@@ -24,8 +24,7 @@ public class Collaborator implements Serializable {
 	public Collaborator() {
 	}
 
-	public Collaborator(String name, String registration, String password, int privilege, String office, String status,
-			Date dateEntry) {
+	public Collaborator(String name, String registration, String password, int privilege, String office, String status, Date dateEntry) {
 		this.name = name;
 		this.registration = registration;
 		this.password = password;
@@ -75,11 +74,11 @@ public class Collaborator implements Serializable {
 		this.office = office;
 	}
 
-	public String getStatusCollaborator() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatusCollaborator(String status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

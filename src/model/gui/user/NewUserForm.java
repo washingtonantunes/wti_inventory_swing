@@ -231,6 +231,7 @@ public class NewUserForm extends JDialog {
 
 	private class buttonSaveListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
 				user = getFormData();
@@ -251,6 +252,7 @@ public class NewUserForm extends JDialog {
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}

@@ -24,8 +24,7 @@ public class MainWindow extends JFrame {
 
 	private JDesktopPane main;
 
-	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista",
-			"ACTIVE", null);
+	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
 
 	public MainWindow() {
 		initComponents();

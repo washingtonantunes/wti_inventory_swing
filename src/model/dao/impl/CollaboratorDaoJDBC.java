@@ -31,7 +31,7 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 					+ "`password`,"
 					+ "`privilege`,"
 					+ "`office`,"
-					+ "`statusCollaborator`,"
+					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES "
 					+ "(?, ?, ?, ?, ?, ?, ?)");
@@ -39,9 +39,9 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 			st.setString(1, obj.getName());
 			st.setString(2, obj.getRegistration());
 			st.setString(3, obj.getPassword());
-			st.setInt(4, obj.getPrivilege());
+			st.setString(4, String.valueOf(obj.getPrivilege()));
 			st.setString(5, obj.getOffice());
-			st.setString(6, obj.getStatusCollaborator());
+			st.setString(6, obj.getStatus());
 			st.setDate(7, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
@@ -77,17 +77,17 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 	}
 	
 	@Override
-	public void disable(String registration, String status, String reason) {
+	public void disable(Collaborator obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `collaborators` " 
-					+ "SET `statusCollaborator` = ?, `reason` = ? "
-					+ "WHERE `serialNumber` = ?");
+					+ "SET `status` = ?, `reason` = ? "
+					+ "WHERE `registration` = ?");
 
-			st.setString(1, status);
-			st.setString(2, reason);
-			st.setString(3, registration);
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getReason());
+			st.setString(3, obj.getRegistration());
 			
 			st.executeUpdate();
 		} 
@@ -116,9 +116,9 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 				collaborator.setName(rs.getString("name"));
 				collaborator.setRegistration(rs.getString("registration"));
 				collaborator.setPassword(rs.getString("password"));
-				collaborator.setPrivilege(rs.getInt("privilege"));
+				collaborator.setPrivilege(Integer.parseInt(rs.getString("privilege")));
 				collaborator.setOffice(rs.getString("office"));
-				collaborator.setStatusCollaborator(rs.getString("statusCollaborator"));
+				collaborator.setStatus(rs.getString("status"));
 				collaborator.setDateEntry(rs.getDate("dateEntry"));
 				collaborators.put(collaborator.getRegistration(), collaborator);
 			}

@@ -44,10 +44,6 @@ public class MenuBar extends JMenuBar {
 		menuItemHome.addActionListener(new MenuItemHomeListener());
 		menuFile.add(menuItemHome);
 
-		final JMenuItem menuItemLogoff = new JMenuItem("Logoff");
-		menuItemLogoff.addActionListener(new MenuItemLogoffListener());
-		menuFile.add(menuItemLogoff);
-
 		final JMenuItem menuItemClose = new JMenuItem("Close");
 		menuItemClose.addActionListener(new MenuItemCloseListener());
 		menuFile.add(menuItemClose);
@@ -145,17 +141,10 @@ public class MenuBar extends JMenuBar {
 		}
 	}
 
-	private class MenuItemLogoffListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("MenuItemLogoffListener");
-		}
-	}
-
 	private class MenuItemCloseListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			Runtime.getRuntime().exit(0);
 		}
 	}
 
