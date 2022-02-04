@@ -29,7 +29,7 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private List<Equipment> equipments;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
-			"<html><center>Host <br>Name</html>", "<html><center>Address<br>MAC</html>", "Type",
+			"Host Name", "<html><center>Address<br>MAC</html>", "Type",
 			"<html><center>Patrimony <br>Number</html>", "Brand", "Model", "<html><center>Memory <br>RAM</html>",
 			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Status",
 			"Date Enty", "Reason" };
