@@ -95,4 +95,18 @@ CREATE TABLE `projects` (
   PRIMARY KEY (`id`,`nameProject`),
   UNIQUE KEY `project_UNIQUE` (`nameProject`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `inventories` (
+  `id` smallint NOT NULL AUTO_INCREMENT,
+  `workPosition` varchar(50) DEFAULT NULL,
+  `project` varchar(30) NOT NULL,
+  `user` varchar(10) DEFAULT NULL,
+  `equipment` varchar(30) NOT NULL,
+  `monitor1` varchar(30) DEFAULT NULL,
+  `monitor2` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `equipment_UNIQUE` (`equipment`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

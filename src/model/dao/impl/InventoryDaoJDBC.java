@@ -34,7 +34,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO `inventories` "
-					+ "(`workPosition`,"
+					+ "(`workPosition`, "
 					+ "`project`,"
 					+ "`user`,"
 					+ "`equipment`,"
@@ -48,8 +48,8 @@ public class InventoryDaoJDBC implements InventoryDao {
 			st.setString(2, obj.getProject().getName());
 			st.setString(3, obj.getUser().getRegistration());
 			st.setString(4, obj.getEquipment().getSerialNumber());
-			st.setString(5, obj.getMonitor1().getSerialNumber());
-			st.setString(6, obj.getMonitor2().getSerialNumber());
+			st.setString(5, obj.getMonitor1() == null? null : obj.getMonitor1().getSerialNumber());
+			st.setString(6, obj.getMonitor2() == null? null : obj.getMonitor2().getSerialNumber());
 			
 			int rowsAffected = st.executeUpdate();
 			
@@ -57,7 +57,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 				ResultSet rs = st.getGeneratedKeys();
 				if (rs.next()) {
 					int id = rs.getInt(1);
-					obj.setIdInventory(id);
+					obj.setId(id);
 				}
 				DB.closeResultSet(rs);
 			}
@@ -79,14 +79,17 @@ public class InventoryDaoJDBC implements InventoryDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `inventories` "
-					+ "SET `workPosition` = ?, `equipment` = ?, `monitor1` = ?, `monitor2` = ? "
-					+ "WHERE `idInventory` = ?");
+					+ "SET `workPosition` = ?, "
+					+ "`equipment` = ?, "
+					+ "`monitor1` = ?, "
+					+ "`monitor2` = ? "
+					+ "WHERE `id` = ?");
 
 			st.setString(1, obj.getWorkPosition().getWorkPoint());
 			st.setString(2, obj.getEquipment().getSerialNumber());
-			st.setString(3, obj.getMonitor1().getSerialNumber());
-			st.setString(4, obj.getMonitor2().getSerialNumber());
-			st.setInt(5, obj.getIdInventory());
+			st.setString(3, obj.getMonitor1() == null? null : obj.getMonitor1().getSerialNumber());
+			st.setString(4, obj.getMonitor2() == null? null : obj.getMonitor2().getSerialNumber());
+			st.setInt(5, obj.getId());
 
 			st.executeUpdate();
 		} 
@@ -102,7 +105,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM `inventories` WHERE `idInventory` = ?");
+			st = conn.prepareStatement("DELETE FROM `inventories` WHERE `id` = ?");
 			
 			st.setInt(1, id);
 			
@@ -121,7 +124,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("CALL `wti_inventory`.`list_inventory_1.2`()");
+			st = conn.prepareStatement("CALL `wti_inventory_1.2`.`list_inventories`()");
 
 			rs = st.executeQuery();
 			
@@ -202,9 +205,9 @@ public class InventoryDaoJDBC implements InventoryDao {
 	
 	private Project instatiateProject(ResultSet rs) throws SQLException {
 		Project project = new Project();
-		project.setId(rs.getInt("id"));
-		project.setName(rs.getString("name"));
-		project.setCity(rs.getString("locality"));
+		project.setId(rs.getInt("idProject"));
+		project.setName(rs.getString("nameProject"));
+		project.setCity(rs.getString("city"));
 		project.setCostCenter(rs.getString("costCenter"));
 		return project;
 	}
@@ -212,7 +215,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	private User instatiateUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setRegistration(rs.getString("registration"));
-		user.setName(rs.getString("name"));
+		user.setName(rs.getString("nameUser"));
 		user.setCPF(rs.getString("cpf"));
 		user.setPhone(rs.getString("phone"));
 		user.setProject(rs.getString("project"));
@@ -240,6 +243,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
 		Monitor monitor = new Monitor();
 		monitor.setSerialNumber(rs.getString("serialNumberMonitor1"));
+		monitor.setBrand(rs.getString("brandMonitor1"));
 		monitor.setModel(rs.getString("modelMonitor1"));
 		monitor.setPatrimonyNumber(rs.getString("patrimonyNumberMonitor1"));
 		return monitor;
@@ -248,6 +252,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
 		Monitor monitor = new Monitor();
 		monitor.setSerialNumber(rs.getString("serialNumberMonitor2"));
+		monitor.setBrand(rs.getString("brandMonitor2"));
 		monitor.setModel(rs.getString("modelMonitor2"));
 		monitor.setPatrimonyNumber(rs.getString("patrimonyNumberMonitor2"));
 		return monitor;

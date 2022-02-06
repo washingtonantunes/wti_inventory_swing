@@ -23,12 +23,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
-import model.entities.Change;
-import model.entities.Project;
 import model.entities.Option;
+import model.entities.Project;
 import model.gui.MainWindow;
 import model.services.OptionService;
-import model.services.change.ChangeService;
 import model.services.project.CreateExlFileProject;
 import model.services.project.ProjectService;
 import model.services.project.ProjectTableModel;
@@ -47,7 +45,6 @@ public class ProjectList extends JPanel {
 	private TableProject table;
 	private ProjectTableModel model;
 
-	private static List<Change> changes;
 	private List<Project> projects;
 	private List<Option> options;
 
@@ -57,7 +54,6 @@ public class ProjectList extends JPanel {
 	private TableRowSorter<ProjectTableModel> sorter;
 
 	public ProjectList() {
-		changes = loadDataChanges();
 		this.projects = loadDataProjects();
 		this.options = loadDataOptions();
 		initComponents();
@@ -177,16 +173,6 @@ public class ProjectList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	public static List<Change> getChanges() {
-		return changes;
-	}
-
-	private List<Change> loadDataChanges() {
-		final ChangeService service = new ChangeService();
-		List<Change> list = service.findAll();
-		return list;
 	}
 
 	private List<Project> loadDataProjects() {

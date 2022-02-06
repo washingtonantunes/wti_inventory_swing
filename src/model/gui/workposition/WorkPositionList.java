@@ -23,12 +23,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
-import model.entities.Change;
 import model.entities.Option;
 import model.entities.WorkPosition;
 import model.gui.MainWindow;
 import model.services.OptionService;
-import model.services.change.ChangeService;
 import model.services.workposition.CreateExlFileWorkPosition;
 import model.services.workposition.TableWorkPosition;
 import model.services.workposition.WorkPositionService;
@@ -47,7 +45,6 @@ public class WorkPositionList extends JPanel {
 	private TableWorkPosition table;
 	private WorkPositionTableModel model;
 
-	private static List<Change> changes;
 	private List<WorkPosition> workPositions;
 	private List<Option> options;
 
@@ -57,7 +54,6 @@ public class WorkPositionList extends JPanel {
 	private TableRowSorter<WorkPositionTableModel> sorter;
 
 	public WorkPositionList() {
-		changes = loadDataChanges();
 		workPositions = loadDataWorkPositions();
 		this.options = loadDataOptions();
 		initComponents();
@@ -177,16 +173,6 @@ public class WorkPositionList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	public static List<Change> getChanges() {
-		return changes;
-	}
-
-	private List<Change> loadDataChanges() {
-		final ChangeService service = new ChangeService();
-		List<Change> list = service.findAll();
-		return list;
 	}
 
 	private List<WorkPosition> loadDataWorkPositions() {

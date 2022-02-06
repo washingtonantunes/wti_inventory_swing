@@ -8,5 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Excel"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/MySQLConnector"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ComboBox"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

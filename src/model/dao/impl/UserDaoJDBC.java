@@ -12,7 +12,7 @@ import db.DB;
 import db.DBException;
 import model.dao.UserDao;
 import model.entities.User;
-import model.gui.user.UserList;
+import model.gui.MainWindow;
 
 public class UserDaoJDBC implements UserDao {
 	
@@ -29,7 +29,7 @@ public class UserDaoJDBC implements UserDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `users` "
 					+ "(`registration`,"
-					+ "`name`,"
+					+ "`nameUser`,"
 					+ "`cpf`,"
 					+ "`phone`,"
 					+ "`project`,"
@@ -64,7 +64,7 @@ public class UserDaoJDBC implements UserDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `users` "
-					+ "SET `name` = ?, "
+					+ "SET `nameUser` = ?, "
 					+ "`cpf` = ?, "
 					+ "`phone` = ?, "
 					+ "`project` = ?, "
@@ -128,7 +128,7 @@ public class UserDaoJDBC implements UserDao {
 				User user = new User();
 
 				user.setRegistration(rs.getString("registration"));
-				user.setName(rs.getString("name"));
+				user.setName(rs.getString("nameUser"));
 				user.setCPF(rs.getString("cpf"));
 				user.setPhone(rs.getString("phone"));
 				user.setProject(rs.getString("project"));
@@ -136,7 +136,7 @@ public class UserDaoJDBC implements UserDao {
 				user.setDepartment(rs.getString("department"));
 				user.setStatus(rs.getString("status"));
 				user.setDateEntry(rs.getDate("dateEntry"));
-				user.setChanges(UserList.getChanges().stream().filter(c -> c.getObject().equals(user.getRegistration())).collect(Collectors.toList()));
+				user.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(user.getRegistration())).collect(Collectors.toList()));
 				user.setReason(rs.getString("reason"));
 				users.add(user);
 			}

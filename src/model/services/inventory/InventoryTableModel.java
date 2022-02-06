@@ -31,12 +31,12 @@ public class InventoryTableModel extends AbstractTableModel {
 
 	private List<Inventory> inventories;
 
-	private String[] columns = new String[] { "Work Point", "Project", "City", "Registration", "Name User",
+	private String[] columns = new String[] { "Work Point", "Project", "City", "Registration", "User",
 			"<html><center>Serial <br>Number</html>", "Host Name", "Type", "<html><center>Patrimony <br>Number</html>",
 			"Brand", "Model", "<html><center>Serial Number<br>Monitor 1</html>",
-			"<html><center>Model <br>Monitor 1</html>", "<html><center>Patrimony <br>Number<br> Monitor 1</html>",
+			"<html><center>Model <br>Monitor 1</html>", "<html><center>Patrimony Number<br> Monitor 1</html>",
 			"<html><center>Serial Number<br>Monitor 2</html>", "<html><center>Model <br>Monitor 2</html>",
-			"<html><center>Patrimony <br>Number<br> Monitor 2</html>" };
+			"<html><center>Patrimony Number<br> Monitor 2</html>" };
 
 	public InventoryTableModel(List<Inventory> inventories) {
 		this.inventories = new ArrayList<>(inventories);
@@ -74,7 +74,7 @@ public class InventoryTableModel extends AbstractTableModel {
 			return i.getProject().getName();
 		} 
 		else if (column == COL_CITY_PROJECT) {
-			return i.getProject().getName();
+			return i.getProject().getCity();
 		} 
 		else if (column == COL_REGISTRATION_USER) {
 			return i.getUser().getRegistration();
@@ -101,22 +101,22 @@ public class InventoryTableModel extends AbstractTableModel {
 			return i.getEquipment().getModel();
 		} 
 		else if (column == COL_SERIAL_NUMBER_MONITOR_1) {
-			return i.getMonitor1().getSerialNumber();
+			return i.getMonitor1() == null ? "" : i.getMonitor1().getSerialNumber();
 		} 
 		else if (column == COL_MODEL_MONITOR_1) {
-			return i.getMonitor1().getModel();
+			return i.getMonitor1() == null ? "" : i.getMonitor1().getModel();
 		} 
 		else if (column == COL_PATRIMONY_NUMBER_MONITOR_1) {
-			return i.getMonitor1().getPatrimonyNumber();
+			return i.getMonitor1() == null ? "" : i.getMonitor1().getPatrimonyNumber();
 		} 
 		else if (column == COL_SERIAL_NUMBER_MONITOR_2) {
-			return i.getMonitor2().getSerialNumber();
+			return i.getMonitor2() == null ? "" : i.getMonitor2().getSerialNumber();
 		} 
 		else if (column == COL_MODEL_MONITOR_2) {
-			return i.getMonitor2().getModel();
+			return i.getMonitor2() == null ? "" : i.getMonitor2().getModel();
 		} 
 		else if (column == COL_PATRIMONY_NUMBER_MONITOR_2) {
-			return i.getMonitor2().getPatrimonyNumber();
+			return i.getMonitor2() == null ? "" : i.getMonitor2().getPatrimonyNumber();
 		}
 		return "";
 	}

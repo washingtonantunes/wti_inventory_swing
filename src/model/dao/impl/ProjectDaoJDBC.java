@@ -13,7 +13,7 @@ import db.DB;
 import db.DBException;
 import model.dao.ProjectDao;
 import model.entities.Project;
-import model.gui.project.ProjectList;
+import model.gui.MainWindow;
 
 public class ProjectDaoJDBC implements ProjectDao {
 
@@ -29,7 +29,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO `projects` "
-					+ "(`name`,"
+					+ "(`nameProject`,"
 					+ "`city`,"
 					+ "`costCenter`,"
 					+ "`status`,"
@@ -70,7 +70,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `projects` "
-					+ "SET `name` = ?, "
+					+ "SET `nameProject` = ?, "
 					+ "`city` = ?, "
 					+ "`costCenter` = ? "
 					+ "WHERE `id` = ?");
@@ -128,12 +128,12 @@ public class ProjectDaoJDBC implements ProjectDao {
 				Project project = new Project();
 
 				project.setId(rs.getInt("id"));
-				project.setName(rs.getString("name"));
+				project.setName(rs.getString("nameProject"));
 				project.setCity(rs.getString("city"));
 				project.setCostCenter(rs.getString("costCenter"));
 				project.setStatus(rs.getString("status"));
 				project.setDateEntry(rs.getDate("dateEntry"));
-				project.setChanges(ProjectList.getChanges().stream().filter(c -> c.getObject().equals(project.getId().toString())).collect(Collectors.toList()));
+				project.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(project.getId().toString())).collect(Collectors.toList()));
 				project.setReason(rs.getString("reason"));
 				projects.add(project);
 			}

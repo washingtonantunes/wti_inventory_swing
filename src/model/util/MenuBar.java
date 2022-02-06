@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import model.gui.MainWindow;
 import model.gui.equipment.EquipmentList;
+import model.gui.inventory.InventoryList;
 import model.gui.monitor.MonitorList;
 import model.gui.project.ProjectList;
 import model.gui.user.UserList;
@@ -222,7 +223,10 @@ public class MenuBar extends JMenuBar {
 	private class MenuItemInventoryListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("MenuItemInventoryListener");
+			mainDesktopPane.removeAll();
+			final InventoryList inventoryList = new InventoryList();
+			mainDesktopPane.add(inventoryList);
+			mainDesktopPane.revalidate();
 		}
 	}
 	

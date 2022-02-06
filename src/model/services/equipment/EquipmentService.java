@@ -64,6 +64,27 @@ public class EquipmentService {
 			}
 		}
 	}
+	
+	public void updateStatus(Equipment obj, String change) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			equipmentDao.updateStatus(obj);
+			changeDao.insert(getChange(obj, obj, 2));
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
 
 	public void disable(Equipment obj) {
 		Connection conn = DB.getConnection();
@@ -122,7 +143,7 @@ public class EquipmentService {
 			changes = getFieldsUpdated(objOld, objNew);
 		} 
 		else if (type == 2) {
-
+			changes = "";
 		} 
 		else if (type == 3) {
 			changes = "Equipment Disabled for: " + objOld.getReason();

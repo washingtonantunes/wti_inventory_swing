@@ -7,7 +7,7 @@ public class Inventory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer idInventory;
+	private Integer id;
 
 	private WorkPosition workPosition;
 	private Project project;
@@ -19,9 +19,10 @@ public class Inventory implements Serializable {
 	public Inventory() {
 	}
 
-	public Inventory(Integer idInventory, WorkPosition workPosition, Project project, User user, Equipment equipment,
+	public Inventory(Integer id, WorkPosition workPosition, Project project, User user, Equipment equipment,
 			Monitor monitor1, Monitor monitor2) {
-		this.idInventory = idInventory;
+		super();
+		this.id = id;
 		this.workPosition = workPosition;
 		this.project = project;
 		this.user = user;
@@ -30,12 +31,12 @@ public class Inventory implements Serializable {
 		this.monitor2 = monitor2;
 	}
 
-	public Integer getIdInventory() {
-		return idInventory;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdInventory(Integer idInventory) {
-		this.idInventory = idInventory;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public WorkPosition getWorkPosition() {
@@ -88,7 +89,7 @@ public class Inventory implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(equipment, idInventory, monitor1, monitor2, project);
+		return Objects.hash(equipment, id, monitor1, monitor2, project);
 	}
 
 	@Override
@@ -100,20 +101,8 @@ public class Inventory implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Inventory other = (Inventory) obj;
-		return Objects.equals(equipment, other.equipment) && Objects.equals(idInventory, other.idInventory)
+		return Objects.equals(equipment, other.equipment) && Objects.equals(id, other.id)
 				&& Objects.equals(monitor1, other.monitor1) && Objects.equals(monitor2, other.monitor2)
 				&& Objects.equals(project, other.project);
 	}
-
-	@Override
-	public String toString() {
-		return "Inventory [idInventory=" + idInventory + ", workPosition=" + workPosition + ", project=" + project
-				+ ", user=" + user + ", equipment=" + equipment + ", monitor1=" + monitor1 + ", monitor2=" + monitor2
-				+ "]";
-	}
-
-	/*
-	 * @Override public String toString() { return "Inventory [idInventory=" +
-	 * idInventory + "]"; }
-	 */
 }

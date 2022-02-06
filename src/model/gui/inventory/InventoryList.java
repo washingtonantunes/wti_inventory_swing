@@ -1,4 +1,4 @@
-package model.gui.monitor;
+package model.gui.inventory;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,31 +8,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
-import model.entities.Monitor;
-import model.entities.Option;
+import model.entities.Inventory;
 import model.gui.MainWindow;
-import model.services.OptionService;
-import model.services.monitor.CreateExlFileMonitor;
-import model.services.monitor.MonitorService;
-import model.services.monitor.MonitorTableModel;
-import model.services.monitor.TableMonitor;
+import model.services.inventory.InventoryService;
+import model.services.inventory.InventoryTableModel;
+import model.services.inventory.TableInventory;
 
-public class MonitorList extends JPanel {
+public class InventoryList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,20 +35,18 @@ public class MonitorList extends JPanel {
 	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private JScrollPane scrollPane;
-	private TableMonitor table;
-	private MonitorTableModel model;
+	private TableInventory table;
+	private InventoryTableModel model;
 
-	private List<Monitor> monitors;
-	private List<Option> options;
+	private List<Inventory> inventories;
 
 	private JLabel label_Show__Quantity;
 
 	private JTextField textField_Filter;
-	private TableRowSorter<MonitorTableModel> sorter;
+	private TableRowSorter<InventoryTableModel> sorter;
 
-	public MonitorList() {
-		this.monitors = loadDataMonitors();
-		this.options = loadDataOptions();
+	public InventoryList() {
+		this.inventories = loadDataInventories();
 		initComponents();
 	}
 
@@ -66,7 +57,7 @@ public class MonitorList extends JPanel {
 		add(createPanelNorth(), BorderLayout.NORTH);
 		add(createTable(), BorderLayout.CENTER);
 	}
-
+	
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setPreferredSize(new Dimension(0, 85));
@@ -81,7 +72,7 @@ public class MonitorList extends JPanel {
 		panel.setPreferredSize(new Dimension(0, 25));
 		panel.setBackground(COLOR1);
 
-		JLabel label_Title = new JLabel("Monitors");
+		JLabel label_Title = new JLabel("Inventories");
 		label_Title.setPreferredSize(new Dimension(130, 35));
 		label_Title.setBounds(20, 2, 100, 20);
 		label_Title.setForeground(Color.WHITE);
@@ -113,7 +104,7 @@ public class MonitorList extends JPanel {
 
 		JButton buttonEdit = new JButton("Edit");
 		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
-		buttonEdit.addActionListener(new buttonEditListener());
+		//buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
 		JButton buttonView = new JButton("View");
@@ -123,12 +114,12 @@ public class MonitorList extends JPanel {
 
 		JButton buttonDisable = new JButton("Disable");
 		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
-		buttonDisable.addActionListener(new buttonDisableListener());
+		//buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
 		JButton buttonExport = new JButton("Export");
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
-		buttonExport.addActionListener(new buttonExportListener());
+		//buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
 
 		return panel;
@@ -156,7 +147,7 @@ public class MonitorList extends JPanel {
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
 
-		label_Show__Quantity = new JLabel(String.valueOf(monitors.size()));
+		label_Show__Quantity = new JLabel(String.valueOf(inventories.size()));
 		label_Show__Quantity.setPreferredSize(new Dimension(30, 35));
 		label_Show__Quantity.setBounds(400, 15, 50, 25);
 		label_Show__Quantity.setForeground(Color.WHITE);
@@ -166,74 +157,37 @@ public class MonitorList extends JPanel {
 	}
 
 	private JScrollPane createTable() {
-		model = new MonitorTableModel(monitors);
+		model = new InventoryTableModel(inventories);
 
-		table = new TableMonitor(model);
+		table = new TableInventory(model);
 		table.addMouseListener(new MouseListener());
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
 	}
 
-	private List<Monitor> loadDataMonitors() {
-		final MonitorService service = new MonitorService();
-		List<Monitor> list = service.findAll();
-		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
+	private List<Inventory> loadDataInventories() {
+		final InventoryService service = new InventoryService();
+		List<Inventory> list = service.findAll();
+		list.sort((e1, e2) -> e1.getProject().getName().compareTo(e2.getProject().getName()));
 		return list;
 	}
-
-	private List<Option> loadDataOptions() {
-		final OptionService service = new OptionService();
-		List<Option> list = service.findAll();
-		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
-		return list;
-	}
-
+	
 	private class buttonNewListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewMonitorForm(model, options).setVisible(true);
+				new NewInventoryForm(model).setVisible(true);
 				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
 		}
 	}
-
-	private class buttonEditListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied",
-						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				int lineSelected = -1;
-				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
-				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
-				} 
-				else {
-					Monitor monitor = model.getMonitor(modelRow);
-					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This monitor is disabled", "Unable to Edit",
-								JOptionPane.INFORMATION_MESSAGE);
-					} 
-					else {
-						new EditMonitorForm(model, monitor, options, modelRow).setVisible(true);
-					}
-				}
-			}
-		}
-	}
-
+	
 	private class buttonViewListener implements ActionListener {
 
 		@Override
@@ -242,55 +196,20 @@ public class MonitorList extends JPanel {
 			lineSelected = table.getSelectedRow();
 			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
-				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				Monitor monitor = model.getMonitor(modelRow);
-				new ViewMonitorForm(monitor).setVisible(true);
+				Inventory inventory = model.getInventory(modelRow);
+				new ViewInventoryForm(inventory).setVisible(true);
 			}
 		}
 	}
-
-	private class buttonDisableListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (MainWindow.collaborator.getPrivilege() == 2) {
-				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied",
-						JOptionPane.INFORMATION_MESSAGE);
-			} 
-			else {
-				int lineSelected = -1;
-				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
-				if (lineSelected < 0) {
-					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
-							JOptionPane.INFORMATION_MESSAGE);
-				} 
-				else {
-					Monitor monitor = model.getMonitor(modelRow);
-					if (monitor.getStatus().equals("DISABLED")) {
-						JOptionPane.showMessageDialog(null, "This monitor already is disabled", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
-					} 
-					else if (monitor.getStatus().equals("IN USE")) {
-						JOptionPane.showMessageDialog(null, "This monitor is in use", "Unable to Disable",
-								JOptionPane.INFORMATION_MESSAGE);
-					} 
-					else {
-						new DisableMonitorForm(model, monitor, options, modelRow).setVisible(true);
-					}
-				}
-			}
-		}
-	}
-
+	
 	private class textFieldFilterListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			sorter = new TableRowSorter<MonitorTableModel>(model);
+			sorter = new TableRowSorter<InventoryTableModel>(model);
 			table.setRowSorter(sorter);
 
 			String text = textField_Filter.getText().toUpperCase();
@@ -306,27 +225,7 @@ public class MonitorList extends JPanel {
 			}
 		}
 	}
-
-	private class buttonExportListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			List<Monitor> monitors = new ArrayList<Monitor>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				monitors.add(model.getMonitor(row));
-			}
-
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
-
-			int returnValue = jfc.showSaveDialog(null);
-
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileMonitor(monitors, selectedFile.getAbsolutePath());
-			}
-		}
-	}
-
+	
 	private class MouseListener extends MouseAdapter {
 
 		@Override
@@ -334,8 +233,8 @@ public class MonitorList extends JPanel {
 			if (evt.getClickCount() == 2) {
 				int lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
-				Monitor monitor = model.getMonitor(modelRow);
-				new ViewMonitorForm(monitor).setVisible(true);
+				Inventory inventory = model.getInventory(modelRow);
+				new ViewInventoryForm(inventory).setVisible(true);
 			}
 		}
 	}

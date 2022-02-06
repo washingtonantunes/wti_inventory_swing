@@ -12,7 +12,7 @@ import db.DB;
 import db.DBException;
 import model.dao.MonitorDao;
 import model.entities.Monitor;
-import model.gui.monitor.MonitorList;
+import model.gui.MainWindow;
 
 public class MonitorDaoJDBC implements MonitorDao {
 
@@ -143,7 +143,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 				monitor.setPatrimonyNumber(rs.getString("patrimonyNumber"));
 				monitor.setStatus(rs.getString("status"));
 				monitor.setDateEntry(rs.getDate("dateEntry"));
-				monitor.setChanges(MonitorList.getChanges().stream().filter(c -> c.getObject().equals(monitor.getSerialNumber())).collect(Collectors.toList()));
+				monitor.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(monitor.getSerialNumber())).collect(Collectors.toList()));
 				monitor.setReason(rs.getString("reason"));
 				monitors.add(monitor);
 			}

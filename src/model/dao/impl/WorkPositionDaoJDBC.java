@@ -12,7 +12,7 @@ import db.DB;
 import db.DBException;
 import model.dao.WorkPositionDao;
 import model.entities.WorkPosition;
-import model.gui.workposition.WorkPositionList;
+import model.gui.MainWindow;
 
 public class WorkPositionDaoJDBC implements WorkPositionDao {
 	
@@ -143,7 +143,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 				workPosition.setNetPoint(rs.getString("netPoint"));
 				workPosition.setStatus(rs.getString("status"));
 				workPosition.setDateEntry(rs.getDate("dateEntry"));
-				workPosition.setChanges(WorkPositionList.getChanges().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
+				workPosition.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
 				workPosition.setReason(rs.getString("reason"));
 				workPositions.add(workPosition);
 			}

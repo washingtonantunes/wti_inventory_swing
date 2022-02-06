@@ -348,7 +348,7 @@ public class EditEquipmentForm extends JDialog {
 
 		ValidationException exception = new ValidationException("Validation error");
 
-		// Validation HostName
+		// Validation Host Name
 		if (textField_HostName.getText() == null || textField_HostName.getText().trim().equals("")) {
 			exception.addError("hostName", "Field can't be empty");
 		} 
@@ -362,7 +362,7 @@ public class EditEquipmentForm extends JDialog {
 			equipment.setHostName(textField_HostName.getText().trim().toUpperCase());
 		}
 
-		// Validation AddressMac
+		// Validation Address Mac
 		if (Utils.ToCheckAddressMACNull(textField_AddressMAC.getText())) {
 			exception.addError("addressMAC", "Field can't be empty");
 		} 

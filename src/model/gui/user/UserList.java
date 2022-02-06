@@ -23,12 +23,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
-import model.entities.Change;
 import model.entities.Option;
 import model.entities.User;
 import model.gui.MainWindow;
 import model.services.OptionService;
-import model.services.change.ChangeService;
 import model.services.user.CreateExlFileUser;
 import model.services.user.TableUser;
 import model.services.user.UserService;
@@ -47,7 +45,6 @@ public class UserList extends JPanel {
 	private TableUser table;
 	private UserTableModel model;
 
-	private static List<Change> changes;
 	private List<User> users;
 	private List<Option> options;
 
@@ -57,7 +54,6 @@ public class UserList extends JPanel {
 	private TableRowSorter<UserTableModel> sorter;
 
 	public UserList() {
-		changes = loadDataChanges();
 		this.users = loadDataUsers();
 		this.options = loadDataOptions();
 		initComponents();
@@ -177,16 +173,6 @@ public class UserList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	public static List<Change> getChanges() {
-		return changes;
-	}
-
-	private List<Change> loadDataChanges() {
-		final ChangeService service = new ChangeService();
-		List<Change> list = service.findAll();
-		return list;
 	}
 
 	private List<User> loadDataUsers() {
