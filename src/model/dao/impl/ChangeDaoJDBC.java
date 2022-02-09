@@ -64,6 +64,7 @@ public class ChangeDaoJDBC implements ChangeDao {
 			while (rs.next()) {
 				Change change = new Change();
 
+				change.setId(rs.getInt("id"));
 				change.setChanges(rs.getString("changes"));
 				change.setDate(rs.getDate("date"));
 				change.setObject(rs.getString("object"));

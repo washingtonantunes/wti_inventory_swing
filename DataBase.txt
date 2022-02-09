@@ -108,5 +108,7 @@ CREATE TABLE `inventories` (
   `monitor2` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `equipment_UNIQUE` (`equipment`),
+  UNIQUE KEY `monitor1_UNIQUE` (`monitor1`),
+  UNIQUE KEY `monitor2_UNIQUE` (`monitor2`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

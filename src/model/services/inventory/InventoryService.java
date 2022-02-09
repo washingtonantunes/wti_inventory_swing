@@ -29,7 +29,6 @@ public class InventoryService {
 			conn.setAutoCommit(false);
 
 			inventoryDao.insert(obj);
-			//updateStatusObj(obj, 0);
 			
 			conn.commit();
 		} 
@@ -44,12 +43,12 @@ public class InventoryService {
 		}
 	}
 	
-	public void update(Inventory obj) {
+	public void update(Inventory objOld, Inventory objNew) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			inventoryDao.update(obj);
+			inventoryDao.update(objNew);
 
 			conn.commit();
 		} 

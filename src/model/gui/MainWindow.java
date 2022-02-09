@@ -30,7 +30,7 @@ public class MainWindow extends JFrame {
 	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
 	
 	private static List<Change> changes;
-
+	
 	public MainWindow() {
 		changes = loadDataChanges();
 		initComponents();

@@ -36,10 +36,10 @@ import model.entities.WorkPosition;
 import model.services.inventory.InventoryService;
 import model.services.inventory.InventoryTableModel;
 
-public class NewInventoryForm extends JDialog {
+public class EditInventoryForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
 	
@@ -88,8 +88,6 @@ public class NewInventoryForm extends JDialog {
 	private JLabel labelShow_ModelMonitor2;
 
 	private JLabel labelError_WorkPosition;
-	private JLabel labelError_Project;
-	private JLabel labelError_User;
 	private JLabel labelError_Equipment;
 	private JLabel labelError_Monitor1;
 	private JLabel labelError_Monitor2;
@@ -101,16 +99,20 @@ public class NewInventoryForm extends JDialog {
 	private List<Monitor> monitors;
 
 	private InventoryTableModel model;
-	private Inventory inventory;
+	private final Inventory inventoryOld;
+	private int lineSelected;
 
-	public NewInventoryForm(InventoryTableModel model, List<WorkPosition> workPositions, List<Project> projects, List<User> users, List<Equipment> equipments, List<Monitor> monitors) {
-		this.model = model;
+	public EditInventoryForm(InventoryTableModel model, Inventory inventoryOld, int lineSelected, List<WorkPosition> workPositions, List<Project> projects, List<User> users, List<Equipment> equipments, List<Monitor> monitors) {
 		this.workPositions = workPositions;
 		this.projects = projects;
 		this.users = users;
 		this.equipments = equipments;
 		this.monitors = monitors;
+		this.model = model;
+		this.inventoryOld = inventoryOld;
+		this.lineSelected = lineSelected;
 		initComponents();
+		load();
 	}
 
 	private void initComponents() {
@@ -119,7 +121,7 @@ public class NewInventoryForm extends JDialog {
 		add(createPanelMain());
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("New Inventory");
+		setTitle("Edit Inventory");
 		setPreferredSize(new Dimension(1280, 650));
 		setResizable(false);
 
@@ -142,7 +144,7 @@ public class NewInventoryForm extends JDialog {
 
 		return panel;
 	}
-
+	
 	private JPanel createPanelWorkPosition() {
 		final JPanel panel = new JPanel();
 		
@@ -232,7 +234,7 @@ public class NewInventoryForm extends JDialog {
 
 		return panel;
 	}
-
+	
 	private void addLabelsWorkPosition(JPanel panel) {
 		labelError_WorkPosition = new JLabel();
 		labelError_WorkPosition.setForeground(Color.RED);
@@ -290,13 +292,7 @@ public class NewInventoryForm extends JDialog {
 		panel.add(labelShow_NetPoint);
 	}
 	
-	private void addLabelsProject(JPanel panel) {
-		labelError_Project = new JLabel();
-		labelError_Project.setForeground(Color.RED);
-		labelError_Project.setHorizontalAlignment(SwingConstants.CENTER);
-		labelError_Project.setBounds(20, 50, 210, 25);
-		panel.add(labelError_Project);
-		
+	private void addLabelsProject(JPanel panel) {		
 		final JLabel label_Name = new JLabel("Name:");
 		label_Name.setForeground(COLOR1);
 		label_Name.setBounds(20, 90, 90, 25);
@@ -317,7 +313,7 @@ public class NewInventoryForm extends JDialog {
 		comboBox_Project = new JComboBox<>(new Vector<>(projects));
 		AutoCompleteDecorator.decorate(comboBox_Project);
 		comboBox_Project.addItemListener(new ItemChangeProjectListener());
-		comboBox_Project.setSelectedIndex(-1);
+		comboBox_Project.setEditable(false);
 		comboBox_Project.setBounds(50, 20, 150, 25);
 		panel.add(comboBox_Project);
 		
@@ -337,13 +333,7 @@ public class NewInventoryForm extends JDialog {
 		panel.add(labelShow_CostCenterProject);
 	}
 	
-	private void addLabelsUser(JPanel panel) {
-		labelError_User = new JLabel();
-		labelError_User.setForeground(Color.RED);
-		labelError_User.setHorizontalAlignment(SwingConstants.CENTER);
-		labelError_User.setBounds(20, 50, 290, 25);
-		panel.add(labelError_User);
-		
+	private void addLabelsUser(JPanel panel) {		
 		final JLabel label_Registration = new JLabel("Registration:");
 		label_Registration.setForeground(COLOR1);
 		label_Registration.setBounds(20, 90, 90, 25);
@@ -667,16 +657,28 @@ public class NewInventoryForm extends JDialog {
 		panel.add(buttonClose);
 	}
 	
+	private void load() {
+		comboBox_WorkPosition.setSelectedItem(inventoryOld.getWorkPosition());
+		comboBox_Project.setSelectedItem(inventoryOld.getProject());
+		comboBox_Project.setEnabled(false);
+		comboBox_User.setSelectedItem(inventoryOld.getUser());
+		comboBox_User.setEnabled(false);
+		comboBox_Equipment.setSelectedItem(inventoryOld.getEquipment());
+		comboBox_Monitor1.setSelectedItem(inventoryOld.getMonitor1());
+		comboBox_Monitor2.setSelectedItem(inventoryOld.getMonitor2());
+	}
+
 	private class buttonSaveListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
 			try {
-				inventory = getFormData();
+				final Inventory inventoryNew = getFormData();
 				InventoryService service = new InventoryService();
-				service.save(inventory);
-				model.addInventory(inventory);
+				service.update(inventoryOld, inventoryNew);
+				model.updateInventory(lineSelected, inventoryNew);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Inventory successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Inventory successfully updated", "Success updating object",
+						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
@@ -693,9 +695,10 @@ public class NewInventoryForm extends JDialog {
 			dispose();
 		}
 	}
-	
+
 	private Inventory getFormData() {
 		Inventory inventory = new Inventory();
+		inventory = (Inventory) inventoryOld.clone();
 
 		ValidationException exception = new ValidationException("Validation error");
 
@@ -707,22 +710,6 @@ public class NewInventoryForm extends JDialog {
 			inventory.setWorkPosition(workPositions.get(workPositions.indexOf(comboBox_WorkPosition.getSelectedItem())));
 		}
 
-		// validation Project
-		if (comboBox_Project.getSelectedIndex() < 0 || comboBox_Project.getSelectedItem() == null) {
-			exception.addError("project", "Field project can't be empty");
-		} 
-		else {
-			inventory.setProject(projects.get(projects.indexOf(comboBox_Project.getSelectedItem())));
-		}
-
-		// validation User
-		if (comboBox_User.getSelectedIndex() < 0 || comboBox_User.getSelectedItem() == null) {
-			exception.addError("user", "Field user can't be empty");
-		} 
-		else {
-			inventory.setUser(users.get(users.indexOf(comboBox_User.getSelectedItem())));
-		}
-
 		// validation Equipment
 		if (comboBox_Equipment.getSelectedIndex() < 0 || comboBox_Equipment.getSelectedItem() == null) {
 			exception.addError("equipment", "Field equipment can't be empty");
@@ -730,10 +717,10 @@ public class NewInventoryForm extends JDialog {
 		else {
 			inventory.setEquipment(equipments.get(equipments.indexOf(comboBox_Equipment.getSelectedItem())));
 		}
-		
+
 		inventory.setMonitor1(comboBox_Monitor1.getSelectedIndex() < 0? null: monitors.get(monitors.indexOf(comboBox_Monitor1.getSelectedItem())));
 		inventory.setMonitor2(comboBox_Monitor2.getSelectedIndex() < 0? null: monitors.get(monitors.indexOf(comboBox_Monitor2.getSelectedItem())));
-		
+
 		// validation Monitor 1
 		if (inventory.getEquipment() != null && inventory.getEquipment().getType().equals("DESKTOP") && inventory.getMonitor1() == null) {
 			exception.addError("monitor1", "Field monitor 1 can't be empty");
@@ -749,19 +736,17 @@ public class NewInventoryForm extends JDialog {
 
 		return inventory;
 	}
-	
+
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
 		labelError_WorkPosition.setText(fields.contains("workPosition") ? errors.get("workPosition") : "");
-		labelError_Project.setText(fields.contains("project") ? errors.get("project") : "");
-		labelError_User.setText(fields.contains("user") ? errors.get("user") : "");
 		labelError_Equipment.setText(fields.contains("equipment") ? errors.get("equipment") : "");
 		labelError_Monitor1.setText(fields.contains("monitor1") ? errors.get("monitor1") : "");
 		labelError_Monitor2.setText(fields.contains("monitor2") ? errors.get("monitor2") : "");
 	}
-	
-	private class ItemChangeWorkPositionListener implements ItemListener {
+
+private class ItemChangeWorkPositionListener implements ItemListener {
 		
 		@Override
 		public void itemStateChanged(ItemEvent event) {

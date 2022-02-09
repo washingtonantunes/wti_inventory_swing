@@ -8,22 +8,40 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import model.entities.Change;
+import model.entities.Equipment;
 import model.entities.Inventory;
+import model.entities.Monitor;
+import model.entities.Project;
+import model.entities.User;
+import model.entities.WorkPosition;
 import model.gui.MainWindow;
+import model.services.change.ChangeService;
+import model.services.equipment.EquipmentService;
+import model.services.inventory.CreateExlFileInventory;
 import model.services.inventory.InventoryService;
 import model.services.inventory.InventoryTableModel;
 import model.services.inventory.TableInventory;
+import model.services.monitor.MonitorService;
+import model.services.project.ProjectService;
+import model.services.user.UserService;
+import model.services.workposition.WorkPositionService;
 
 public class InventoryList extends JPanel {
 
@@ -37,8 +55,16 @@ public class InventoryList extends JPanel {
 	private JScrollPane scrollPane;
 	private TableInventory table;
 	private InventoryTableModel model;
+	
+	private static List<Change> changes;
 
 	private List<Inventory> inventories;
+	
+	protected List<WorkPosition> workPositions;
+	private List<Project> projects;
+	private List<User> users;
+	private List<Equipment> equipments;
+	private List<Monitor> monitors;
 
 	private JLabel label_Show__Quantity;
 
@@ -46,7 +72,13 @@ public class InventoryList extends JPanel {
 	private TableRowSorter<InventoryTableModel> sorter;
 
 	public InventoryList() {
-		this.inventories = loadDataInventories();
+		changes = loadDataChanges();
+		inventories = loadDataInventories();
+		workPositions = loadDataWorkPositions();
+		projects = loadDataProjects();
+		users = loadDataUsers();
+		equipments = loadDataEquipments();
+		monitors = loadDataMonitors();
 		initComponents();
 	}
 
@@ -104,7 +136,7 @@ public class InventoryList extends JPanel {
 
 		JButton buttonEdit = new JButton("Edit");
 		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
-		//buttonEdit.addActionListener(new buttonEditListener());
+		buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
 		JButton buttonView = new JButton("View");
@@ -112,14 +144,14 @@ public class InventoryList extends JPanel {
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonDisable = new JButton("Disable");
-		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
-		//buttonDisable.addActionListener(new buttonDisableListener());
-		panel.add(buttonDisable);
+		JButton buttonRemove = new JButton("Remove");
+		buttonRemove.setPreferredSize(DIMENSIONBUTTON);
+		buttonRemove.addActionListener(new buttonRemoveListener());
+		panel.add(buttonRemove);
 
 		JButton buttonExport = new JButton("Export");
 		buttonExport.setPreferredSize(DIMENSIONBUTTON);
-		//buttonExport.addActionListener(new buttonExportListener());
+		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
 
 		return panel;
@@ -165,11 +197,61 @@ public class InventoryList extends JPanel {
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
 	}
+	
+	public static List<Change> getChanges() {
+		return changes;
+	}
+
+	private List<Change> loadDataChanges() {
+		final ChangeService service = new ChangeService();
+		List<Change> list = service.findAll();
+		return list;
+	}
 
 	private List<Inventory> loadDataInventories() {
 		final InventoryService service = new InventoryService();
 		List<Inventory> list = service.findAll();
 		list.sort((e1, e2) -> e1.getProject().getName().compareTo(e2.getProject().getName()));
+		return list;
+	}
+	
+	private List<WorkPosition> loadDataWorkPositions() {
+		final WorkPositionService service = new WorkPositionService();
+		List<WorkPosition> list = service.findAll();
+		list = list.stream().filter(e -> e.getStatus().equals("FREE")).collect(Collectors.toList());
+		list.sort((w1, w2) -> w1.getWorkPoint().compareTo(w2.getWorkPoint()));
+		return list;
+	}
+	
+	private List<Project> loadDataProjects() {
+		final ProjectService service = new ProjectService();
+		List<Project> list = service.findAll();
+		list = list.stream().filter(e -> e.getStatus().equals("ACTIVE")).collect(Collectors.toList());
+		list.sort((w1, w2) -> w1.getName().compareTo(w2.getName()));
+		return list;
+	}
+	
+	private List<User> loadDataUsers() {
+		final UserService service = new UserService();
+		List<User> list = service.findAll();
+		list = list.stream().filter(e -> e.getStatus().equals("ACTIVE")).collect(Collectors.toList());
+		list.sort((w1, w2) -> w1.getRegistration().compareTo(w2.getRegistration()));
+		return list;
+	}
+	
+	private List<Equipment> loadDataEquipments() {
+		final EquipmentService service = new EquipmentService();
+		List<Equipment> list = service.findAll();
+		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
+		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
+		return list;
+	}
+	
+	private List<Monitor> loadDataMonitors() {
+		final MonitorService service = new MonitorService();
+		List<Monitor> list = service.findAll();
+		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
+		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
 		return list;
 	}
 	
@@ -181,9 +263,31 @@ public class InventoryList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewInventoryForm(model).setVisible(true);
+				new NewInventoryForm(model, workPositions, projects, users, equipments, monitors).setVisible(true);
 				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
+			}
+		}
+	}
+	
+	private class buttonEditListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
+				if (lineSelected < 0) {
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				else {
+					Inventory inventory = model.getInventory(modelRow);
+					new EditInventoryForm(model, inventory, modelRow, workPositions, projects, users, equipments, monitors).setVisible(true);
+				}
 			}
 		}
 	}
@@ -205,6 +309,33 @@ public class InventoryList extends JPanel {
 		}
 	}
 	
+	private class buttonRemoveListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied", JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				int modelRow = table.convertRowIndexToModel(lineSelected);
+				if (lineSelected < 0) {
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				else {
+					int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove");
+					if (i == JOptionPane.OK_OPTION) {
+						Inventory inventory = model.getInventory(modelRow);
+						InventoryService service = new InventoryService();
+						service.delete(inventory);
+						model.removeInventory(modelRow);
+					}
+				}
+			}
+		}
+	}
+	
 	private class textFieldFilterListener implements ActionListener {
 
 		@Override
@@ -222,6 +353,26 @@ public class InventoryList extends JPanel {
 				sorter.setRowFilter(RowFilter.regexFilter(text));
 				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
+			}
+		}
+	}
+	
+	private class buttonExportListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			List<Inventory> inventorys = new ArrayList<Inventory>();
+			for (int row = 0; row < table.getRowCount(); row++) {
+				inventorys.add(model.getInventory(row));
+			}
+
+			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+
+			int returnValue = jfc.showSaveDialog(null);
+
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = jfc.getSelectedFile();
+				new CreateExlFileInventory(inventorys, selectedFile.getAbsolutePath());
 			}
 		}
 	}

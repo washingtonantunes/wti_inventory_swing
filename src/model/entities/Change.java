@@ -7,6 +7,7 @@ public class Change implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Integer id;
 	private String object;
 	private String type;
 	private String changes;
@@ -14,6 +15,14 @@ public class Change implements Serializable {
 	private String author;
 
 	public Change() {
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getChanges() {

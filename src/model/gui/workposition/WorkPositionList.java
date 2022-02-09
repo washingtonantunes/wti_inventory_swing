@@ -44,7 +44,7 @@ public class WorkPositionList extends JPanel {
 	private JScrollPane scrollPane;
 	private TableWorkPosition table;
 	private WorkPositionTableModel model;
-
+	
 	private List<WorkPosition> workPositions;
 	private List<Option> options;
 

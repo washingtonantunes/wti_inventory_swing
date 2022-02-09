@@ -3,7 +3,7 @@ package model.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Inventory implements Serializable {
+public class Inventory implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -105,4 +105,13 @@ public class Inventory implements Serializable {
 				&& Objects.equals(monitor1, other.monitor1) && Objects.equals(monitor2, other.monitor2)
 				&& Objects.equals(project, other.project);
 	}
+	
+	@Override
+	public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }

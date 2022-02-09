@@ -44,7 +44,7 @@ public class MonitorList extends JPanel {
 	private JScrollPane scrollPane;
 	private TableMonitor table;
 	private MonitorTableModel model;
-
+	
 	private List<Monitor> monitors;
 	private List<Option> options;
 
