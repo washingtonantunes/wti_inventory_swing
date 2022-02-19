@@ -57,17 +57,13 @@ public class TableWorkPosition extends JTable {
 			else if (i == 3) {
 				column.setPreferredWidth(90); // Net Point
 				column.setResizable(false);
-			}  
+			} 
 			else if (i == 4) {
 				column.setPreferredWidth(100); // Status
 				column.setResizable(false);
 			} 
 			else if (i == 5) {
 				column.setPreferredWidth(100); // Date Entry
-				column.setResizable(false);
-			} 
-			else if (i == 6) {
-				column.setPreferredWidth(90); // Reason
 				column.setResizable(false);
 			}
 		}

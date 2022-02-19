@@ -16,11 +16,10 @@ public class WorkPositionTableModel extends AbstractTableModel {
 	private static final int COL_NET_POINT = 3;
 	private static final int COL_STATUS = 4;
 	private static final int COL_DATE_ENTRY = 5;
-	private static final int COL_REASON = 6;
 
 	List<WorkPosition> workPositions;
 
-	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point", "Status", "Date Enty", "Reason" };
+	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point", "Status", "Date Enty" };
 
 	public WorkPositionTableModel(List<WorkPosition> workPositions) {
 		this.workPositions = workPositions;
@@ -69,9 +68,6 @@ public class WorkPositionTableModel extends AbstractTableModel {
 		else if (column == COL_DATE_ENTRY) {
 			return w.getDateEntry();
 		} 
-		else if (column == COL_REASON) {
-			return w.getReason();
-		}
 		return "";
 	}
 

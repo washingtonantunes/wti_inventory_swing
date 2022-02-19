@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import model.entities.User;
 
@@ -12,5 +12,5 @@ public interface UserDao {
 
 	void disable(User obj);
 
-	List<User> findAll();
+	Map<String, User> findAll();
 }

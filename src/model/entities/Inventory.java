@@ -21,7 +21,6 @@ public class Inventory implements Serializable, Cloneable {
 
 	public Inventory(Integer id, WorkPosition workPosition, Project project, User user, Equipment equipment,
 			Monitor monitor1, Monitor monitor2) {
-		super();
 		this.id = id;
 		this.workPosition = workPosition;
 		this.project = project;

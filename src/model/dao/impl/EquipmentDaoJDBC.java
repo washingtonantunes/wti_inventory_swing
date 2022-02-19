@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import db.DB;
 import db.DBException;
 import model.dao.EquipmentDao;
+import model.entities.Change;
 import model.entities.Equipment;
+import model.entities.User;
+import model.entities.WorkPosition;
 import model.gui.MainWindow;
 
 public class EquipmentDaoJDBC implements EquipmentDao {
@@ -39,10 +42,13 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 					+ "`hardDisk`,"
 					+ "`costType`,"
 					+ "`value`,"
+					+ "`location`,"
+					+ "`noteEntry`,"
+					+ "`note`,"
 					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES " 
-					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			st.setString(1, obj.getSerialNumber());
 			st.setString(2, obj.getHostName());
@@ -55,8 +61,11 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(9, obj.getHardDisk());
 			st.setString(10, obj.getCostType());
 			st.setDouble(11, obj.getValue());
-			st.setString(12, obj.getStatus());
-			st.setDate(13, new java.sql.Date(obj.getDateEntry().getTime()));
+			st.setString(12, obj.getLocation());
+			st.setString(13, obj.getNoteEntry());
+			st.setString(14, obj.getNote());
+			st.setString(15, obj.getStatus());
+			st.setDate(16, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
 		} 
@@ -83,7 +92,9 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 					+ "`memoryRam` = ?, "
 					+ "`hardDisk` = ?, "
 					+ "`costType` = ?, "
-					+ "`value` = ? "
+					+ "`value` = ?, "
+					+ "`noteEntry` = ?, "
+					+ "`note` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getHostName());
@@ -96,7 +107,9 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st.setString(8, obj.getHardDisk());
 			st.setString(9, obj.getCostType());
 			st.setDouble(10, obj.getValue());
-			st.setString(11, obj.getSerialNumber());
+			st.setString(11, obj.getNoteEntry());
+			st.setString(12, obj.getNote());
+			st.setString(13, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -115,10 +128,14 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
 					+ "SET `status` = ? "
+					+ "`user` = ?, "
+					+ "`workPosition` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getSerialNumber());
+			st.setString(2, obj.getUser().getName());
+			st.setString(3, obj.getWorkPosition().getWorkPoint());
+			st.setString(4, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -136,12 +153,11 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` " 
-					+ "SET `status` = ?, `reason` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getReason());
-			st.setString(3, obj.getSerialNumber());
+			st.setString(2, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -179,9 +195,13 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setCostType(rs.getString("costType"));
 				equipment.setValue(rs.getDouble("value"));
 				equipment.setStatus(rs.getString("status"));
-				equipment.setDateEntry(rs.getDate("dateEntry"));
-				equipment.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(equipment.getSerialNumber())).collect(Collectors.toList()));
-				equipment.setReason(rs.getString("reason"));
+				equipment.setLocation(rs.getString("location"));
+				equipment.setNoteEntry(rs.getString("noteEntry"));
+				equipment.setDateEntry(rs.getDate("dateEntry"));				
+				equipment.setNote(rs.getString("note"));
+				equipment.setUser(instatiateUser(rs));
+				equipment.setWorkPosition(instatiateWorkPosition(rs));
+				equipment.setChanges(instatiateChanges(equipment.getSerialNumber()));
 				equipments.add(equipment);
 			}
 			return equipments;
@@ -193,5 +213,20 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+	
+	private User instatiateUser(ResultSet rs) throws SQLException {
+		User user = MainWindow.getUser(rs.getString("user"));
+		return user;
+	}
+	
+	private WorkPosition instatiateWorkPosition(ResultSet rs) throws SQLException {
+		WorkPosition workPosition = MainWindow.getWorkPosition(rs.getString("workPosition"));
+		return workPosition;
+	}
+	
+	private List<Change> instatiateChanges(String serialNumber) {
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(serialNumber)).collect(Collectors.toList());
+		return changes;
 	}
 }

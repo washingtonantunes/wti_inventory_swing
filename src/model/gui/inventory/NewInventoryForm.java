@@ -797,7 +797,7 @@ public class NewInventoryForm extends JDialog {
 
 				labelShow_RegistrationUser.setText(user.getRegistration());
 				labelShow_NameUser.setText(user.getName());
-				labelShow_CPFUser.setText(user.getCPF());
+				labelShow_CPFUser.setText(user.getCpf());
 				labelShow_PhoneUser.setText(user.getPhone());
 				labelShow_EmailUser.setText(user.getEmail());
 				labelShow_DepartmentUser.setText(user.getDepartment());

@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -176,8 +177,14 @@ public class ProjectList extends JPanel {
 	}
 
 	private List<Project> loadDataProjects() {
-		final ProjectService service = new ProjectService();
-		List<Project> list = service.findAll();
+		final ProjectService service = new ProjectService();		
+		Map<String, Project> projects = service.findAll();
+		List<Project> list = new ArrayList<Project>();
+		
+		for (String entry : projects.keySet()) {
+			list.add(projects.get(entry));
+		}
+		
 		list.sort((e1, e2) -> e1.getName().compareTo(e2.getName()));
 		return list;
 	}

@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import db.DB;
 import db.DBException;
 import model.dao.WorkPositionDao;
+import model.entities.Change;
 import model.entities.WorkPosition;
 import model.gui.MainWindow;
 
@@ -106,12 +108,11 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `work_positions` " 
-					+ "SET `status` = ?, `reason` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `workPoint` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getReason());
-			st.setString(3, obj.getWorkPoint());
+			st.setString(2, obj.getWorkPoint());
 			
 			st.executeUpdate();
 		} 
@@ -124,7 +125,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 	}
 
 	@Override
-	public List<WorkPosition> findAll() {
+	public Map<String, WorkPosition> findAll() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -132,7 +133,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 
 			rs = st.executeQuery();
 
-			List<WorkPosition> workPositions = new ArrayList<WorkPosition>();
+			Map<String, WorkPosition> workPositions = new HashMap<String, WorkPosition>();
 
 			while (rs.next()) {
 				WorkPosition workPosition = new WorkPosition();
@@ -143,9 +144,11 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 				workPosition.setNetPoint(rs.getString("netPoint"));
 				workPosition.setStatus(rs.getString("status"));
 				workPosition.setDateEntry(rs.getDate("dateEntry"));
-				workPosition.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(workPosition.getWorkPoint())).collect(Collectors.toList()));
-				workPosition.setReason(rs.getString("reason"));
-				workPositions.add(workPosition);
+				workPosition.setEquipment(null);
+				workPosition.setMonitor1(null);
+				workPosition.setMonitor2(null);
+				workPosition.setChanges(instatiateChanges(workPosition.getWorkPoint()));
+				workPositions.put(workPosition.getWorkPoint(), workPosition);
 			}
 			return workPositions;
 		} 
@@ -156,5 +159,10 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+	
+	private List<Change> instatiateChanges(String registration) {
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(registration)).collect(Collectors.toList());
+		return changes;
 	}
 }

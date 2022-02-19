@@ -172,14 +172,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_NetPoint);
 	}
 
-	private void addLabelsAndComboBoxesWorkPosition(JPanel panel) {
-//		comboBox_WorkPosition = new JComboBox<WorkPosition>(new Vector<>(workPositions));
-//		AutoCompleteDecorator.decorate(comboBox_WorkPosition);
-//		comboBox_WorkPosition.addItemListener(new ItemChangeWorkPositionListener());
-//		comboBox_WorkPosition.setSelectedIndex(-1);
-//		comboBox_WorkPosition.setBounds(50, 20, 150, 25);
-//		panel.add(comboBox_WorkPosition);
-		
+	private void addLabelsAndComboBoxesWorkPosition(JPanel panel) {		
 		final JLabel labelShow_WorkPoint = new JLabel(inventory.getWorkPosition().getWorkPoint());
 		labelShow_WorkPoint.setForeground(COLOR2);
 		labelShow_WorkPoint.setBounds(110, 90, 120, 25);
@@ -218,14 +211,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_CostCenter);
 	}
 
-	private void addLabelsAndComboBoxesProject(JPanel panel) {
-//		comboBox_Project = new JComboBox<>(new Vector<>(projects));
-//		AutoCompleteDecorator.decorate(comboBox_Project);
-//		comboBox_Project.addItemListener(new ItemChangeProjectListener());
-//		comboBox_Project.setSelectedIndex(-1);
-//		comboBox_Project.setBounds(50, 20, 150, 25);
-//		panel.add(comboBox_Project);
-		
+	private void addLabelsAndComboBoxesProject(JPanel panel) {		
 		final JLabel labelShow_NameProject = new JLabel(inventory.getProject().getName());
 		labelShow_NameProject.setForeground(COLOR2);
 		labelShow_NameProject.setBounds(110, 90, 120, 25);
@@ -274,14 +260,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_Department);
 	}
 
-	private void addLabelsAndComboBoxesUser(JPanel panel) {
-//		comboBox_User = new JComboBox<>(new Vector<>(users));
-//		AutoCompleteDecorator.decorate(comboBox_User);
-//		comboBox_User.addItemListener(new ItemChangeUserListener());
-//		comboBox_User.setSelectedIndex(-1);
-//		comboBox_User.setBounds(90, 20, 150, 25);
-//		panel.add(comboBox_User);
-		
+	private void addLabelsAndComboBoxesUser(JPanel panel) {		
 		final JLabel labelShow_RegistrationUser = new JLabel(inventory.getUser().getRegistration());
 		labelShow_RegistrationUser.setForeground(COLOR2);
 		labelShow_RegistrationUser.setBounds(110, 90, 200, 25);
@@ -292,7 +271,7 @@ public class ViewInventoryForm extends JDialog {
 		labelShow_NameUser.setBounds(110, 130, 200, 25);
 		panel.add(labelShow_NameUser);
 		
-		final JLabel labelShow_CPFUser = new JLabel(inventory.getUser().getCPF());
+		final JLabel labelShow_CPFUser = new JLabel(inventory.getUser().getCpf());
 		labelShow_CPFUser.setForeground(COLOR2);
 		labelShow_CPFUser.setBounds(110, 170, 200, 25);
 		panel.add(labelShow_CPFUser);
@@ -370,14 +349,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_Value);
 	}
 	
-	private void addLabelsAndComboBoxesEquipment(JPanel panel) {
-//		comboBox_Equipment = new JComboBox<>(new Vector<>(equipments));
-//		AutoCompleteDecorator.decorate(comboBox_Equipment);
-//		comboBox_Equipment.addItemListener(new ItemChangeEquipmentListener());
-//		comboBox_Equipment.setSelectedIndex(-1);
-//		comboBox_Equipment.setBounds(90, 20, 150, 25);
-//		panel.add(comboBox_Equipment);
-		
+	private void addLabelsAndComboBoxesEquipment(JPanel panel) {		
 		final JLabel labelShow_SerialNumberEquipment = new JLabel(inventory.getEquipment().getSerialNumber());
 		labelShow_SerialNumberEquipment.setForeground(COLOR2);
 		labelShow_SerialNumberEquipment.setBounds(150, 90, 150, 25);
@@ -456,14 +428,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_Model);
 	}
 
-	private void addLabelsAndComboBoxesMonitor1(JPanel panel) {
-//		comboBox_Monitor1 = new JComboBox<>(new Vector<>(monitors));
-//		AutoCompleteDecorator.decorate(comboBox_Monitor1);
-//		comboBox_Monitor1.addItemListener(new ItemChangeMonitor1Listener());
-//		comboBox_Monitor1.setSelectedIndex(-1);
-//		comboBox_Monitor1.setBounds(80, 20, 150, 25);
-//		panel.add(comboBox_Monitor1);
-		
+	private void addLabelsAndComboBoxesMonitor1(JPanel panel) {		
 		final JLabel labelShow_SerialNumberMonitor1 = new JLabel(inventory.getMonitor1().getSerialNumber());
 		labelShow_SerialNumberMonitor1.setForeground(COLOR2);
 		labelShow_SerialNumberMonitor1.setBounds(150, 90, 120, 25);
@@ -507,14 +472,7 @@ public class ViewInventoryForm extends JDialog {
 		panel.add(label_Model);
 	}
 
-	private void addLabelsAndComboBoxesMonitor2(JPanel panel) {
-//		comboBox_Monitor2 = new JComboBox<>(new Vector<>(monitors));
-//		AutoCompleteDecorator.decorate(comboBox_Monitor2);
-//		comboBox_Monitor2.addItemListener(new ItemChangeMonitor2Listener());
-//		comboBox_Monitor2.setSelectedIndex(-1);
-//		comboBox_Monitor2.setBounds(80, 20, 150, 25);
-//		panel.add(comboBox_Monitor2);
-		
+	private void addLabelsAndComboBoxesMonitor2(JPanel panel) {		
 		final JLabel labelShow_SerialNumberMonitor2 = new JLabel(inventory.getMonitor2().getSerialNumber());
 		labelShow_SerialNumberMonitor2.setForeground(COLOR2);
 		labelShow_SerialNumberMonitor2.setBounds(150, 90, 150, 25);
@@ -537,14 +495,28 @@ public class ViewInventoryForm extends JDialog {
 	}
 
 	private void addButton(JPanel panel) {
+		final JButton buttonTerm = new JButton("Gerar Termo");
+		buttonTerm.setBounds(500, 560, 120, 25);
+		buttonTerm.addActionListener(new buttonTermListener());
+		panel.add(buttonTerm);
+
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(560, 560, 120, 25);
+		buttonClose.setBounds(640, 560, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
+	}
+	
+	private class buttonTermListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+		}
 	}
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}

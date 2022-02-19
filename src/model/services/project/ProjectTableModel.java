@@ -10,17 +10,16 @@ public class ProjectTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int ID = 0;
+	private static final int COL_COST_CENTER = 0;
 	private static final int COL_NAME = 1;
 	private static final int COL_CITY = 2;
-	private static final int COL_COST_CENTER = 3;
-	private static final int COL_STATUS = 4;
-	private static final int COL_DATE_ENTRY = 5;
-	private static final int COL_REASON = 6;
+	private static final int COL_STATUS = 3;
+	private static final int COL_DATE_ENTRY = 4;
+	private static final int COL_REASON = 5;
 
 	List<Project> projects;
 
-	private String[] columns = new String[] { "ID", "Name", "City", "Cost Center", "Status", "Date Entry", "Reason" };
+	private String[] columns = new String[] { "Cost Center", "Name", "City", "Status", "Date Entry", "Reason" };
 
 	public ProjectTableModel(List<Project> projects) {
 		this.projects = projects;
@@ -51,17 +50,14 @@ public class ProjectTableModel extends AbstractTableModel {
 
 		Project p = projects.get(row);
 
-		if (column == ID) {
-			return p.getId();
+		if (column == COL_COST_CENTER) {
+			return p.getCostCenter();
 		} 
 		else if (column == COL_NAME) {
 			return p.getName();
 		} 
 		else if (column == COL_CITY) {
 			return p.getCity();
-		} 
-		else if (column == COL_COST_CENTER) {
-			return p.getCostCenter();
 		} 
 		else if (column == COL_STATUS) {
 			return p.getStatus();

@@ -67,7 +67,7 @@ public class CreateExlFileProject {
 				cellnum = 0;
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(project.getId());
+				cell.setCellValue(project.getCostCenter());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(project.getName());
@@ -76,16 +76,10 @@ public class CreateExlFileProject {
 				cell.setCellValue(project.getCity());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(project.getCostCenter());
-
-				cell = row.createCell(cellnum++);
 				cell.setCellValue(project.getStatus());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(sdf.format(project.getDateEntry()));
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(project.getReason());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");

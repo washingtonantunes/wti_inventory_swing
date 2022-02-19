@@ -205,7 +205,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 	
 	private Project instatiateProject(ResultSet rs) throws SQLException {
 		Project project = new Project();
-		project.setId(rs.getInt("idProject"));
+		//project.setId(rs.getInt("idProject"));
 		project.setName(rs.getString("nameProject"));
 		project.setCity(rs.getString("city"));
 		project.setCostCenter(rs.getString("costCenter"));
@@ -216,9 +216,9 @@ public class InventoryDaoJDBC implements InventoryDao {
 		User user = new User();
 		user.setRegistration(rs.getString("registration"));
 		user.setName(rs.getString("nameUser"));
-		user.setCPF(rs.getString("cpf"));
+		user.setCpf(rs.getString("cpf"));
 		user.setPhone(rs.getString("phone"));
-		user.setProject(rs.getString("project"));
+		//user.setProject(rs.getString("project"));
 		user.setEmail(rs.getString("email"));
 		user.setDepartment(rs.getString("department"));
 		return user;

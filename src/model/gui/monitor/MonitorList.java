@@ -215,12 +215,12 @@ public class MonitorList extends JPanel {
 			} else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
 							JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This monitor is disabled", "Unable to Edit",
@@ -240,12 +240,12 @@ public class MonitorList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int lineSelected = -1;
 			lineSelected = table.getSelectedRow();
-			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
 						JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
+				int modelRow = table.convertRowIndexToModel(lineSelected);
 				Monitor monitor = model.getMonitor(modelRow);
 				new ViewMonitorForm(monitor).setVisible(true);
 			}
@@ -263,12 +263,12 @@ public class MonitorList extends JPanel {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
 							JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					Monitor monitor = model.getMonitor(modelRow);
 					if (monitor.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This monitor already is disabled", "Unable to Disable",

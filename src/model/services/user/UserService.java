@@ -3,10 +3,11 @@ package model.services.user;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
+import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.UserDao;
@@ -19,7 +20,7 @@ public class UserService {
 	private UserDao userDao = DaoFactory.createUserDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<User> findAll() {
+	public Map<String, User> findAll() {
 		return userDao.findAll();
 	}
 
@@ -29,7 +30,10 @@ public class UserService {
 			conn.setAutoCommit(false);
 
 			userDao.insert(obj);
-			changeDao.insert(getChange(obj,obj, 0));
+			
+			Change change = getChange(obj,obj, 0);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -50,7 +54,10 @@ public class UserService {
 			conn.setAutoCommit(false);
 
 			userDao.update(objNew);
-			changeDao.insert(getChange(objOld, objNew, 1));
+			
+			Change change = getChange(objOld, objNew, 1);
+			changeDao.insert(change);
+			objNew.addChange(change);
 
 			conn.commit();
 		} 
@@ -71,7 +78,10 @@ public class UserService {
 			conn.setAutoCommit(false);
 
 			userDao.disable(obj);
-			changeDao.insert(getChange(obj, obj, 3));
+			
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -136,25 +146,30 @@ public class UserService {
 		if (!objOld.getName().equals(objNew.getName())) {
 			fieldsUpdated += " 'Name Old: " + objOld.getName() + "',";
 		}
-		if (!objOld.getCPF().equals(objNew.getCPF())) {
-			fieldsUpdated += " 'CPF Old: " + objOld.getCPF() + "',";
+		if (!objOld.getCpf().equals(objNew.getCpf())) {
+			fieldsUpdated += " 'CPF Old: " + objOld.getCpf() + "',";
 		}
 		if (!objOld.getPhone().equals(objNew.getPhone())) {
 			fieldsUpdated += " 'Phone Old: " + objOld.getPhone() + "',";
-		}
-		if (!objOld.getProject().equals(objNew.getProject())) {
-			fieldsUpdated += " 'Project Old: " + objOld.getProject() + "',";
 		}
 		if (!objOld.getEmail().equals(objNew.getEmail())) {
 			fieldsUpdated += " 'Email Old: " + objOld.getEmail() + "',";
 		}
 		if (!objOld.getDepartment().equals(objNew.getDepartment())) {
-			fieldsUpdated += " 'Department Old: " + objOld.getDepartment() + "'";
+			fieldsUpdated += " 'Department Old: " + objOld.getDepartment() + "',";
+		}
+		if (!objOld.getProject().equals(objNew.getProject())) {
+			fieldsUpdated += " 'Project Old: " + objOld.getProject() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
-			fieldsUpdated = fieldsUpdated.substring(0, i);
+			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
+		}
+		
+		String validation = fieldsUpdated.substring(16);
+		if (validation.length() == 0) {
+			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;

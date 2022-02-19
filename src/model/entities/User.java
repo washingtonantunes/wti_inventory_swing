@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -14,13 +15,20 @@ public class User implements Serializable, Cloneable {
 	private String cpf;
 	private String phone;
 	private String email;
-	private String project;
 	private String department;
 	private String status;
 	private Date dateEntry;
 	private String reason;
 
-	private List<Change> changes;
+	private Project project;
+	private Equipment equipment;
+	private Monitor monitor1;
+	private Monitor monitor2;
+
+	private List<Peripheral> peripherals;
+	private List<License> licenses;
+
+	private List<Change> changes = new ArrayList<>();
 
 	public User() {
 	}
@@ -41,11 +49,11 @@ public class User implements Serializable, Cloneable {
 		this.name = name;
 	}
 
-	public String getCPF() {
+	public String getCpf() {
 		return cpf;
 	}
 
-	public void setCPF(String cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
@@ -65,14 +73,6 @@ public class User implements Serializable, Cloneable {
 		this.email = email;
 	}
 
-	public String getProject() {
-		return project;
-	}
-
-	public void setProject(String project) {
-		this.project = project;
-	}
-
 	public String getDepartment() {
 		return department;
 	}
@@ -89,14 +89,6 @@ public class User implements Serializable, Cloneable {
 		this.status = status;
 	}
 
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
 	public Date getDateEntry() {
 		return dateEntry;
 	}
@@ -105,12 +97,117 @@ public class User implements Serializable, Cloneable {
 		this.dateEntry = dateEntry;
 	}
 
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public Equipment getEquipment() {
+		return equipment;
+	}
+
+	public void setEquipment(Equipment equipment) {
+		this.equipment = equipment;
+	}
+
+	public Monitor getMonitor1() {
+		return monitor1;
+	}
+
+	public void setMonitor1(Monitor monitor1) {
+		this.monitor1 = monitor1;
+	}
+
+	public Monitor getMonitor2() {
+		return monitor2;
+	}
+
+	public void setMonitor2(Monitor monitor2) {
+		this.monitor2 = monitor2;
+	}
+
+	public List<Peripheral> getPeripherals() {
+		return peripherals;
+	}
+
+	public void addPeripheral(Peripheral peripheral) {
+		this.peripherals.add(peripheral);
+	}
+	
+	public void setPeripherals(List<Peripheral> peripherals) {
+		this.peripherals = peripherals;
+	}
+
+	public List<License> getLicenses() {
+		return licenses;
+	}
+
+	public void addLicense(License license) {
+		this.licenses.add(license);
+	}
+	
+	public void setLicenses(List<License> licenses) {
+		this.licenses = licenses;
+	}
+
 	public List<Change> getChanges() {
 		return changes;
+	}
+	
+	public void addChange(Change change) {
+		this.changes.add(change);
 	}
 
 	public void setChanges(List<Change> changes) {
 		this.changes = changes;
+	}
+	
+	public Double getUserCosts() {
+		double cost = 0.0;
+
+		// get value equipment
+		if (equipment != null) {
+			cost += equipment.getValue();
+		}
+
+		// get value monitor1
+		if (monitor1 != null) {
+			cost += monitor1.getValue();
+		}
+
+		// get value monitor2
+		if (monitor2 != null) {
+			cost += monitor1.getValue();
+		}
+
+		// get value peripherals
+		if (peripherals != null) {
+
+			for (Peripheral peripheral : peripherals) {
+				cost += peripheral.getValue();
+			}
+		}
+
+		// get value licenses
+		if (licenses != null) {
+
+			for (License license : licenses) {
+				cost += license.getValue();
+			}
+		}
+
+		return cost;
 	}
 
 	@Override
@@ -133,15 +230,15 @@ public class User implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return registration.toString();
+		return registration;
 	}
-	
+
 	@Override
 	public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
 }

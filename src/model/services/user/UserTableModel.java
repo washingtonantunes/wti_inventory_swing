@@ -14,16 +14,15 @@ public class UserTableModel extends AbstractTableModel {
 	private static final int COL_NAME = 1;
 	private static final int COL_CPF = 2;
 	private static final int COL_PHONE = 3;
-	private static final int COL_PROJECT = 4;
-	private static final int COL_EMAIL = 5;
-	private static final int COL_DEPARTMENT = 6;
-	private static final int COL_STATUS = 7;
-	private static final int COL_DATE_ENTRY = 8;
-	private static final int COL_REASON = 9;
+	private static final int COL_EMAIL = 4;
+	private static final int COL_DEPARTMENT = 5;
+	private static final int COL_STATUS = 6;
+	private static final int COL_DATE_ENTRY = 7;
+	private static final int COL_PROJECT = 8;
 
 	List<User> users;
 
-	private String[] columns = new String[] { "Registration", "Name", "CPF", "Phone", "Project", "Email", "Department", "Status", "Date Entry", "Reason" };
+	private String[] columns = new String[] { "Registration", "Name", "CPF", "Phone", "Email", "Department", "Status", "Date Entry", "Project" };
 
 	public UserTableModel(List<User> users) {
 		this.users = users;
@@ -61,13 +60,10 @@ public class UserTableModel extends AbstractTableModel {
 			return p.getName();
 		} 
 		else if (column == COL_CPF) {
-			return p.getCPF();
+			return p.getCpf();
 		} 
 		else if (column == COL_PHONE) {
 			return p.getPhone();
-		} 
-		else if (column == COL_PROJECT) {
-			return p.getProject();
 		} 
 		else if (column == COL_EMAIL) {
 			return p.getEmail();
@@ -81,9 +77,9 @@ public class UserTableModel extends AbstractTableModel {
 		else if (column == COL_DATE_ENTRY) {
 			return p.getDateEntry();
 		} 
-		else if (column == COL_REASON) {
-			return p.getReason();
-		}
+		else if (column == COL_PROJECT) {
+			return p.getProject();
+		} 
 		return "";
 	}
 
@@ -95,6 +91,10 @@ public class UserTableModel extends AbstractTableModel {
 		users.add(user);
 		int lastIndex = getRowCount() - 1;
 		fireTableRowsInserted(lastIndex, lastIndex);
+	}
+	
+	public List<User> getUsers() {
+		return users;
 	}
 
 	public void updateUser(int indexLine, User user) {

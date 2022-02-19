@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -217,7 +218,14 @@ public class InventoryList extends JPanel {
 	
 	private List<WorkPosition> loadDataWorkPositions() {
 		final WorkPositionService service = new WorkPositionService();
-		List<WorkPosition> list = service.findAll();
+
+		Map<String, WorkPosition> workPositions = service.findAll();
+		List<WorkPosition> list = new ArrayList<WorkPosition>();
+		
+		for (String entry : workPositions.keySet()) {
+			list.add(workPositions.get(entry));
+		}
+		
 		list = list.stream().filter(e -> e.getStatus().equals("FREE")).collect(Collectors.toList());
 		list.sort((w1, w2) -> w1.getWorkPoint().compareTo(w2.getWorkPoint()));
 		return list;
@@ -225,7 +233,13 @@ public class InventoryList extends JPanel {
 	
 	private List<Project> loadDataProjects() {
 		final ProjectService service = new ProjectService();
-		List<Project> list = service.findAll();
+		Map<String, Project> projects = service.findAll();
+		List<Project> list = new ArrayList<Project>();
+		
+		for (String entry : projects.keySet()) {
+			list.add(projects.get(entry));
+		}
+
 		list = list.stream().filter(e -> e.getStatus().equals("ACTIVE")).collect(Collectors.toList());
 		list.sort((w1, w2) -> w1.getName().compareTo(w2.getName()));
 		return list;
@@ -233,7 +247,13 @@ public class InventoryList extends JPanel {
 	
 	private List<User> loadDataUsers() {
 		final UserService service = new UserService();
-		List<User> list = service.findAll();
+		Map<String, User> users = service.findAll();
+		List<User> list = new ArrayList<User>();
+		
+		for (String entry : users.keySet()) {
+			list.add(users.get(entry));
+		}
+		
 		list = list.stream().filter(e -> e.getStatus().equals("ACTIVE")).collect(Collectors.toList());
 		list.sort((w1, w2) -> w1.getRegistration().compareTo(w2.getRegistration()));
 		return list;

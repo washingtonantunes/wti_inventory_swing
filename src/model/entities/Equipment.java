@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,13 +22,16 @@ public class Equipment implements Serializable, Cloneable {
 	private String costType;
 	private Double value;
 	private String status;
+	private String location;
+	private String noteEntry;
 	private Date dateEntry;
-	private String reason;	
+	private String note;
+	private String reason;
+	
+	private User user;
+	private WorkPosition workPosition;
 
-	private List<Change> changes;
-
-	public Equipment() {
-	}	
+	private List<Change> changes = new ArrayList<>();
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -125,12 +129,52 @@ public class Equipment implements Serializable, Cloneable {
 		this.status = status;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getNoteEntry() {
+		return noteEntry;
+	}
+
+	public void setNoteEntry(String noteEntry) {
+		this.noteEntry = noteEntry;
+	}
+
 	public Date getDateEntry() {
 		return dateEntry;
 	}
 
 	public void setDateEntry(Date dateEntry) {
 		this.dateEntry = dateEntry;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public WorkPosition getWorkPosition() {
+		return workPosition;
+	}
+
+	public void setWorkPosition(WorkPosition workPosition) {
+		this.workPosition = workPosition;
 	}
 
 	public String getReason() {
@@ -143,6 +187,10 @@ public class Equipment implements Serializable, Cloneable {
 
 	public List<Change> getChanges() {
 		return changes;
+	}
+	
+	public void addChange(Change change) {
+		this.changes.add(change);
 	}
 
 	public void setChanges(List<Change> changes) {
@@ -171,13 +219,13 @@ public class Equipment implements Serializable, Cloneable {
 	public String toString() {
 		return serialNumber;
 	}
-	
+
 	@Override
 	public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
 }

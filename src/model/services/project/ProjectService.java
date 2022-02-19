@@ -3,7 +3,7 @@ package model.services.project;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
@@ -19,7 +19,7 @@ public class ProjectService {
 	private ProjectDao projectDao = DaoFactory.createProjectDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<Project> findAll() {
+	public Map<String, Project> findAll() {
 		return projectDao.findAll();
 	}
 
@@ -88,7 +88,7 @@ public class ProjectService {
 
 	private Change getChange(Project objOld, Project objNew, int type) {
 		Change change = new Change();
-		change.setObject(objOld.getId().toString());
+		change.setObject(objOld.getCostCenter());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
@@ -145,7 +145,7 @@ public class ProjectService {
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
-			fieldsUpdated = fieldsUpdated.substring(0, i);
+			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
 		}
 
 		return fieldsUpdated;

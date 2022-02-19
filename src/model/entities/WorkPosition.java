@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -16,8 +17,12 @@ public class WorkPosition implements Serializable, Cloneable {
 	private String status;
 	private Date dateEntry;
 	private String reason;
+	
+	private Equipment equipment;
+	private Monitor monitor1;
+	private Monitor monitor2;
 
-	private List<Change> changes;
+	private List<Change> changes = new ArrayList<>();;
 
 	public WorkPosition() {
 	}
@@ -69,7 +74,7 @@ public class WorkPosition implements Serializable, Cloneable {
 	public void setDateEntry(Date dateEntry) {
 		this.dateEntry = dateEntry;
 	}
-
+	
 	public String getReason() {
 		return reason;
 	}
@@ -78,8 +83,36 @@ public class WorkPosition implements Serializable, Cloneable {
 		this.reason = reason;
 	}
 
+	public Equipment getEquipment() {
+		return equipment;
+	}
+
+	public void setEquipment(Equipment equipment) {
+		this.equipment = equipment;
+	}
+
+	public Monitor getMonitor1() {
+		return monitor1;
+	}
+
+	public void setMonitor1(Monitor monitor1) {
+		this.monitor1 = monitor1;
+	}
+
+	public Monitor getMonitor2() {
+		return monitor2;
+	}
+
+	public void setMonitor2(Monitor monitor2) {
+		this.monitor2 = monitor2;
+	}
+
 	public List<Change> getChanges() {
 		return changes;
+	}
+	
+	public void addChange(Change change) {
+		this.changes.add(change);
 	}
 
 	public void setChanges(List<Change> changes) {

@@ -7,6 +7,7 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
+import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.MonitorDao;
@@ -29,16 +30,17 @@ public class MonitorService {
 			conn.setAutoCommit(false);
 
 			monitorDao.insert(obj);
-			changeDao.insert(getChange(obj, obj, 0));
+
+			Change change = getChange(obj, obj, 0);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -50,16 +52,17 @@ public class MonitorService {
 			conn.setAutoCommit(false);
 
 			monitorDao.update(objNew);
-			changeDao.insert(getChange(objOld, objNew, 1));
+
+			Change change = getChange(objOld, objNew, 1);
+			changeDao.insert(change);
+			objNew.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -71,16 +74,17 @@ public class MonitorService {
 			conn.setAutoCommit(false);
 
 			monitorDao.disable(obj);
-			changeDao.insert(getChange(obj, obj, 3));
+
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -100,14 +104,11 @@ public class MonitorService {
 		String typeChange = "";
 		if (type == 0) {
 			typeChange = "Monitor Input";
-		} 
-		else if (type == 1) {
+		} else if (type == 1) {
 			typeChange = "Monitor Update";
-		} 
-		else if (type == 2) {
+		} else if (type == 2) {
 			typeChange = "Monitor Update Status";
-		} 
-		else if (type == 3) {
+		} else if (type == 3) {
 			typeChange = "Monitor Deactivation";
 		}
 		return typeChange;
@@ -117,14 +118,11 @@ public class MonitorService {
 		String changes = "";
 		if (type == 0) {
 			changes = "New Monitor Added";
-		} 
-		else if (type == 1) {
+		} else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
-		} 
-		else if (type == 2) {
+		} else if (type == 2) {
 
-		} 
-		else if (type == 3) {
+		} else if (type == 3) {
 			changes = "Monitor Disabled for: " + objOld.getReason();
 		}
 		return changes;
@@ -140,12 +138,26 @@ public class MonitorService {
 			fieldsUpdated += " 'Brand Old: " + objOld.getBrand() + "',";
 		}
 		if (!objOld.getModel().equals(objNew.getModel())) {
-			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "'";
+			fieldsUpdated += " 'Model Old: " + objOld.getModel() + "',";
+		}
+		if (!objOld.getCostType().equals(objNew.getCostType())) {
+			fieldsUpdated += " 'Cost Type Old: " + objOld.getCostType() + "',";
+		}
+		if (!objOld.getValue().equals(objNew.getValue())) {
+			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "',";
+		}
+		if (!objOld.getNoteEntry().equals(objNew.getNoteEntry())) {
+			fieldsUpdated += " 'Note Entry Old: " + objOld.getNoteEntry() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
-			fieldsUpdated = fieldsUpdated.substring(0, i);
+			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
+		}
+		
+		String validation = fieldsUpdated.substring(16);
+		if (validation.length() == 0) {
+			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;

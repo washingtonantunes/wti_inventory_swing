@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -177,7 +178,13 @@ public class UserList extends JPanel {
 
 	private List<User> loadDataUsers() {
 		final UserService service = new UserService();
-		List<User> list = service.findAll();
+		Map<String, User> users = service.findAll();
+		List<User> list = new ArrayList<User>();
+		
+		for (String entry : users.keySet()) {
+			list.add(users.get(entry));
+		}
+		
 		list.sort((e1, e2) -> e1.getRegistration().compareTo(e2.getRegistration()));
 		return list;
 	}
@@ -213,11 +220,11 @@ public class UserList extends JPanel {
 			} else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					User user = model.getUser(modelRow);
 					if (user.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This user is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
@@ -236,11 +243,11 @@ public class UserList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int lineSelected = -1;
 			lineSelected = table.getSelectedRow();
-			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
+				int modelRow = table.convertRowIndexToModel(lineSelected);
 				User user = model.getUser(modelRow);
 				new ViewUserForm(user).setVisible(true);
 			}
@@ -256,10 +263,10 @@ public class UserList extends JPanel {
 			} else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					User user = model.getUser(modelRow);
 					if (user.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This user already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
@@ -299,11 +306,12 @@ public class UserList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<User> users = new ArrayList<User>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				users.add(model.getUser(row));
-			}
+//			List<User> users = new ArrayList<User>();
+//			for (int row = 0; row < table.getRowCount(); row++) {
+//				users.add(model.getUser(row));
+//			}
 
+			
 			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
 			int returnValue = jfc.showSaveDialog(null);

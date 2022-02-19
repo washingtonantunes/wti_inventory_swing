@@ -102,10 +102,10 @@ public class ViewProjectForm extends JDialog {
 	}
 
 	private void addLabelsShow(JPanel panel) {
-		final JLabel label_Show_ID = new JLabel(project.getId().toString());
-		label_Show_ID.setForeground(COLOR2);
-		label_Show_ID.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
-		panel.add(label_Show_ID);
+//		final JLabel label_Show_ID = new JLabel(project.getId().toString());
+//		label_Show_ID.setForeground(COLOR2);
+//		label_Show_ID.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
+//		panel.add(label_Show_ID);
 
 		final JLabel label_Show_Name = new JLabel(project.getName());
 		label_Show_Name.setForeground(COLOR2);

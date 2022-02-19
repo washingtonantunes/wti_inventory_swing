@@ -24,15 +24,13 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private static final int COL_VALUE = 10;
 	private static final int COL_STATUS = 11;
 	private static final int COL_DATE_ENTRY = 12;
-	private static final int COL_REASON = 13;
 
 	private List<Equipment> equipments;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
 			"Host Name", "<html><center>Address<br>MAC</html>", "Type",
 			"<html><center>Patrimony <br>Number</html>", "Brand", "Model", "<html><center>Memory <br>RAM</html>",
-			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Status",
-			"Date Enty", "Reason" };
+			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Status", "Date Enty"};
 
 	public EquipmentTableModel(List<Equipment> equipments) {
 		this.equipments = new ArrayList<>(equipments);
@@ -102,9 +100,6 @@ public class EquipmentTableModel extends AbstractTableModel {
 		else if (column == COL_DATE_ENTRY) {
 			return e.getDateEntry();
 		} 
-		else if (column == COL_REASON) {
-			return e.getReason();
-		}
 		return "";
 	}
 

@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.Monitor;
 
 public class CreateExlFileMonitor {
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<Monitor> monitors;
@@ -45,22 +45,34 @@ public class CreateExlFileMonitor {
 			cell.setCellValue("Serial Number");
 
 			cell = row.createCell(cellnum++);
+			cell.setCellValue("Patrimony Number");
+
+			cell = row.createCell(cellnum++);
 			cell.setCellValue("Brand");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Model");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Patrimony Number");
+			cell.setCellValue("Cost Type");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("Value");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("NoteEntry");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("Note");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("Location");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Status");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Date Entry");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Reason");
 
 			for (Monitor monitor : monitors) {
 				row = sheet.createRow(rownum++);
@@ -70,22 +82,34 @@ public class CreateExlFileMonitor {
 				cell.setCellValue(monitor.getSerialNumber());
 
 				cell = row.createCell(cellnum++);
+				cell.setCellValue(monitor.getPatrimonyNumber());
+
+				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getBrand());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getModel());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(monitor.getPatrimonyNumber());
+				cell.setCellValue(monitor.getCostType());
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(String.format("R$ %.2f", monitor.getValue()));
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(monitor.getNote());
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(monitor.getNoteEntry());
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(monitor.getLocation());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(monitor.getStatus());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(sdf.format(monitor.getDateEntry()));
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(monitor.getReason());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");
@@ -93,8 +117,7 @@ public class CreateExlFileMonitor {
 			fileOut.close();
 			workbook.close();
 			JOptionPane.showMessageDialog(null, "Excel file generated successfully!");
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error exporting data: " + e.getMessage());
 		}
 	}

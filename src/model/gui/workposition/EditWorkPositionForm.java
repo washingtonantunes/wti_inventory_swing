@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import db.DBException;
+import exception.ObjectException;
 import exception.ValidationException;
 import model.entities.Option;
 import model.entities.WorkPosition;
@@ -200,6 +201,11 @@ public class EditWorkPositionForm extends JDialog {
 			} 
 			catch (DBException e) {
 				setErroMessagesDBException(e);
+			} catch (ObjectException e) {
+				if (e.getMessage().contains("There is no change")) {
+					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		}
 	}

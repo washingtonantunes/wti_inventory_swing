@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.WorkPosition;
 
 public class CreateExlFileWorkPosition {
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<WorkPosition> workPositions;
@@ -59,9 +59,6 @@ public class CreateExlFileWorkPosition {
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Date Entry");
 
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Reason");
-
 			for (WorkPosition workPosition : workPositions) {
 				row = sheet.createRow(rownum++);
 				cellnum = 0;
@@ -83,9 +80,6 @@ public class CreateExlFileWorkPosition {
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(sdf.format(workPosition.getDateEntry()));
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(workPosition.getReason());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");
@@ -93,8 +87,7 @@ public class CreateExlFileWorkPosition {
 			fileOut.close();
 			workbook.close();
 			JOptionPane.showMessageDialog(null, "Excel file generated successfully!");
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error exporting data: " + e.getMessage());
 		}
 	}

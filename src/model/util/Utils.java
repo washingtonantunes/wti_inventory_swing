@@ -78,4 +78,10 @@ public class Utils {
 		}
 		return false;
 	}
+	
+	public static String getLocationEquipment() {
+		String location = "";
+		
+		return location;
+	}
 }

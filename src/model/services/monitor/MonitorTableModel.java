@@ -12,16 +12,19 @@ public class MonitorTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
 	private static final int COL_SERIAL_NUMBER = 0;
-	private static final int COL_BRAND = 1;
-	private static final int COL_MODEL = 2;
-	private static final int COL_PATRIMONY_NUMBER = 3;
-	private static final int COL_STATUS = 4;
-	private static final int COL_DATE_ENTRY = 5;
-	private static final int COL_REASON = 6;
+	private static final int COL_PATRIMONY_NUMBER = 1;
+	private static final int COL_BRAND = 2;
+	private static final int COL_MODEL = 3;
+	private static final int COL_COST_TYPE = 4;
+	private static final int COL_VALUE = 5;
+	private static final int COL_STATUS = 6;
+	private static final int COL_DATE_ENTRY = 7;
 
 	private List<Monitor> monitors;
 
-	private String[] columns = new String[] { "Serial Number", "Brand", "Model", "Patrimony Number", "Status", "Date Enty", "Reason" };
+	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
+			"<html><center>Patrimony <br>Number</html>", "Brand", "Model", "Cost Type", "Value", "Status",
+			"Date Enty" };;
 
 	public MonitorTableModel(List<Monitor> monitors) {
 		this.monitors = new ArrayList<>(monitors);
@@ -55,23 +58,26 @@ public class MonitorTableModel extends AbstractTableModel {
 		if (column == COL_SERIAL_NUMBER) {
 			return e.getSerialNumber();
 		} 
+		else if (column == COL_PATRIMONY_NUMBER) {
+			return e.getPatrimonyNumber();
+		} 
 		else if (column == COL_BRAND) {
 			return e.getBrand();
 		} 
 		else if (column == COL_MODEL) {
 			return e.getModel();
 		} 
-		else if (column == COL_PATRIMONY_NUMBER) {
-			return e.getPatrimonyNumber();
+		else if (column == COL_COST_TYPE) {
+			return e.getCostType();
+		} 
+		else if (column == COL_VALUE) {
+			return e.getValue();
 		} 
 		else if (column == COL_STATUS) {
 			return e.getStatus();
 		} 
 		else if (column == COL_DATE_ENTRY) {
 			return e.getDateEntry();
-		} 
-		else if (column == COL_REASON) {
-			return e.getReason();
 		}
 		return "";
 	}

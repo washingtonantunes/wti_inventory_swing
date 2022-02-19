@@ -47,29 +47,33 @@ public class TableMonitor extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(80); // Brand
-				column.setResizable(false);
-			} 
-			else if (i == 2) {
-				column.setPreferredWidth(180); // Model
-				column.setResizable(false);
-			} 
-			else if (i == 3) {
 				column.setPreferredWidth(90); // Patrimony Number
 				column.setResizable(false);
 			} 
+			else if (i == 2) {
+				column.setPreferredWidth(80); // Brand
+				column.setResizable(false);
+			} 
+			else if (i == 3) {
+				column.setPreferredWidth(180); // Model
+				column.setResizable(false);
+			} 
 			else if (i == 4) {
-				column.setPreferredWidth(100); // Status
+				column.setPreferredWidth(90); // Cost Type
 				column.setResizable(false);
 			} 
 			else if (i == 5) {
-				column.setPreferredWidth(100); // Date Entry
+				column.setPreferredWidth(60); // Value
 				column.setResizable(false);
 			} 
 			else if (i == 6) {
-				column.setPreferredWidth(90); // Reason
+				column.setPreferredWidth(100); // Status
 				column.setResizable(false);
-			}
+			} 
+			else if (i == 7) {
+				column.setPreferredWidth(100); // Date Entry
+				column.setResizable(false);
+			} 
 		}
 	}
 

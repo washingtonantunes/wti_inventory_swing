@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import model.entities.WorkPosition;
 
@@ -14,5 +14,5 @@ public interface WorkPositionDao {
 
 	void disable(WorkPosition obj);
 
-	List<WorkPosition> findAll();
+	Map<String, WorkPosition> findAll();
 }

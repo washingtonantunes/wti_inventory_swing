@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import model.entities.Equipment;
 
 public class CreateExlFileEquipment {
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private List<Equipment> equipments;
@@ -75,13 +75,19 @@ public class CreateExlFileEquipment {
 			cell.setCellValue("Value");
 
 			cell = row.createCell(cellnum++);
+			cell.setCellValue("NoteEntry");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("Note");
+
+			cell = row.createCell(cellnum++);
+			cell.setCellValue("Location");
+
+			cell = row.createCell(cellnum++);
 			cell.setCellValue("Status");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Date Entry");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Reason");
 
 			for (Equipment equipment : equipments) {
 				row = sheet.createRow(rownum++);
@@ -121,13 +127,19 @@ public class CreateExlFileEquipment {
 				cell.setCellValue(String.format("R$ %.2f", equipment.getValue()));
 
 				cell = row.createCell(cellnum++);
+				cell.setCellValue(equipment.getNote());
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(equipment.getNoteEntry());
+
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(equipment.getLocation());
+
+				cell = row.createCell(cellnum++);
 				cell.setCellValue(equipment.getStatus());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(sdf.format(equipment.getDateEntry()));
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(equipment.getReason());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");
@@ -135,8 +147,7 @@ public class CreateExlFileEquipment {
 			fileOut.close();
 			workbook.close();
 			JOptionPane.showMessageDialog(null, "Excel file generated successfully!");
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error exporting data: " + e.getMessage());
 		}
 	}

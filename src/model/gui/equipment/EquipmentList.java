@@ -214,11 +214,11 @@ public class EquipmentList extends JPanel {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
@@ -237,11 +237,11 @@ public class EquipmentList extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int lineSelected = -1;
 			lineSelected = table.getSelectedRow();
-			int modelRow = table.convertRowIndexToModel(lineSelected);
 			if (lineSelected < 0) {
 				JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
+				int modelRow = table.convertRowIndexToModel(lineSelected);
 				Equipment equipment = model.getEquipment(modelRow);
 				new ViewEquipmentForm(equipment).setVisible(true);
 			}
@@ -258,11 +258,11 @@ public class EquipmentList extends JPanel {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
 					Equipment equipment = model.getEquipment(modelRow);
 					if (equipment.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This equipment already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);

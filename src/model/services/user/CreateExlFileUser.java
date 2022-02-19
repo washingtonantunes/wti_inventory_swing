@@ -54,9 +54,6 @@ public class CreateExlFileUser {
 			cell.setCellValue("Phone");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Project");
-
-			cell = row.createCell(cellnum++);
 			cell.setCellValue("Email");
 
 			cell = row.createCell(cellnum++);
@@ -69,7 +66,7 @@ public class CreateExlFileUser {
 			cell.setCellValue("Date Entry");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Reason");
+			cell.setCellValue("Project");
 
 			for (User user : users) {
 				row = sheet.createRow(rownum++);
@@ -82,13 +79,10 @@ public class CreateExlFileUser {
 				cell.setCellValue(user.getName());
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getCPF());
+				cell.setCellValue(user.getCpf());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(user.getPhone());
-
-				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getProject());
 
 				cell = row.createCell(cellnum++);
 				cell.setCellValue(user.getEmail());
@@ -103,7 +97,7 @@ public class CreateExlFileUser {
 				cell.setCellValue(sdf.format(user.getDateEntry()));
 
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(user.getReason());
+				cell.setCellValue(user.getProject().getName());
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");

@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import model.entities.Project;
 
@@ -12,5 +12,5 @@ public interface ProjectDao {
 
 	void disable(Project obj);
 
-	List<Project> findAll();
+	Map<String, Project> findAll();
 }

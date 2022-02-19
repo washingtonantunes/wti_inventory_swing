@@ -28,7 +28,7 @@ public class DisableMonitorForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
 	
 	private final Color COLOR1 = new Color(0, 65, 83);
 

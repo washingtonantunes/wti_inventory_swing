@@ -125,9 +125,11 @@ public class EditProjectForm extends JDialog {
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
-		final JLabel label_Show_ID = new JLabel(projectOld.getId().toString());
-		label_Show_ID.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
-		panel.add(label_Show_ID);
+		/*
+		 * final JLabel label_Show_ID = new JLabel(projectOld.getId().toString());
+		 * label_Show_ID.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
+		 * panel.add(label_Show_ID);
+		 */
 
 		textField_Name = new JTextField();
 		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.PROJECT, 50));

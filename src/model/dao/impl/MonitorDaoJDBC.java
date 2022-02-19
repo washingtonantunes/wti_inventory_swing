@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 import db.DB;
 import db.DBException;
 import model.dao.MonitorDao;
+import model.entities.Change;
 import model.entities.Monitor;
+import model.entities.User;
+import model.entities.WorkPosition;
 import model.gui.MainWindow;
 
 public class MonitorDaoJDBC implements MonitorDao {
@@ -29,20 +32,30 @@ public class MonitorDaoJDBC implements MonitorDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `monitors` "
 					+ "(`serialNumber`,"
+					+ "`patrimonyNumber`,"
 					+ "`brand`,"
 					+ "`model`,"
-					+ "`patrimonyNumber`,"
+					+ "`costType`,"
+					+ "`value`,"
+					+ "`location`,"
+					+ "`noteEntry`,"
+					+ "`note`,"
 					+ "`status`,"
 					+ "`dateEntry`) "
 					+ "VALUES "
-					+ "(?, ?, ?, ?, ?, ?)");
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			
 			st.setString(1, obj.getSerialNumber());
-			st.setString(2, obj.getBrand());
-			st.setString(3, obj.getModel());
-			st.setString(4, obj.getPatrimonyNumber());
-			st.setString(5, obj.getStatus());
-			st.setDate(6, new java.sql.Date(obj.getDateEntry().getTime()));
+			st.setString(2, obj.getPatrimonyNumber());
+			st.setString(3, obj.getBrand());
+			st.setString(4, obj.getModel());
+			st.setString(5, obj.getCostType());
+			st.setDouble(6, obj.getValue());
+			st.setString(7, obj.getLocation());
+			st.setString(8, obj.getNoteEntry());
+			st.setString(9, obj.getNote());
+			st.setString(10, obj.getStatus());
+			st.setDate(11, new java.sql.Date(obj.getDateEntry().getTime()));
 
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -60,13 +73,21 @@ public class MonitorDaoJDBC implements MonitorDao {
 					"UPDATE `monitors` "
 					+ "SET `patrimonyNumber` = ?, "
 					+ "`brand` = ?, "
-					+ "`model` = ? "
+					+ "`model` = ?, "
+					+ "`costType` = ?, "
+					+ "`value` = ?, "
+					+ "`noteEntry` = ?, "
+					+ "`note` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getPatrimonyNumber());
 			st.setString(2, obj.getBrand());
 			st.setString(3, obj.getModel());
-			st.setString(4, obj.getSerialNumber());
+			st.setString(4, obj.getCostType());
+			st.setDouble(5, obj.getValue());
+			st.setString(6, obj.getNoteEntry());
+			st.setString(7, obj.getNote());
+			st.setString(8, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -106,12 +127,11 @@ public class MonitorDaoJDBC implements MonitorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `monitors` " 
-					+ "SET `status` = ?, `reason` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getReason());
-			st.setString(3, obj.getSerialNumber());
+			st.setString(2, obj.getSerialNumber());
 			
 			st.executeUpdate();
 		} 
@@ -138,13 +158,19 @@ public class MonitorDaoJDBC implements MonitorDao {
 				Monitor monitor = new Monitor();
 
 				monitor.setSerialNumber(rs.getString("serialNumber"));
+				monitor.setPatrimonyNumber(rs.getString("patrimonyNumber"));
 				monitor.setBrand(rs.getString("brand"));
 				monitor.setModel(rs.getString("model"));
-				monitor.setPatrimonyNumber(rs.getString("patrimonyNumber"));
+				monitor.setCostType(rs.getString("costType"));
+				monitor.setValue(rs.getDouble("value"));
 				monitor.setStatus(rs.getString("status"));
+				monitor.setLocation(rs.getString("location"));
+				monitor.setNoteEntry(rs.getString("noteEntry"));
 				monitor.setDateEntry(rs.getDate("dateEntry"));
-				monitor.setChanges(MainWindow.getChanges().stream().filter(c -> c.getObject().equals(monitor.getSerialNumber())).collect(Collectors.toList()));
-				monitor.setReason(rs.getString("reason"));
+				monitor.setNote(rs.getString("note"));
+				monitor.setUser(instatiateUser(rs));
+				monitor.setWorkPosition(instatiateWorkPosition(rs));
+				monitor.setChanges(instatiateChanges(monitor.getSerialNumber()));
 				monitors.add(monitor);
 			}
 			return monitors;
@@ -156,5 +182,20 @@ public class MonitorDaoJDBC implements MonitorDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+	
+	private User instatiateUser(ResultSet rs) throws SQLException {
+		User user = MainWindow.getUser(rs.getString("user"));
+		return user;
+	}
+	
+	private WorkPosition instatiateWorkPosition(ResultSet rs) throws SQLException {
+		WorkPosition workPosition = MainWindow.getWorkPosition(rs.getString("workPosition"));
+		return workPosition;
+	}
+	
+	private List<Change> instatiateChanges(String serialNumber) {
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(serialNumber)).collect(Collectors.toList());
+		return changes;
 	}
 }

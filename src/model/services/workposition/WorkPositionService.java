@@ -3,10 +3,11 @@ package model.services.workposition;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
+import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.WorkPositionDao;
@@ -19,7 +20,7 @@ public class WorkPositionService {
 	private WorkPositionDao workPositionDao = DaoFactory.createWorkPositionDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<WorkPosition> findAll() {
+	public Map<String, WorkPosition> findAll() {
 		return workPositionDao.findAll();
 	}
 
@@ -29,16 +30,17 @@ public class WorkPositionService {
 			conn.setAutoCommit(false);
 
 			workPositionDao.insert(obj);
-			changeDao.insert(getChange(obj, obj, 0));
+
+			Change change = getChange(obj, obj, 0);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -50,16 +52,17 @@ public class WorkPositionService {
 			conn.setAutoCommit(false);
 
 			workPositionDao.update(objNew);
-			changeDao.insert(getChange(objOld, objNew, 1));
+
+			Change change = getChange(objOld, objNew, 1);
+			changeDao.insert(change);
+			objNew.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -71,16 +74,17 @@ public class WorkPositionService {
 			conn.setAutoCommit(false);
 
 			workPositionDao.disable(obj);
-			changeDao.insert(getChange(obj, obj, 3));
+
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
-			} 
-			catch (SQLException e1) {
+			} catch (SQLException e1) {
 				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
@@ -100,14 +104,11 @@ public class WorkPositionService {
 		String typeChange = "";
 		if (type == 0) {
 			typeChange = "Work Position Input";
-		} 
-		else if (type == 1) {
+		} else if (type == 1) {
 			typeChange = "Work Position Update";
-		} 
-		else if (type == 2) {
+		} else if (type == 2) {
 			typeChange = "Work Position Update Status";
-		} 
-		else if (type == 3) {
+		} else if (type == 3) {
 			typeChange = "Work Position Deactivation";
 		}
 		return typeChange;
@@ -117,14 +118,11 @@ public class WorkPositionService {
 		String changes = "";
 		if (type == 0) {
 			changes = "New Work Position Added";
-		} 
-		else if (type == 1) {
+		} else if (type == 1) {
 			changes = getFieldsUpdated(objOld, objNew);
-		} 
-		else if (type == 2) {
+		} else if (type == 2) {
 
-		} 
-		else if (type == 3) {
+		} else if (type == 3) {
 			changes = "Work Position Disabled for: " + objOld.getReason();
 		}
 		return changes;
@@ -141,17 +139,20 @@ public class WorkPositionService {
 		}
 		if (objOld.getNetPoint() == null && objNew.getNetPoint() != null) {
 			fieldsUpdated += " 'NetPoint Old: NULL " + "',";
-		} 
-		else if (objOld.getNetPoint() != null && objNew.getNetPoint() == null) {
+		} else if (objOld.getNetPoint() != null && objNew.getNetPoint() == null) {
 			fieldsUpdated += " 'NetPoint Old: " + objOld.getNetPoint() + "',";
-		} 
-		else if (!objOld.getNetPoint().equals(objNew.getNetPoint())) {
-			fieldsUpdated += " 'NetPoint Old: " + objOld.getNetPoint() + "',";
+		} else if (!objOld.getNetPoint().equals(objNew.getNetPoint())) {
+			fieldsUpdated += " 'NetPoint Old: " + objOld.getNetPoint() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
-			fieldsUpdated = fieldsUpdated.substring(0, i);
+			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
+		}
+		
+		String validation = fieldsUpdated.substring(16);
+		if (validation.length() == 0) {
+			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;

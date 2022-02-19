@@ -47,7 +47,7 @@ public class TableUser extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(200); // Name
+				column.setPreferredWidth(300); // Name
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
@@ -59,29 +59,25 @@ public class TableUser extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 4) {
-				column.setPreferredWidth(90); // Project
-				column.setResizable(false);
-			} 
-			else if (i == 5) {
 				column.setPreferredWidth(200); // Email
 				column.setResizable(false);
 			} 
-			else if (i == 6) {
-				column.setPreferredWidth(90); // Department
+			else if (i == 5) {
+				column.setPreferredWidth(100); // Department
 				column.setResizable(false);
 			} 
-			else if (i == 7) {
+			else if (i == 6) {
 				column.setPreferredWidth(70); // Status
 				column.setResizable(false);
 			} 
-			else if (i == 8) {
+			else if (i == 7) {
 				column.setPreferredWidth(70); // Date Entry
 				column.setResizable(false);
-			} 
-			else if (i == 9) {
-				column.setPreferredWidth(90); // Reason
-				column.setResizable(false);
 			}
+			else if (i == 8) {
+				column.setPreferredWidth(110); // Project
+				column.setResizable(false);
+			} 
 		}
 	}
 

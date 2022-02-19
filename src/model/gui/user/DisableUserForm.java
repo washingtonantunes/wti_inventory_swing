@@ -28,7 +28,7 @@ public class DisableUserForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 
@@ -118,11 +118,9 @@ public class DisableUserForm extends JDialog {
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "User successfully disabled", "Success disabling object",
 						JOptionPane.INFORMATION_MESSAGE);
-			} 
-			catch (ValidationException e) {
+			} catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
-			} 
-			catch (DBException e) {
+			} catch (DBException e) {
 				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error disabling object",
 						JOptionPane.ERROR_MESSAGE);
 			}
@@ -147,8 +145,7 @@ public class DisableUserForm extends JDialog {
 		// Validation Reason
 		if (comboBox_Reason.getSelectedIndex() < 0 || comboBox_Reason.getSelectedItem() == null) {
 			exception.addError("reason", "It is necessary to select a reason!");
-		} 
-		else {
+		} else {
 			user.setReason(comboBox_Reason.getSelectedItem().toString());
 		}
 

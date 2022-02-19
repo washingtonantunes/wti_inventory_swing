@@ -7,6 +7,7 @@ import java.util.List;
 
 import db.DB;
 import db.DBException;
+import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.EquipmentDao;
@@ -29,7 +30,10 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.insert(obj);
-			changeDao.insert(getChange(obj, obj, 0));
+			
+			Change change = getChange(obj, obj, 0);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -50,7 +54,10 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.update(objNew);
-			changeDao.insert(getChange(objOld, objNew, 1));
+			
+			Change change = getChange(objOld, objNew, 1);
+			changeDao.insert(change);
+			objNew.addChange(change);
 
 			conn.commit();
 		} 
@@ -65,13 +72,16 @@ public class EquipmentService {
 		}
 	}
 	
-	public void updateStatus(Equipment obj, String change) {
+	public void updateStatus(Equipment obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
 			equipmentDao.updateStatus(obj);
-			changeDao.insert(getChange(obj, obj, 2));
+			
+			Change change = getChange(obj, obj, 2);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -92,7 +102,10 @@ public class EquipmentService {
 			conn.setAutoCommit(false);
 
 			equipmentDao.disable(obj);
-			changeDao.insert(getChange(obj, obj, 3));
+			
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -184,12 +197,20 @@ public class EquipmentService {
 			fieldsUpdated += " 'CostType Old: " + objOld.getCostType() + "',";
 		}
 		if (!objOld.getValue().equals(objNew.getValue())) {
-			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "'";
+			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "',";
+		}
+		if (!objOld.getNoteEntry().equals(objNew.getNoteEntry())) {
+			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
-			fieldsUpdated = fieldsUpdated.substring(0, i);
+			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
+		}
+		
+		String validation = fieldsUpdated.substring(16);
+		if (validation.length() == 0) {
+			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;

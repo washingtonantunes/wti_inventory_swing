@@ -1,12 +1,15 @@
 CREATE DATABASE `wti_inventory_2.0` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 CREATE TABLE `changes` (
-  `object` varchar(100) NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `changes` varchar(500) NOT NULL,
+  `id` smallint NOT NULL AUTO_INCREMENT,
+  `object` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `changes` varchar(300) NOT NULL,
   `date` date NOT NULL,
-  `author` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `author` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`,`object`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `options` (
@@ -21,7 +24,7 @@ CREATE TABLE `options` (
 
 CREATE TABLE `equipments` (
   `serialNumber` varchar(30) NOT NULL,
-  `hostName` varchar(30) NOT NULL,
+  `hostname` varchar(30) NOT NULL,
   `addressMAC` varchar(30) NOT NULL,
   `type` varchar(30) NOT NULL,
   `patrimonyNumber` varchar(30) NOT NULL,
@@ -29,13 +32,17 @@ CREATE TABLE `equipments` (
   `model` varchar(30) NOT NULL,
   `memoryRam` varchar(10) NOT NULL,
   `hardDisk` varchar(10) NOT NULL,
-  `costType` varchar(50) DEFAULT NULL,
+  `costType` varchar(30) DEFAULT NULL,
   `value` decimal(5,2) DEFAULT NULL,
+  `location` varchar(45) NOT NULL,
+  `noteEntry` varchar(45) DEFAULT NULL,
+  `note` varchar(300) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
-  `reason` varchar(50) DEFAULT NULL,
   `dateEntry` date NOT NULL,
+  `user` varchar(45) DEFAULT NULL,
+  `workPosition` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`serialNumber`),
-  UNIQUE KEY `hostname_UNIQUE` (`hostName`),
+  UNIQUE KEY `hostname_UNIQUE` (`hostname`),
   UNIQUE KEY `serialNumber_UNIQUE` (`serialNumber`),
   UNIQUE KEY `addressMAC_UNIQUE` (`addressMAC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -43,14 +50,20 @@ CREATE TABLE `equipments` (
 
 CREATE TABLE `monitors` (
   `serialNumber` varchar(30) NOT NULL,
+  `patrimonyNumber` varchar(30) NOT NULL,
   `brand` varchar(30) NOT NULL,
   `model` varchar(30) NOT NULL,
-  `patrimonyNumber` varchar(30) NOT NULL,
+  `costType` varchar(30) DEFAULT NULL,
+  `value` decimal(5,2) DEFAULT NULL,
+  `location` varchar(45) NOT NULL,
+  `noteEntry` varchar(45) NOT NULL,
+  `note` varchar(300) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
-  `reason` varchar(50) DEFAULT NULL,
   `dateEntry` date NOT NULL,
+  `user` varchar(45) DEFAULT NULL,
+  `workPosition` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`serialNumber`),
-  UNIQUE KEY `serialNumber_UNIQUE` (`serialNumber`)
+  UNIQUE KEY `serialNumberMonitor_UNIQUE` (`serialNumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -60,27 +73,35 @@ CREATE TABLE `work_positions` (
   `floor` varchar(30) NOT NULL,
   `netPoint` varchar(20) DEFAULT NULL,
   `status` varchar(30) NOT NULL,
-  `reason` varchar(50) DEFAULT NULL,
-  `dateEntry` date NOT NULL,
+  `dateEntry` date DEFAULT NULL,
+  `equipment` varchar(45) DEFAULT NULL,
+  `monitor1` varchar(45) DEFAULT NULL,
+  `monitor2` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`workPoint`),
-  UNIQUE KEY `workPoint_UNIQUE` (`workPoint`)
+  UNIQUE KEY `equipment_UNIQUE` (`equipment`),
+  UNIQUE KEY `monitor2_UNIQUE` (`monitor2`),
+  UNIQUE KEY `monitor1_UNIQUE` (`monitor1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
 CREATE TABLE `users` (
-  `registration` varchar(20) NOT NULL,
+  `registration` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `cpf` varchar(20) NOT NULL,
-  `phone` varchar(20) NOT NULL,
-  `project` varchar(30) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `phone` varchar(30) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `department` varchar(30) NOT NULL,
   `status` varchar(30) NOT NULL,
-  `reason` varchar(50) DEFAULT NULL,
   `dateEntry` date NOT NULL,
-  PRIMARY KEY (`registration`),
+  `project` varchar(45) NOT NULL,
+  `equipment` varchar(45) DEFAULT NULL,
+  `monitor1` varchar(45) DEFAULT NULL,
+  `monitor2` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`department`,`registration`),
   UNIQUE KEY `matricula_UNIQUE` (`registration`),
-  UNIQUE KEY `cpf_UNIQUE` (`cpf`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
+  UNIQUE KEY `equipment_UNIQUE` (`equipment`),
+  UNIQUE KEY `monitor1_UNIQUE` (`monitor1`),
+  UNIQUE KEY `monitor2_UNIQUE` (`monitor2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -99,16 +120,14 @@ CREATE TABLE `projects` (
 
 
 CREATE TABLE `inventories` (
-  `id` smallint NOT NULL AUTO_INCREMENT,
+  `idInventory` smallint NOT NULL AUTO_INCREMENT,
+  `dateInventory` date DEFAULT NULL,
   `workPosition` varchar(50) DEFAULT NULL,
   `project` varchar(30) NOT NULL,
   `user` varchar(10) DEFAULT NULL,
   `equipment` varchar(30) NOT NULL,
   `monitor1` varchar(30) DEFAULT NULL,
   `monitor2` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `equipment_UNIQUE` (`equipment`),
-  UNIQUE KEY `monitor1_UNIQUE` (`monitor1`),
-  UNIQUE KEY `monitor2_UNIQUE` (`monitor2`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  PRIMARY KEY (`idInventory`),
+  KEY `fk_user_idx` (`user`)
 ) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

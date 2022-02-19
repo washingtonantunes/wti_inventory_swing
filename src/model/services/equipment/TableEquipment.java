@@ -95,10 +95,6 @@ public class TableEquipment extends JTable {
 				column.setPreferredWidth(100); // Date Entry
 				column.setResizable(false);
 			} 
-			else if (i == 13) {
-				column.setPreferredWidth(90); // Reason
-				column.setResizable(false);
-			}
 		}
 	}
 
