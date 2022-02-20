@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import db.DBException;
+import exception.ObjectException;
 import exception.ValidationException;
 import model.entities.Project;
 import model.entities.Option;
@@ -32,26 +33,39 @@ public class EditProjectForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private static final int COLUMN1 = 20;
-	private static final int COLUMN2 = 170;
-	private static final int COLUMN3 = 330;
+	private final int COLUMN1 = 20;
+	private final int COLUMN2 = 120;
+	private final int COLUMN3 = 330;
 
-	private static final int WIDTH = 150;
-	private static final int HEIGHT = 25;
+	private int line = 0;
+	private int line_multiplier = 30;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
+	private final int WIDTH_LABEL = 70;
+	private final int HEIGHT_LABEL = 25;
+
+	private final int WIDTH_TEXTFIELD_COMBOBOX = 200;
+	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
+
+	private final int WIDTH_LABEL_ERROR = 150;
+	private final int HEIGHT_LABEL_ERROR = 25;
+	
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 5) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private JTextField textField_Name;
 	private JComboBox<String> comboBox_City;
-	private JTextField textField_CostCenter;
 
 	private JLabel labelError_Name;
 	private JLabel labelError_City;
-	private JLabel labelError_CostCenter;
 
 	private ProjectTableModel model;
 	private Project projectOld;
@@ -93,97 +107,82 @@ public class EditProjectForm extends JDialog {
 	}
 
 	private void addLabels(JPanel panel) {
-		final JLabel label_ID = new JLabel("ID:");
-		label_ID.setForeground(COLOR1);
-		label_ID.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
-		panel.add(label_ID);
+		final JLabel label_CostCenter = new JLabel("Cost Center:");
+		label_CostCenter.setForeground(COLOR1);
+		label_CostCenter.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
+		panel.add(label_CostCenter);
 
 		final JLabel label_Name = new JLabel("Name:");
 		label_Name.setForeground(COLOR1);
-		label_Name.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
+		label_Name.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Name);
 
 		final JLabel label_City = new JLabel("City:");
 		label_City.setForeground(COLOR1);
-		label_City.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
+		label_City.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_City);
-
-		final JLabel label_CostCenter = new JLabel("Cost Center:");
-		label_CostCenter.setForeground(COLOR1);
-		label_CostCenter.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
-		panel.add(label_CostCenter);
 
 		JLabel label_Status = new JLabel("Status:");
 		label_Status.setForeground(COLOR1);
-		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
+		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Status);
 
 		JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setForeground(COLOR1);
-		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
+		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_DateEntry);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
-		/*
-		 * final JLabel label_Show_ID = new JLabel(projectOld.getId().toString());
-		 * label_Show_ID.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
-		 * panel.add(label_Show_ID);
-		 */
+		final JLabel label_Show__CostCenter = new JLabel(projectOld.getCostCenter());
+		label_Show__CostCenter.setForeground(COLOR2);
+		label_Show__CostCenter.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
+		panel.add(label_Show__CostCenter);
 
 		textField_Name = new JTextField();
 		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.PROJECT, 50));
 		textField_Name.setText(projectOld.getName());
-		textField_Name.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+		textField_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_Name);
 
 		comboBox_City = new JComboBox<>(
 				new Vector<>(options.stream().filter(o -> o.getType().equals("CITY") && o.getStatus().equals("ACTIVE"))
 						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_City.setSelectedItem(projectOld.getCity());
-		comboBox_City.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+		comboBox_City.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(comboBox_City);
 
-		textField_CostCenter = new JTextField();
-		textField_CostCenter.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 15));
-		textField_CostCenter.setText(projectOld.getCostCenter());
-		textField_CostCenter.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
-		panel.add(textField_CostCenter);
-
 		final JLabel label_Show_Status = new JLabel(projectOld.getStatus());
-		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
+		label_Show_Status.setForeground(COLOR2);
+		label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(label_Show_Status);
 
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(projectOld.getDateEntry()));
-		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
+		label_Show_DateEntry.setForeground(COLOR2);
+		label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(label_Show_DateEntry);
 	}
 
 	private void addLabelsError(JPanel panel) {
 		labelError_Name = new JLabel();
 		labelError_Name.setForeground(Color.RED);
-		labelError_Name.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
+		labelError_Name.setBounds(COLUMN3, line = 60, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_Name);
 
 		labelError_City = new JLabel();
 		labelError_City.setForeground(Color.RED);
-		labelError_City.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
+		labelError_City.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_City);
-
-		labelError_CostCenter = new JLabel();
-		labelError_CostCenter.setForeground(Color.RED);
-		labelError_CostCenter.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
-		panel.add(labelError_CostCenter);
 	}
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 270, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(positionButton, 210, 120, 30);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 270, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(positionButton + 160, 210, 120, 30);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -204,6 +203,12 @@ public class EditProjectForm extends JDialog {
 			} 
 			catch (DBException e) {
 				setErroMessagesDBException(e);
+			}
+			catch (ObjectException e) {
+				if (e.getMessage().contains("There is no change")) {
+					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		}
 	}
@@ -237,14 +242,6 @@ public class EditProjectForm extends JDialog {
 			project.setCity(comboBox_City.getSelectedItem().toString());
 		}
 
-		// validation Cost Center
-		if (textField_CostCenter.getText() == null || textField_CostCenter.getText().trim().equals("")) {
-			exception.addError("costCenter", "Field can't be empty");
-		} 
-		else {
-			project.setCostCenter(textField_CostCenter.getText().trim().toUpperCase());
-		}
-
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
@@ -257,18 +254,9 @@ public class EditProjectForm extends JDialog {
 
 		labelError_Name.setText(fields.contains("name") ? errors.get("name") : "");
 		labelError_City.setText(fields.contains("city") ? errors.get("city") : "");
-		labelError_CostCenter.setText(fields.contains("costCenter") ? errors.get("costCenter") : "");
 	}
 
 	private void setErroMessagesDBException(DBException e) {
-		if (e.getMessage().contains("Duplicate entry")) {
-			if (e.getMessage().contains("projects.name_UNIQUE")) {
-				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
-			}
-		} else {
-			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
-		}
+		JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error update object", JOptionPane.ERROR_MESSAGE);
 	}
 }

@@ -35,13 +35,14 @@ public class MainWindow extends JFrame {
 
 	private JDesktopPane main;
 
-	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
-	
+	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista",
+			"ACTIVE", null);
+
 	private static List<Change> changes;
 	private static Map<String, Project> projects;
 	private static Map<String, User> users;
 	private static Map<String, WorkPosition> workPositions;
-	
+
 	public MainWindow() {
 		changes = loadDataChanges();
 		projects = loadDataProjects();
@@ -52,7 +53,7 @@ public class MainWindow extends JFrame {
 
 	private void initComponents() {
 		add(create());
-		
+
 		menu = new MenuBar(main);
 		setJMenuBar(menu);
 
@@ -101,57 +102,74 @@ public class MainWindow extends JFrame {
 		return main;
 	}
 	
+	public static void addProject(Change change) {
+		changes.add(change);		
+	}
+
 	public static List<Change> getChanges() {
 		return changes;
 	}
 	
+	public static void addUser(User User) {
+		users.put(User.getRegistration(), User);		
+	}
+
 	public static Map<String, User> getUsers() {
 		return users;
 	}
-	
+
 	public static User getUser(String registration) {
 		User user;
-		
-		
+
 		if (users.containsKey(registration)) {
 			user = users.get(registration);
-		} else {
+		} 
+		else {
 			user = new User();
 		}
-		
+
 		return user;
 	}
 	
+	public static void addWorkPosition(WorkPosition workPosition) {
+		workPositions.put(workPosition.getWorkPoint(), workPosition);		
+	}
+
 	public static Map<String, WorkPosition> getWorkPositions() {
 		return workPositions;
 	}
-	
+
 	public static WorkPosition getWorkPosition(String workPoint) {
 		WorkPosition workPosition;
 
 		if (users.containsKey(workPoint)) {
 			workPosition = workPositions.get(workPoint);
-		} else {
+		} 
+		else {
 			workPosition = new WorkPosition();
 		}
 
 		return workPosition;
 	}
 	
+	public static void addProject(Project project) {
+		projects.put(project.getCostCenter(), project);		
+	}
+
 	public static Map<String, Project> getProjects() {
 		return projects;
 	}
-	
+
 	public static List<Project> getProjectList() {
-		
+
 		List<Project> list = new ArrayList<Project>();
-		
+
 		for (String entry : projects.keySet()) {
 			list.add(projects.get(entry));
 		}
 		return list;
 	}
-	
+
 	public static Project getProject(String costCenter) {
 		Project project;
 
@@ -169,19 +187,19 @@ public class MainWindow extends JFrame {
 		List<Change> list = service.findAll();
 		return list;
 	}
-	
+
 	private Map<String, User> loadDataUsers() {
 		final UserService service = new UserService();
 		Map<String, User> list = service.findAll();
 		return list;
 	}
-	
+
 	private Map<String, WorkPosition> loadDataWorkPositions() {
 		final WorkPositionService service = new WorkPositionService();
 		Map<String, WorkPosition> list = service.findAll();
 		return list;
 	}
-	
+
 	private Map<String, Project> loadDataProjects() {
 		final ProjectService service = new ProjectService();
 		Map<String, Project> list = service.findAll();

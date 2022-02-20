@@ -32,6 +32,9 @@ public class Equipment implements Serializable, Cloneable {
 	private WorkPosition workPosition;
 
 	private List<Change> changes = new ArrayList<>();
+	
+	public Equipment() {
+	}
 
 	public String getSerialNumber() {
 		return serialNumber;

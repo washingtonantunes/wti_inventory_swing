@@ -311,18 +311,27 @@ public class MonitorList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Monitor> monitors = new ArrayList<Monitor>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				monitors.add(model.getMonitor(row));
-			}
+			int i = table.getRowCount();
+			if (i <= 0) {
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
+						JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				List<Monitor> Monitors = new ArrayList<Monitor>();
 
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				for (int row = 0; row < table.getRowCount(); row++) {
+					int modelRow = table.convertRowIndexToModel(row);
+					Monitors.add(model.getMonitor(modelRow));
+				}
 
-			int returnValue = jfc.showSaveDialog(null);
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileMonitor(monitors, selectedFile.getAbsolutePath());
+				int returnValue = jfc.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					new CreateExlFileMonitor(Monitors, selectedFile.getAbsolutePath());
+				}
 			}
 		}
 	}

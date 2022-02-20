@@ -13,6 +13,8 @@ import db.DB;
 import db.DBException;
 import model.dao.WorkPositionDao;
 import model.entities.Change;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.WorkPosition;
 import model.gui.MainWindow;
 
@@ -144,9 +146,9 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 				workPosition.setNetPoint(rs.getString("netPoint"));
 				workPosition.setStatus(rs.getString("status"));
 				workPosition.setDateEntry(rs.getDate("dateEntry"));
-				workPosition.setEquipment(null);
-				workPosition.setMonitor1(null);
-				workPosition.setMonitor2(null);
+				workPosition.setEquipment(instatiateEquipment(rs));
+				workPosition.setMonitor1(instatiateMonitor1(rs));
+				workPosition.setMonitor2(instatiateMonitor2(rs));
 				workPosition.setChanges(instatiateChanges(workPosition.getWorkPoint()));
 				workPositions.put(workPosition.getWorkPoint(), workPosition);
 			}
@@ -159,6 +161,21 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+	
+	private Equipment instatiateEquipment(ResultSet rs) throws SQLException {
+		Equipment equipment = new Equipment();
+		return equipment;
+	}
+	
+	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
+		Monitor monitor = new Monitor();
+		return monitor;
+	}
+	
+	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
+		Monitor monitor = new Monitor();
+		return monitor;
 	}
 	
 	private List<Change> instatiateChanges(String registration) {

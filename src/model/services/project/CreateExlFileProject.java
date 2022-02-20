@@ -42,7 +42,7 @@ public class CreateExlFileProject {
 
 			row = sheet.createRow(rownum++);
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("ID");
+			cell.setCellValue("Cost Center");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Name");
@@ -51,16 +51,10 @@ public class CreateExlFileProject {
 			cell.setCellValue("City");
 
 			cell = row.createCell(cellnum++);
-			cell.setCellValue("Cost Center");
-
-			cell = row.createCell(cellnum++);
 			cell.setCellValue("Status");
 
 			cell = row.createCell(cellnum++);
 			cell.setCellValue("Date Entry");
-
-			cell = row.createCell(cellnum++);
-			cell.setCellValue("Reason");
 
 			for (Project project : projects) {
 				row = sheet.createRow(rownum++);

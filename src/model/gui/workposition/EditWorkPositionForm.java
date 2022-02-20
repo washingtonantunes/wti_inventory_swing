@@ -36,16 +36,31 @@ public class EditWorkPositionForm extends JDialog {
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private static final int COLUMN1 = 20;
-	private static final int COLUMN2 = 170;
-	private static final int COLUMN3 = 330;
+	private final int COLUMN1 = 20;
+	private final int COLUMN2 = 110;
+	private final int COLUMN3 = 370;
 
-	private static final int WIDTH = 150;
-	private static final int HEIGHT = 25;
+	private int line = 0;
+	private int line_multiplier = 30;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
+	private final int WIDTH_LABEL = 80;
+	private final int HEIGHT_LABEL = 25;
+
+	private final int WIDTH_TEXTFIELD_COMBOBOX = 200;
+	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
+
+	private final int WIDTH_LABEL_ERROR = 170;
+	private final int HEIGHT_LABEL_ERROR = 25;
+
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 9) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
 	private JComboBox<String> comboBox_Location;
 	private JComboBox<String> comboBox_Floor;
@@ -97,89 +112,124 @@ public class EditWorkPositionForm extends JDialog {
 	private void addLabels(JPanel panel) {
 		final JLabel label_WorkPoint = new JLabel("Work Point:");
 		label_WorkPoint.setForeground(COLOR1);
-		label_WorkPoint.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
+		label_WorkPoint.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_WorkPoint);
 
 		final JLabel label_Location = new JLabel("Location:");
 		label_Location.setForeground(COLOR1);
-		label_Location.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
+		label_Location.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Location);
 
 		final JLabel label_Floor = new JLabel("Floor:");
 		label_Floor.setForeground(COLOR1);
-		label_Floor.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
+		label_Floor.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Floor);
 
 		final JLabel label_NetPoint = new JLabel("NetPoint:");
 		label_NetPoint.setForeground(COLOR1);
-		label_NetPoint.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
+		label_NetPoint.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_NetPoint);
 
 		final JLabel label_Status = new JLabel("Status:");
 		label_Status.setForeground(COLOR1);
-		label_Status.setBounds(COLUMN1, 170, WIDTH, HEIGHT);
+		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Status);
 
-		final JLabel label_DateEntry = new JLabel("DateEntry:");
+		final JLabel label_DateEntry = new JLabel("Date Entry:");
 		label_DateEntry.setForeground(COLOR1);
-		label_DateEntry.setBounds(COLUMN1, 210, WIDTH, HEIGHT);
+		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_DateEntry);
+
+		final JLabel label_Equipment = new JLabel("Equipment:");
+		label_Equipment.setForeground(COLOR1);
+		label_Equipment.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
+		panel.add(label_Equipment);
+
+		final JLabel label_Monitor1 = new JLabel("Monitor 1:");
+		label_Monitor1.setForeground(COLOR1);
+		label_Monitor1.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
+		panel.add(label_Monitor1);
+		
+		final JLabel label_Monitor2 = new JLabel("Monitor 2:");
+		label_Monitor2.setForeground(COLOR1);
+		label_Monitor2.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
+		panel.add(label_Monitor2);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 		final JLabel label_Show_WorkPoint = new JLabel(workPositionOld.getWorkPoint());
-		label_Show_WorkPoint.setBounds(COLUMN2, 10, WIDTH, HEIGHT);
+		label_Show_WorkPoint.setForeground(COLOR2);
+		label_Show_WorkPoint.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(label_Show_WorkPoint);
 
 		comboBox_Location = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("LOCATION") && o.getStatus().equals("ACTIVE"))
+				options.stream().filter(o -> o.getType().equals("LOCALIZATION") && o.getStatus().equals("ACTIVE"))
 						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Location.setSelectedItem(workPositionOld.getLocation());
-		comboBox_Location.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+		comboBox_Location.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(comboBox_Location);
 
 		comboBox_Floor = new JComboBox<>(
 				new Vector<>(options.stream().filter(o -> o.getType().equals("FLOOR") && o.getStatus().equals("ACTIVE"))
 						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_Floor.setSelectedItem(workPositionOld.getFloor());
-		comboBox_Floor.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+		comboBox_Floor.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(comboBox_Floor);
 
 		textField_NetPoint = new JTextField();
 		textField_NetPoint.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 4));
 		textField_NetPoint.setText(workPositionOld.getNetPoint());
-		textField_NetPoint.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
+		textField_NetPoint.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_NetPoint);
 
 		final JLabel label_Show_Status = new JLabel(workPositionOld.getStatus());
-		label_Show_Status.setBounds(COLUMN2, 170, WIDTH, HEIGHT);
+		label_Show_Status.setForeground(COLOR2);
+		label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(label_Show_Status);
 
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(workPositionOld.getDateEntry()));
-		label_Show_DateEntry.setBounds(COLUMN2, 210, WIDTH, HEIGHT);
+		label_Show_DateEntry.setForeground(COLOR2);
+		label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(label_Show_DateEntry);
+
+		final JLabel label_Show_Equipment = new JLabel(workPositionOld.getEquipment() != null ? workPositionOld.getEquipment().getSerialNumber() : "");
+		label_Show_Equipment.setForeground(COLOR2);
+		label_Show_Equipment.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
+		panel.add(label_Show_Equipment);
+
+		final JLabel label_Show_Monitor1 = new JLabel(
+				workPositionOld.getMonitor1() != null ? workPositionOld.getMonitor1().getSerialNumber() : "");
+		label_Show_Monitor1.setForeground(COLOR2);
+		label_Show_Monitor1.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
+		panel.add(label_Show_Monitor1);
+		
+		final JLabel label_Show_Monitor2 = new JLabel(
+				workPositionOld.getMonitor2() != null ? workPositionOld.getMonitor2().getSerialNumber() : "");
+		label_Show_Monitor2.setForeground(COLOR2);
+		label_Show_Monitor2.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
+		panel.add(label_Show_Monitor2);
 	}
 
 	private void addLabelsError(JPanel panel) {
 		labelError_Location = new JLabel();
 		labelError_Location.setForeground(Color.RED);
-		labelError_Location.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
+		labelError_Location.setBounds(COLUMN3, line = 60, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_Location);
 
 		labelError_Floor = new JLabel();
 		labelError_Floor.setForeground(Color.RED);
-		labelError_Floor.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
+		labelError_Floor.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_Floor);
 	}
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 270, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(positionButton, 330, 120, 30);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 270, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(positionButton + 160, 330, 120, 30);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -201,7 +251,8 @@ public class EditWorkPositionForm extends JDialog {
 			} 
 			catch (DBException e) {
 				setErroMessagesDBException(e);
-			} catch (ObjectException e) {
+			} 
+			catch (ObjectException e) {
 				if (e.getMessage().contains("There is no change")) {
 					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -223,21 +274,9 @@ public class EditWorkPositionForm extends JDialog {
 
 		ValidationException exception = new ValidationException("Validation error");
 
-		// Validation Location
-		if (comboBox_Location.getSelectedIndex() < 0 || comboBox_Location.getSelectedItem() == null) {
-			exception.addError("location", "Field can't be empty");
-		} 
-		else {
-			workPosition.setLocation(comboBox_Location.getSelectedItem().toString());
-		}
+		workPosition.setLocation(comboBox_Location.getSelectedItem().toString());
 
-		// Validation Floor
-		if (comboBox_Floor.getSelectedIndex() < 0 || comboBox_Floor.getSelectedItem() == null) {
-			exception.addError("floor", "Field can't be empty");
-		} 
-		else {
-			workPosition.setFloor(comboBox_Floor.getSelectedItem().toString());
-		}
+		workPosition.setFloor(comboBox_Floor.getSelectedItem().toString());
 
 		// validation Net Point
 		workPosition.setNetPoint(Utils.tryParseToString(textField_NetPoint.getText().trim().toUpperCase()));
@@ -259,14 +298,14 @@ public class EditWorkPositionForm extends JDialog {
 	private void setErroMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("work_positions.PRIMARY")) {
-				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "This work point already exists", "Error update object", JOptionPane.ERROR_MESSAGE);
 			} 
 			else {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error update object", JOptionPane.ERROR_MESSAGE);
 			}
 		} 
 		else {
-			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error update object", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

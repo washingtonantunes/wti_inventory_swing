@@ -51,7 +51,12 @@ public class NewMonitorForm extends JDialog {
 	private final int WIDTH_LABEL_ERROR = 250;
 	private final int HEIGHT_LABEL_ERROR = 25;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(600, 270);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 8) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 
@@ -236,12 +241,12 @@ public class NewMonitorForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 190, 120, 25);
+		buttonSave.setBounds(positionButton, 300, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 190, 120, 25);
+		buttonClose.setBounds(positionButton + 160, 300, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -331,6 +336,9 @@ public class NewMonitorForm extends JDialog {
 			monitor.setNoteEntry(textField_NoteEntry.getText().trim().toUpperCase());
 		}
 
+		// Insert Note
+		monitor.setNote(textField_Note.getText().trim().toUpperCase());
+
 		// Insert Status
 		monitor.setStatus("STAND BY");
 
@@ -340,7 +348,7 @@ public class NewMonitorForm extends JDialog {
 		// Insert User
 		monitor.setUser(new User());
 
-		// Insert Work Position
+		// Insert WorkPosition
 		monitor.setWorkPosition(new WorkPosition());
 
 		if (exception.getErrors().size() > 0) {

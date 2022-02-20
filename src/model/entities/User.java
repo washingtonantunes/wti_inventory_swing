@@ -25,8 +25,8 @@ public class User implements Serializable, Cloneable {
 	private Monitor monitor1;
 	private Monitor monitor2;
 
-	private List<Peripheral> peripherals;
-	private List<License> licenses;
+	private List<Peripheral> peripherals = new ArrayList<>();
+	private List<License> licenses = new ArrayList<>();
 
 	private List<Change> changes = new ArrayList<>();
 

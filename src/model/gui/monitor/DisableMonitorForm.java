@@ -28,7 +28,12 @@ public class DisableMonitorForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(400, 150);
+	private final int widthPanel = 400; // largura
+	private final int heightPanel = 150; // altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+
+	private final int positionButton = (widthPanel / 2) - 140;
 	
 	private final Color COLOR1 = new Color(0, 65, 83);
 
@@ -97,12 +102,12 @@ public class DisableMonitorForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(90, 70, 100, 25);
+		buttonSave.setBounds(positionButton, 70, 100, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(200, 70, 100, 25);
+		buttonClose.setBounds(positionButton + 160, 70, 100, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -141,9 +146,6 @@ public class DisableMonitorForm extends JDialog {
 
 		ValidationException exception = new ValidationException("Validation error");
 
-		// Insert Status
-		monitor.setStatus("DISABLED");
-
 		// Validation Reason
 		if (comboBox_Reason.getSelectedIndex() < 0 || comboBox_Reason.getSelectedItem() == null) {
 			exception.addError("reason", "It is necessary to select a reason!");
@@ -155,6 +157,10 @@ public class DisableMonitorForm extends JDialog {
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
+
+		// Insert Status
+		monitor.setStatus("DISABLED");
+
 		return monitor;
 	}
 

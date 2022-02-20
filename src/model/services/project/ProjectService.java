@@ -7,6 +7,7 @@ import java.util.Map;
 
 import db.DB;
 import db.DBException;
+import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.ProjectDao;
@@ -29,7 +30,10 @@ public class ProjectService {
 			conn.setAutoCommit(false);
 
 			projectDao.insert(obj);
-			changeDao.insert(getChange(obj, obj, 0));
+
+			Change change = getChange(obj, obj, 0);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -50,7 +54,10 @@ public class ProjectService {
 			conn.setAutoCommit(false);
 
 			projectDao.update(objNew);
-			changeDao.insert(getChange(objOld, objNew, 1));
+
+			Change change = getChange(objOld, objNew, 1);
+			changeDao.insert(change);
+			objNew.addChange(change);
 
 			conn.commit();
 		} 
@@ -71,7 +78,10 @@ public class ProjectService {
 			conn.setAutoCommit(false);
 
 			projectDao.disable(obj);
-			changeDao.insert(getChange(obj, obj, 3));
+
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
 
 			conn.commit();
 		} 
@@ -132,20 +142,22 @@ public class ProjectService {
 
 	private String getFieldsUpdated(Project objOld, Project objNew) {
 		String fieldsUpdated = "Fields Updated: ";
-		
+
 		if (!objOld.getName().equals(objNew.getName())) {
 			fieldsUpdated += " 'Name Old: " + objOld.getName() + "',";
 		}
 		if (!objOld.getCity().equals(objNew.getCity())) {
-			fieldsUpdated += " 'Locality Old: " + objOld.getCity() + "',";
-		}
-		if (!objOld.getCostCenter().equals(objNew.getCostCenter())) {
-			fieldsUpdated += " 'CostCenter Old: " + objOld.getCostCenter() + "',";
+			fieldsUpdated += " 'City Old: " + objOld.getCity() + "'";
 		}
 
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
+		}
+		
+		String validation = fieldsUpdated.substring(16);
+		if (validation.length() == 0) {
+			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;

@@ -306,19 +306,27 @@ public class UserList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			List<User> users = new ArrayList<User>();
-//			for (int row = 0; row < table.getRowCount(); row++) {
-//				users.add(model.getUser(row));
-//			}
+			int i = table.getRowCount();
+			if (i <= 0) {
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
+						JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				List<User> Users = new ArrayList<User>();
 
-			
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				for (int row = 0; row < table.getRowCount(); row++) {
+					int modelRow = table.convertRowIndexToModel(row);
+					Users.add(model.getUser(modelRow));
+				}
 
-			int returnValue = jfc.showSaveDialog(null);
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileUser(users, selectedFile.getAbsolutePath());
+				int returnValue = jfc.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					new CreateExlFileUser(Users, selectedFile.getAbsolutePath());
+				}
 			}
 		}
 	}

@@ -303,18 +303,27 @@ public class EquipmentList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Equipment> equipments = new ArrayList<Equipment>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				equipments.add(model.getEquipment(row));
-			}
+			int i = table.getRowCount();
+			if (i <= 0) {
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
+						JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				List<Equipment> Equipments = new ArrayList<Equipment>();
 
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				for (int row = 0; row < table.getRowCount(); row++) {
+					int modelRow = table.convertRowIndexToModel(row);
+					Equipments.add(model.getEquipment(modelRow));
+				}
 
-			int returnValue = jfc.showSaveDialog(null);
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileEquipment(equipments, selectedFile.getAbsolutePath());
+				int returnValue = jfc.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					new CreateExlFileEquipment(Equipments, selectedFile.getAbsolutePath());
+				}
 			}
 		}
 	}

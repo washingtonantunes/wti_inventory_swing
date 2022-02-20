@@ -52,7 +52,12 @@ public class EditMonitorForm extends JDialog {
 	private final int WIDTH_LABEL_ERROR = 250;
 	private final int HEIGHT_LABEL_ERROR = 25;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 13) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -291,12 +296,12 @@ public class EditMonitorForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 270, 120, 25);
+		buttonSave.setBounds(positionButton, 450, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 270, 120, 25);
+		buttonClose.setBounds(positionButton + 160, 450, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -379,6 +384,9 @@ public class EditMonitorForm extends JDialog {
 		} else {
 			monitor.setNoteEntry(textField_NoteEntry.getText().trim().toUpperCase());
 		}
+
+		// Insert Note
+		monitor.setNote(textField_Note.getText().trim().toUpperCase());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

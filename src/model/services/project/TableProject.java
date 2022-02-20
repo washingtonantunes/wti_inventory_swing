@@ -43,7 +43,7 @@ public class TableProject extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(50); // ID
+				column.setPreferredWidth(80); // Cost Center
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
@@ -55,18 +55,14 @@ public class TableProject extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
-				column.setPreferredWidth(80); // Cost Center
-				column.setResizable(false);
-			} 
-			else if (i == 4) {
 				column.setPreferredWidth(100); // Status
 				column.setResizable(false);
 			} 
-			else if (i == 5) {
+			else if (i == 4) {
 				column.setPreferredWidth(100); // Date Entry
 				column.setResizable(false);
 			} 
-			else if (i == 6) {
+			else if (i == 5) {
 				column.setPreferredWidth(90); // Reason
 				column.setResizable(false);
 			}
@@ -89,7 +85,7 @@ public class TableProject extends JTable {
 			}
 		};
 
-		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(4).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

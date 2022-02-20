@@ -25,6 +25,8 @@ import javax.swing.text.MaskFormatter;
 
 import db.DBException;
 import exception.ValidationException;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
@@ -54,7 +56,12 @@ public class NewUserForm extends JDialog {
 	private final int WIDTH_LABEL_ERROR = 230;
 	private final int HEIGHT_LABEL_ERROR = 25;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(600, 350);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 7) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 
@@ -233,12 +240,12 @@ public class NewUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(165, 270, 120, 25);
+		buttonSave.setBounds(positionButton, 270, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(305, 270, 120, 25);
+		buttonClose.setBounds(positionButton + 160, 270, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -342,6 +349,15 @@ public class NewUserForm extends JDialog {
 
 		// Insert DateEntry
 		user.setDateEntry(new Date());
+
+		// Insert Equipment
+		user.setEquipment(new Equipment());
+
+		// Insert Monitor 1
+		user.setMonitor1(new Monitor());
+
+		// Insert Monitor 2
+		user.setMonitor2(new Monitor());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

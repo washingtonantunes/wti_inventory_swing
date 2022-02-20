@@ -38,7 +38,12 @@ public class ViewMonitorForm extends JDialog {
 	private final int WIDTH_LABEL_SHOW = 300;
 	private final int HEIGHT_LABEL_SHOW = 30;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(500, 530);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_LABEL_SHOW + 50; // largura
+	private final int heightPanel = (30 * 13) + 140; // altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -216,12 +221,12 @@ public class ViewMonitorForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(90, 450, 120, 30);
+		buttonChanges.setBounds(positionButton, 450, 120, 30);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(230, 450, 120, 30);
+		buttonClose.setBounds(positionButton + 160, 450, 120, 30);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}

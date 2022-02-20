@@ -33,7 +33,10 @@ public class ViewUserForm extends JDialog {
 	private final int WIDTH_LABEL_SHOW = 300;
 	private final int HEIGHT_LABEL_SHOW = 30;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(500, 410);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_LABEL_SHOW + 50; // largura
+	private final int heightPanel = (30 * 9) + 140; // altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -166,17 +169,17 @@ public class ViewUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonItens = new JButton("Itens");
-		buttonItens.setBounds(40, 330, 120, 25);
+		buttonItens.setBounds(15, 330, 100, 25);
 		buttonItens.addActionListener(new buttonItensListener());
 		panel.add(buttonItens);
 
 		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(180, 330, 120, 25);
+		buttonChanges.setBounds(130, 330, 90, 25);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 330, 120, 25);
+		buttonClose.setBounds(235, 330, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}

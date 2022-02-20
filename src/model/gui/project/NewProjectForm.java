@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import db.DBException;
 import exception.ValidationException;
 import model.entities.Project;
+import model.gui.MainWindow;
 import model.entities.Option;
 import model.services.project.ProjectService;
 import model.services.project.ProjectTableModel;
@@ -32,14 +33,28 @@ public class NewProjectForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int COLUMN1 = 20;
-	private static final int COLUMN2 = 170;
-	private static final int COLUMN3 = 330;
+	private final int COLUMN1 = 20;
+	private final int COLUMN2 = 120;
+	private final int COLUMN3 = 330;
 
-	private static final int WIDTH = 150;
-	private static final int HEIGHT = 25;
+	private int line = 0;
+	private int line_multiplier = 30;
 
-	private static final Dimension DIMENSIONMAINPANEL = new Dimension(600, 270);
+	private final int WIDTH_LABEL = 70;
+	private final int HEIGHT_LABEL = 25;
+
+	private final int WIDTH_TEXTFIELD_COMBOBOX = 200;
+	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
+
+	private final int WIDTH_LABEL_ERROR = 150;
+	private final int HEIGHT_LABEL_ERROR = 25;
+	
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 3) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 
@@ -88,71 +103,66 @@ public class NewProjectForm extends JDialog {
 	}
 
 	private void addLabels(JPanel panel) {
-		final JLabel label_ID = new JLabel("ID:");
-		label_ID.setForeground(COLOR1);
-		label_ID.setBounds(COLUMN1, 10, WIDTH, HEIGHT);
-		panel.add(label_ID);
+		final JLabel label_CostCenter = new JLabel("Cost Center:");
+		label_CostCenter.setForeground(COLOR1);
+		label_CostCenter.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
+		panel.add(label_CostCenter);
 
 		final JLabel label_Name = new JLabel("Name:");
 		label_Name.setForeground(COLOR1);
-		label_Name.setBounds(COLUMN1, 50, WIDTH, HEIGHT);
+		label_Name.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Name);
 
 		final JLabel label_City = new JLabel("City:");
 		label_City.setForeground(COLOR1);
-		label_City.setBounds(COLUMN1, 90, WIDTH, HEIGHT);
+		label_City.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_City);
-
-		final JLabel label_CostCenter = new JLabel("Cost Center:");
-		label_CostCenter.setForeground(COLOR1);
-		label_CostCenter.setBounds(COLUMN1, 130, WIDTH, HEIGHT);
-		panel.add(label_CostCenter);
 	}
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
+		textField_CostCenter = new JTextField();
+		textField_CostCenter.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 15));
+		textField_CostCenter.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
+		panel.add(textField_CostCenter);
+
 		textField_Name = new JTextField();
 		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.PROJECT, 50));
-		textField_Name.setBounds(COLUMN2, 50, WIDTH, HEIGHT);
+		textField_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_Name);
 
 		comboBox_City = new JComboBox<>(
 				new Vector<>(options.stream().filter(o -> o.getType().equals("CITY") && o.getStatus().equals("ACTIVE"))
 						.map(Option::getOption).collect(Collectors.toList())));
 		comboBox_City.setSelectedIndex(-1);
-		comboBox_City.setBounds(COLUMN2, 90, WIDTH, HEIGHT);
+		comboBox_City.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(comboBox_City);
-
-		textField_CostCenter = new JTextField();
-		textField_CostCenter.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 15));
-		textField_CostCenter.setBounds(COLUMN2, 130, WIDTH, HEIGHT);
-		panel.add(textField_CostCenter);
 	}
 
 	private void addLabelsError(JPanel panel) {
+		labelError_CostCenter = new JLabel();
+		labelError_CostCenter.setForeground(Color.RED);
+		labelError_CostCenter.setBounds(COLUMN3, line = 30, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
+		panel.add(labelError_CostCenter);
+
 		labelError_Name = new JLabel();
 		labelError_Name.setForeground(Color.RED);
-		labelError_Name.setBounds(COLUMN3, 50, WIDTH + 90, HEIGHT);
+		labelError_Name.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_Name);
 
 		labelError_City = new JLabel();
 		labelError_City.setForeground(Color.RED);
-		labelError_City.setBounds(COLUMN3, 90, WIDTH + 90, HEIGHT);
+		labelError_City.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
 		panel.add(labelError_City);
-
-		labelError_CostCenter = new JLabel();
-		labelError_CostCenter.setForeground(Color.RED);
-		labelError_CostCenter.setBounds(COLUMN3, 130, WIDTH + 90, HEIGHT);
-		panel.add(labelError_CostCenter);
 	}
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(180, 190, WIDTH - 30, HEIGHT);
+		buttonSave.setBounds(positionButton, 150, 120, 30);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(320, 190, WIDTH - 30, HEIGHT);
+		buttonClose.setBounds(positionButton + 160, 150, 120, 30);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -165,6 +175,7 @@ public class NewProjectForm extends JDialog {
 				ProjectService service = new ProjectService();
 				service.save(project);
 				model.addProject(project);
+				MainWindow.addProject(project);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Project successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} 
@@ -189,25 +200,28 @@ public class NewProjectForm extends JDialog {
 
 		ValidationException exception = new ValidationException("Validation error");
 
+		// validation Cost Center
+		if (textField_CostCenter.getText() == null || textField_CostCenter.getText().trim().equals("")) {
+			exception.addError("costCenter", "Field can't be empty");
+		} 
+		else {
+			project.setCostCenter(textField_CostCenter.getText().trim().toUpperCase());
+		}
+
 		// validation Name
 		if (textField_Name.getText() == null || textField_Name.getText().trim().equals("")) {
 			exception.addError("name", "Field can't be empty");
-		} else {
+		} 
+		else {
 			project.setName(textField_Name.getText().trim().toUpperCase());
 		}
 
 		// Validation City
 		if (comboBox_City.getSelectedIndex() < 0 || comboBox_City.getSelectedItem() == null) {
 			exception.addError("city", "Field can't be empty");
-		} else {
+		} 
+		else {
 			project.setCity(comboBox_City.getSelectedItem().toString());
-		}
-
-		// validation Cost Center
-		if (textField_CostCenter.getText() == null || textField_CostCenter.getText().trim().equals("")) {
-			exception.addError("costCenter", "Field can't be empty");
-		} else {
-			project.setCostCenter(textField_CostCenter.getText().trim().toUpperCase());
 		}
 
 		// Insert Status
@@ -226,9 +240,9 @@ public class NewProjectForm extends JDialog {
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 
+		labelError_CostCenter.setText(fields.contains("costCenter") ? errors.get("costCenter") : "");
 		labelError_Name.setText(fields.contains("name") ? errors.get("name") : "");
 		labelError_City.setText(fields.contains("city") ? errors.get("city") : "");
-		labelError_CostCenter.setText(fields.contains("costCenter") ? errors.get("costCenter") : "");
 	}
 
 	private void setErroMessagesDBException(DBException e) {

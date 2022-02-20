@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -16,12 +17,12 @@ public class Project implements Serializable, Cloneable {
 	private Date dateEntry;
 	private String reason;
 
-	private Integer quantityDesktop;
-	private Integer quantityNotebook;
+	private Integer quantityDesktops;
+	private Integer quantityNotebooks;
 
-	private Double valueTotal;
+	private Double costTotal;
 
-	private List<Change> changes;
+	private List<Change> changes = new ArrayList<>();
 
 	public Project() {
 	}
@@ -75,27 +76,27 @@ public class Project implements Serializable, Cloneable {
 	}
 
 	public Integer getQuantityDesktop() {
-		return quantityDesktop;
+		return quantityDesktops;
 	}
 
-	public void setQuantityDesktop(Integer quantityDesktop) {
-		this.quantityDesktop = quantityDesktop;
+	public void setQuantityDesktops(Integer quantityDesktops) {
+		this.quantityDesktops = quantityDesktops;
 	}
 
-	public Integer getQuantityNotebook() {
-		return quantityNotebook;
+	public Integer getQuantityNotebooks() {
+		return quantityNotebooks;
 	}
 
-	public void setQuantityNotebook(Integer quantityNotebook) {
-		this.quantityNotebook = quantityNotebook;
+	public void setQuantityNotebooks(Integer quantityNotebooks) {
+		this.quantityNotebooks = quantityNotebooks;
 	}
 
-	public Double getValueTotal() {
-		return valueTotal;
+	public Double getCostTotals() {
+		return costTotal;
 	}
 
-	public void setValueTotal(Double valueTotal) {
-		this.valueTotal = valueTotal;
+	public void setCostTotal(Double costTotal) {
+		this.costTotal = costTotal;
 	}
 
 	public List<Change> getChanges() {

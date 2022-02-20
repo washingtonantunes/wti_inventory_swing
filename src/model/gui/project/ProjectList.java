@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -29,7 +27,6 @@ import model.entities.Project;
 import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.project.CreateExlFileProject;
-import model.services.project.ProjectService;
 import model.services.project.ProjectTableModel;
 import model.services.project.TableProject;
 
@@ -55,7 +52,7 @@ public class ProjectList extends JPanel {
 	private TableRowSorter<ProjectTableModel> sorter;
 
 	public ProjectList() {
-		this.projects = loadDataProjects();
+		this.projects = MainWindow.getProjectList();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -174,19 +171,6 @@ public class ProjectList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	private List<Project> loadDataProjects() {
-		final ProjectService service = new ProjectService();		
-		Map<String, Project> projects = service.findAll();
-		List<Project> list = new ArrayList<Project>();
-		
-		for (String entry : projects.keySet()) {
-			list.add(projects.get(entry));
-		}
-		
-		list.sort((e1, e2) -> e1.getName().compareTo(e2.getName()));
-		return list;
 	}
 
 	private List<Option> loadDataOptions() {
@@ -309,18 +293,27 @@ public class ProjectList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Project> projects = new ArrayList<Project>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				projects.add(model.getProject(row));
-			}
+			int i = table.getRowCount();
+			if (i <= 0) {
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
+						JOptionPane.INFORMATION_MESSAGE);
+			} 
+			else {
+				List<Project> Projects = new ArrayList<Project>();
 
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				for (int row = 0; row < table.getRowCount(); row++) {
+					int modelRow = table.convertRowIndexToModel(row);
+					Projects.add(model.getProject(modelRow));
+				}
 
-			int returnValue = jfc.showSaveDialog(null);
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileProject(projects, selectedFile.getAbsolutePath());
+				int returnValue = jfc.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					new CreateExlFileProject(Projects, selectedFile.getAbsolutePath());
+				}
 			}
 		}
 	}

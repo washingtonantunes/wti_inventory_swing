@@ -1,4 +1,4 @@
-CREATE DATABASE `wti_inventory_2.0` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE `wti_inventory` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 CREATE TABLE `changes` (
   `id` smallint NOT NULL AUTO_INCREMENT,
@@ -106,17 +106,17 @@ CREATE TABLE `users` (
 
 
 CREATE TABLE `projects` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `costCenter` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `city` varchar(20) NOT NULL,
-  `costCenter` varchar(20) NOT NULL,
   `status` varchar(30) NOT NULL,
-  `reason` varchar(50) DEFAULT NULL,
   `dateEntry` date NOT NULL,
-  PRIMARY KEY (`id`,`nameProject`),
-  UNIQUE KEY `project_UNIQUE` (`nameProject`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `quantityDesktop` int DEFAULT NULL,
+  `quantityNotebook` int DEFAULT NULL,
+  `costTotal` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`costCenter`),
+  UNIQUE KEY `costCenter_UNIQUE` (`costCenter`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 CREATE TABLE `inventories` (

@@ -167,10 +167,10 @@ public class EquipmentService {
 	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
-		if (!objOld.getHostName().equals(objNew.getHostName())) {
+		if (!objOld.getHostName().equalsIgnoreCase(objNew.getHostName())) {
 			fieldsUpdated += " 'HostName Old: " + objOld.getHostName() + "',";
 		}
-		if (!objOld.getAddressMAC().equals(objNew.getAddressMAC())) {
+		if (!objOld.getAddressMAC().equalsIgnoreCase(objNew.getAddressMAC())) {
 			fieldsUpdated += " 'AddressMAC Old: " + objOld.getAddressMAC() + "',";
 		}
 		if (!objOld.getType().equals(objNew.getType())) {
@@ -199,7 +199,7 @@ public class EquipmentService {
 		if (!objOld.getValue().equals(objNew.getValue())) {
 			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "',";
 		}
-		if (!objOld.getNoteEntry().equals(objNew.getNoteEntry())) {
+		if (!objOld.getNoteEntry().equalsIgnoreCase(objNew.getNoteEntry())) {
 			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "'";
 		}
 

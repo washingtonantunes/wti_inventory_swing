@@ -381,18 +381,26 @@ public class InventoryList extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			List<Inventory> inventorys = new ArrayList<Inventory>();
-			for (int row = 0; row < table.getRowCount(); row++) {
-				inventorys.add(model.getInventory(row));
-			}
+			int i = table.getRowCount();
+			if (i <= 0) {
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				List<Inventory> Inventorys = new ArrayList<Inventory>();
 
-			JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
+				for (int row = 0; row < table.getRowCount(); row++) {
+					int modelRow = table.convertRowIndexToModel(row);
+					Inventorys.add(model.getInventory(modelRow));
+				}
 
-			int returnValue = jfc.showSaveDialog(null);
+				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
 
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = jfc.getSelectedFile();
-				new CreateExlFileInventory(inventorys, selectedFile.getAbsolutePath());
+				int returnValue = jfc.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					new CreateExlFileInventory(Inventorys, selectedFile.getAbsolutePath());
+				}
 			}
 		}
 	}

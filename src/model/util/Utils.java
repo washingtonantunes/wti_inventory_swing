@@ -11,6 +11,7 @@ public class Utils {
 		return true;
 	}
 
+	//Unused
 	public static boolean ToCheckAddressMAC(String addressMACToCheck) {
 		String a = addressMACToCheck.toUpperCase().trim().substring(2, 3);
 		String b = addressMACToCheck.toUpperCase().trim().substring(5, 6);
@@ -80,8 +81,23 @@ public class Utils {
 	}
 	
 	public static String getLocationEquipment() {
-		String location = "";
+		String location = "WITH TI BPO";
 		
 		return location;
+	}
+	
+	public static boolean ToCheckHostNameAndType(String hostNameToCheck, String typeToCheck) {
+		String hostName = hostNameToCheck.substring(3, 6);
+		String type = typeToCheck;
+		
+		if (hostName.equals("DSK") && type.equals("DESKTOP")) {
+			return false;
+		}
+		
+		if (hostName.equals("NTB") && type.equals("NOTEBOOK")) {
+			return false;
+		}
+		
+		return true;
 	}
 }

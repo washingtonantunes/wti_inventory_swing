@@ -15,11 +15,10 @@ public class ProjectTableModel extends AbstractTableModel {
 	private static final int COL_CITY = 2;
 	private static final int COL_STATUS = 3;
 	private static final int COL_DATE_ENTRY = 4;
-	private static final int COL_REASON = 5;
 
 	List<Project> projects;
 
-	private String[] columns = new String[] { "Cost Center", "Name", "City", "Status", "Date Entry", "Reason" };
+	private String[] columns = new String[] { "Cost Center", "Name", "City", "Status", "Date Entry" };
 
 	public ProjectTableModel(List<Project> projects) {
 		this.projects = projects;
@@ -65,9 +64,6 @@ public class ProjectTableModel extends AbstractTableModel {
 		else if (column == COL_DATE_ENTRY) {
 			return p.getDateEntry();
 		} 
-		else if (column == COL_REASON) {
-			return p.getReason();
-		}
 		return "";
 	}
 

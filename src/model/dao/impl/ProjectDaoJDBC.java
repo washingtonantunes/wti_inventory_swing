@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,44 +23,31 @@ public class ProjectDaoJDBC implements ProjectDao {
 	public ProjectDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
-	
+
 	@Override
 	public void insert(Project obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement(
-					"INSERT INTO `projects` "
-					+ "(`nameProject`,"
+			st = conn.prepareStatement("INSERT INTO `projects` " 
+					+ "(`costCenter`," 
+					+ "`name`," 
 					+ "`city`,"
-					+ "`costCenter`,"
-					+ "`status`,"
-					+ "`dateEntry`) "
-					+ "VALUES "
-					+ "(?, ?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-			
-			st.setString(1, obj.getName());
-			st.setString(2, obj.getCity());
-			st.setString(3, obj.getCostCenter());
+					+ "`status`," 
+					+ "`dateEntry`) " 
+					+ "VALUES " + "(?, ?, ?, ?, ?)");
+
+			st.setString(1, obj.getCostCenter());
+			st.setString(2, obj.getName());
+			st.setString(3, obj.getCity());
 			st.setString(4, obj.getStatus());
 			st.setDate(5, new java.sql.Date(obj.getDateEntry().getTime()));
 
-			int rowsAffected = st.executeUpdate();
-			
-			if (rowsAffected > 0) {
-//				ResultSet rs = st.getGeneratedKeys();
-//				if (rs.next()) {
-//					int id = rs.getInt(1);
-//					obj.setId(id);
-//				}
-//				DB.closeResultSet(rs);
-			}
-			else {
-				throw new DBException("Unexpected error! No rows affected!");
-			}
-		} catch (SQLException e) {
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
 			throw new DBException(e.getMessage());
-		} finally {
+		} 
+		finally {
 			DB.closeStatement(st);
 		}
 	}
@@ -71,9 +57,9 @@ public class ProjectDaoJDBC implements ProjectDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `projects` "
-					+ "SET `nameProject` = ?, "
-					+ "`city` = ? "
+					"UPDATE `projects` " 
+					+ "SET `name` = ?, " 
+					+ "`city` = ? " 
 					+ "WHERE `costCenter` = ?");
 
 			st.setString(1, obj.getName());
@@ -95,13 +81,12 @@ public class ProjectDaoJDBC implements ProjectDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-					"UPDATE `projects` "
-					+ "SET `status` = ?, `reason` = ? "
+					"UPDATE `projects` " 
+					+ "SET `status` = ? " 
 					+ "WHERE `costCenter` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getReason());
-			st.setString(3, obj.getCostCenter());
+			st.setString(2, obj.getCostCenter());
 
 			st.executeUpdate();
 		} 
@@ -128,10 +113,13 @@ public class ProjectDaoJDBC implements ProjectDao {
 				Project project = new Project();
 
 				project.setCostCenter(rs.getString("costCenter"));
-				project.setName(rs.getString("nameProject"));
+				project.setName(rs.getString("name"));
 				project.setCity(rs.getString("city"));
-				project.setStatus(rs.getString("statusProject"));
+				project.setStatus(rs.getString("status"));
 				project.setDateEntry(rs.getDate("dateEntry"));
+				project.setQuantityDesktops(rs.getInt("quantityDesktop"));
+				project.setQuantityNotebooks(rs.getInt("quantityNotebook"));
+				project.setCostTotal(rs.getDouble("costTotal"));
 				project.setChanges(instatiateChanges(project.getCostCenter()));
 				projects.put(project.getCostCenter(), project);
 			}
@@ -145,9 +133,10 @@ public class ProjectDaoJDBC implements ProjectDao {
 			DB.closeResultSet(rs);
 		}
 	}
-	
+
 	private List<Change> instatiateChanges(String costCenter) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(costCenter)).collect(Collectors.toList());
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(costCenter))
+				.collect(Collectors.toList());
 		return changes;
 	}
 }

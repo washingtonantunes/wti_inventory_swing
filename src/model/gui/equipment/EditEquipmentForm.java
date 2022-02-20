@@ -52,10 +52,15 @@ public class EditEquipmentForm extends JDialog {
 	private final int WIDTH_TEXTFIELD_COMBOBOX = 200;
 	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
 
-	private final int WIDTH_LABEL_ERROR = 250;
+	private final int WIDTH_LABEL_ERROR = 270;
 	private final int HEIGHT_LABEL_ERROR = 25;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(630, 680);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 18) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -400,12 +405,12 @@ public class EditEquipmentForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(165, 600, 120, 25);
+		buttonSave.setBounds(positionButton, 600, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(305, 600, 125, 25);
+		buttonClose.setBounds(positionButton + 160, 600, 125, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -446,6 +451,8 @@ public class EditEquipmentForm extends JDialog {
 		equipment = (Equipment) equipmentOld.clone();
 
 		ValidationException exception = new ValidationException("Validation error");
+		boolean hostNameToCheck = false;
+		boolean TypeToCheck = false;
 
 		// Validation Host Name
 		if (textField_HostName.getText() == null || textField_HostName.getText().trim().equals("")) {
@@ -456,15 +463,12 @@ public class EditEquipmentForm extends JDialog {
 			exception.addError("hostName", "Invalid format - Ex: 'SPODSK' or 'SPONTB'");
 		} else {
 			equipment.setHostName(textField_HostName.getText().trim().toUpperCase());
+			hostNameToCheck = true;
 		}
 
 		// Validation Address Mac
 		if (Utils.ToCheckAddressMACNull(textField_AddressMAC.getText())) {
 			exception.addError("addressMAC", "Field can't be empty");
-		} else if (textField_AddressMAC.getText().length() < 16) {
-			exception.addError("addressMAC", "Invalid Address MAC - Ex: > 16");
-		} else if (Utils.ToCheckAddressMAC(textField_AddressMAC.getText())) {
-			exception.addError("addressMAC", "Invalid format - Ex: '0A-00-27-00-00-0B'");
 		} else {
 			equipment.setAddressMAC(textField_AddressMAC.getText().trim().toUpperCase());
 		}
@@ -474,6 +478,7 @@ public class EditEquipmentForm extends JDialog {
 			exception.addError("type", "Field can't be empty");
 		} else {
 			equipment.setType(comboBox_Type.getSelectedItem().toString());
+			TypeToCheck = true;
 		}
 
 		// Validation Patrimony Number
@@ -530,6 +535,18 @@ public class EditEquipmentForm extends JDialog {
 			exception.addError("noteEntry", "Invalid Note Entry - Ex: > 4");
 		} else {
 			equipment.setNoteEntry(textField_NoteEntry.getText().trim().toUpperCase());
+		}
+
+		// Insert Note
+		equipment.setNote(textField_Note.getText().trim().toUpperCase());
+
+		// Validation Host Name and Type
+		if (hostNameToCheck && TypeToCheck) {
+			if (Utils.ToCheckHostNameAndType(textField_HostName.getText(),
+					comboBox_Type.getSelectedItem().toString())) {
+				exception.addError("hostName", "Field without pattern");
+				exception.addError("type", "Field without pattern");
+			}
 		}
 
 		if (exception.getErrors().size() > 0) {

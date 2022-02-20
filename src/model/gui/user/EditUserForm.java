@@ -57,7 +57,12 @@ public class EditUserForm extends JDialog {
 	private final int WIDTH_LABEL_ERROR = 230;
 	private final int HEIGHT_LABEL_ERROR = 25;
 
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(600, 410);
+	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
+	private final int heightPanel = (30 * 9) + 140; //altura
+
+	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
+	
+	private final int positionButton = (widthPanel / 2) - 140;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -263,12 +268,12 @@ public class EditUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(165, 330, 120, 25);
+		buttonSave.setBounds(positionButton, 330, 120, 25);
 		buttonSave.addActionListener(new buttonSaveListener());
 		panel.add(buttonSave);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(305, 330, 120, 25);
+		buttonClose.setBounds(positionButton + 160, 330, 120, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
