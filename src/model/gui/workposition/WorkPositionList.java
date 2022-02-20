@@ -49,7 +49,7 @@ public class WorkPositionList extends JPanel {
 	private List<WorkPosition> workPositions;
 	private List<Option> options;
 
-	private JLabel label_Show__Quantity;
+	private JLabel label_Show_Quantity;
 
 	private JTextField textField_Filter;
 	private TableRowSorter<WorkPositionTableModel> sorter;
@@ -157,11 +157,11 @@ public class WorkPositionList extends JPanel {
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
 
-		label_Show__Quantity = new JLabel(String.valueOf(workPositions.size()));
-		label_Show__Quantity.setPreferredSize(new Dimension(50, 35));
-		label_Show__Quantity.setBounds(400, 15, 50, 25);
-		label_Show__Quantity.setForeground(Color.WHITE);
-		panel.add(label_Show__Quantity);
+		label_Show_Quantity = new JLabel(String.valueOf(workPositions.size()));
+		label_Show_Quantity.setPreferredSize(new Dimension(50, 35));
+		label_Show_Quantity.setBounds(400, 15, 50, 25);
+		label_Show_Quantity.setForeground(Color.WHITE);
+		panel.add(label_Show_Quantity);
 
 		return panel;
 	}
@@ -205,7 +205,7 @@ public class WorkPositionList extends JPanel {
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				new NewWorkPositionForm(model, options).setVisible(true);
-				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
 		}
@@ -295,11 +295,11 @@ public class WorkPositionList extends JPanel {
 			String text = textField_Filter.getText().toUpperCase();
 			if (text.length() == 0) {
 				sorter.setRowFilter(null);
-				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			} else {
 				sorter.setRowFilter(RowFilter.regexFilter(text));
-				label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
 		}

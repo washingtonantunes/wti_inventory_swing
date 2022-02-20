@@ -58,7 +58,9 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `collaborators` "
-					+ "SET `password` = ?, `privilege` = ?, `office` = ? "
+					+ "SET `password` = ?, "
+					+ "`privilege` = ?, "
+					+ "`office` = ? "
 					+ "WHERE `registration` = ?");
 
 			st.setString(1, obj.getPassword());
@@ -82,11 +84,10 @@ public class CollaboratorDaoJDBC implements CollaboratorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `collaborators` " 
-					+ "SET `status` = ?, `reason` = ? "
+					+ "SET `status` = ? "
 					+ "WHERE `registration` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getReason());
 			st.setString(3, obj.getRegistration());
 			
 			st.executeUpdate();

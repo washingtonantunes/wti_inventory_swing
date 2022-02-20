@@ -154,7 +154,7 @@ public class ViewProjectForm extends JDialog {
 	private class buttonChangesListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			new ChangesPanel(project.getChanges()).setVisible(true);
+			new ChangesPanel(project.getChanges());
 		}
 	}
 

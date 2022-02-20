@@ -173,7 +173,7 @@ public class ViewMonitorForm extends JDialog {
 		label_Show_CostType.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_CostType);
 
-		final JLabel label_Show_Value = new JLabel(String.valueOf(monitor.getValue()));
+		final JLabel label_Show_Value = new JLabel(String.format("R$ %.2f", monitor.getValue()));
 		label_Show_Value.setForeground(COLOR2);
 		label_Show_Value.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Value);
@@ -234,7 +234,7 @@ public class ViewMonitorForm extends JDialog {
 	private class buttonChangesListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			new ChangesPanel(monitor.getChanges()).setVisible(true);
+			new ChangesPanel(monitor.getChanges());
 		}
 	}
 

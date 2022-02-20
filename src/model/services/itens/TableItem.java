@@ -1,10 +1,9 @@
-package model.services.monitor;
+package model.services.itens;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.Font;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -13,11 +12,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class TableMonitor extends JTable {
+public class TableItem extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
-	public TableMonitor(MonitorTableModel model) {
+	public TableItem(ItemTableModel model) {
 		super(model);
 		initComponents();
 	}
@@ -25,9 +24,10 @@ public class TableMonitor extends JTable {
 	private void initComponents() {
 		setFillsViewportHeight(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setRowHeight(30);
+		setFont(new java.awt.Font(null, Font.BOLD, 20));
 		configureHeader();
 		configureSizeColumn();
-		configureColumnDate();
 		configureColumnValue();
 	}
 
@@ -44,59 +44,25 @@ public class TableMonitor extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(110); // Serial Number
+				column.setPreferredWidth(50); // Index
+				column.setCellRenderer(new CellRenderer());
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(90); // Patrimony Number
+				column.setPreferredWidth(180); // Type
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
-				column.setPreferredWidth(80); // Brand
+				column.setPreferredWidth(300); // Name
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
-				column.setPreferredWidth(180); // Model
+				column.setPreferredWidth(150); // Value
 				column.setResizable(false);
-			} 
-			else if (i == 4) {
-				column.setPreferredWidth(90); // Cost Type
-				column.setResizable(false);
-			} 
-			else if (i == 5) {
-				column.setPreferredWidth(60); // Value
-				column.setResizable(false);
-			} 
-			else if (i == 6) {
-				column.setPreferredWidth(100); // Status
-				column.setResizable(false);
-			} 
-			else if (i == 7) {
-				column.setPreferredWidth(100); // Date Entry
-				column.setResizable(false);
-			} 
+			}
 		}
 	}
 
-	private void configureColumnDate() {
-		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
-
-			private static final long serialVersionUID = 1L;
-
-			SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-				if (value instanceof Date) {
-					value = f.format(value);
-				}
-				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			}
-		};
-
-		this.getColumnModel().getColumn(7).setCellRenderer(tableCellRenderer);
-	}
-	
 	public void configureColumnValue() {
 		TableCellRenderer tableCellRenderer = new DefaultTableCellRenderer() {
 
@@ -110,7 +76,7 @@ public class TableMonitor extends JTable {
 				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			}
 		};
-		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(3).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
@@ -123,5 +89,20 @@ public class TableMonitor extends JTable {
 			coleur = null;
 		}
 		return c;
+	}
+	
+	public class CellRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		public CellRenderer() {
+			super();
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			this.setHorizontalAlignment(CENTER);
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
 	}
 }

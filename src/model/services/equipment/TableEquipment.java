@@ -122,7 +122,7 @@ public class TableEquipment extends JTable {
 
 			private static final long serialVersionUID = 1L;
 
-			String format = "R$ %.1f";
+			String format = "R$ %.2f";
 
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {

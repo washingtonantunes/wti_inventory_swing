@@ -6,14 +6,18 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.entities.Item;
 import model.entities.User;
 import model.gui.change.ChangesPanel;
+import model.gui.item.ItemList;
 
 public class ViewUserForm extends JDialog {
 
@@ -187,14 +191,15 @@ public class ViewUserForm extends JDialog {
 	private class buttonItensListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			System.out.println("buttonItensListener");
+			final List<Item> itens = getItens();
+			new ItemList(itens).setVisible(true);;
 		}
 	}
 
 	private class buttonChangesListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			new ChangesPanel(user.getChanges()).setVisible(true);
+			new ChangesPanel(user.getChanges());
 		}
 	}
 
@@ -203,5 +208,11 @@ public class ViewUserForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}
+	}
+	
+	private List<Item> getItens() {
+		final List<Item> itens = new ArrayList<Item>();
+		
+		return itens;
 	}
 }

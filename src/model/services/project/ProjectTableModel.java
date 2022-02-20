@@ -16,7 +16,7 @@ public class ProjectTableModel extends AbstractTableModel {
 	private static final int COL_STATUS = 3;
 	private static final int COL_DATE_ENTRY = 4;
 
-	List<Project> projects;
+	private List<Project> projects;
 
 	private String[] columns = new String[] { "Cost Center", "Name", "City", "Status", "Date Entry" };
 

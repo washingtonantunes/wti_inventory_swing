@@ -17,7 +17,7 @@ public class WorkPositionTableModel extends AbstractTableModel {
 	private static final int COL_STATUS = 4;
 	private static final int COL_DATE_ENTRY = 5;
 
-	List<WorkPosition> workPositions;
+	private List<WorkPosition> workPositions;
 
 	private String[] columns = new String[] { "Work Point", "Location", "Floor", "Net Point", "Status", "Date Enty" };
 

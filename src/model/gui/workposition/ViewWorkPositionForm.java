@@ -198,7 +198,7 @@ public class ViewWorkPositionForm extends JDialog {
 	private class buttonChangesListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
-			new ChangesPanel(workPosition.getChanges()).setVisible(true);
+			new ChangesPanel(workPosition.getChanges());
 		}
 	}
 

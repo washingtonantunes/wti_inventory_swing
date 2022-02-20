@@ -350,6 +350,8 @@ public class InventoryList extends JPanel {
 						InventoryService service = new InventoryService();
 						service.delete(inventory);
 						model.removeInventory(modelRow);
+						label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
+						repaint();
 					}
 				}
 			}

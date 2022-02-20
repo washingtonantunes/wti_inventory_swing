@@ -41,6 +41,7 @@ public class ChangesPanel extends JDialog {
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	private JScrollPane createTable() {

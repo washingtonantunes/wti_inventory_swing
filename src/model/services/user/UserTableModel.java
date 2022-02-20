@@ -20,7 +20,7 @@ public class UserTableModel extends AbstractTableModel {
 	private static final int COL_DATE_ENTRY = 7;
 	private static final int COL_PROJECT = 8;
 
-	List<User> users;
+	private List<User> users;
 
 	private String[] columns = new String[] { "Registration", "Name", "CPF", "Phone", "Email", "Department", "Status", "Date Entry", "Project" };
 
