@@ -120,14 +120,13 @@ CREATE TABLE `projects` (
 
 
 CREATE TABLE `inventories` (
-  `idInventory` smallint NOT NULL AUTO_INCREMENT,
-  `dateInventory` date DEFAULT NULL,
+  `id` smallint NOT NULL AUTO_INCREMENT,
   `workPosition` varchar(50) DEFAULT NULL,
   `project` varchar(30) NOT NULL,
   `user` varchar(10) DEFAULT NULL,
   `equipment` varchar(30) NOT NULL,
   `monitor1` varchar(30) DEFAULT NULL,
   `monitor2` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`idInventory`),
+  PRIMARY KEY (`id`),
   KEY `fk_user_idx` (`user`)
-) ENGINE=InnoDB AUTO_INCREMENT=? DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

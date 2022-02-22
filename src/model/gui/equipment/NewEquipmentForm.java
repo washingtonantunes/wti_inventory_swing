@@ -29,6 +29,7 @@ import model.entities.Equipment;
 import model.entities.Option;
 import model.entities.User;
 import model.entities.WorkPosition;
+import model.gui.MainWindow;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
 import model.util.JTextFieldFilter;
@@ -364,13 +365,14 @@ public class NewEquipmentForm extends JDialog {
 				EquipmentService service = new EquipmentService();
 				service.save(equipment);
 				model.addEquipment(equipment);
+				MainWindow.addEquipment(equipment);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Equipment successfully added", "Success saving object",
 						JOptionPane.INFORMATION_MESSAGE);
-			} catch (ValidationException e) {
-				setErrorMessages(e.getErrors());
-			} catch (DBException e) {
-				setErroMessagesDBException(e);
+			} catch (ValidationException ve) {
+				setErrorMessages(ve.getErrors());
+			} catch (DBException db) {
+				setErroMessagesDBException(db);
 			}
 		}
 	}

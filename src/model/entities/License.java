@@ -9,12 +9,17 @@ public class License implements Serializable {
 
 	private String code;
 	private String name;
-	private String type;
 	private Double value;
-	
+
 	private User user;
-	
+
 	public License() {
+	}
+
+	public License(String code, String name, Double value) {
+		this.code = code;
+		this.name = name;
+		this.value = value;
 	}
 
 	public String getCode() {
@@ -31,14 +36,6 @@ public class License implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Double getValue() {
@@ -72,5 +69,10 @@ public class License implements Serializable {
 			return false;
 		License other = (License) obj;
 		return Objects.equals(code, other.code);
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

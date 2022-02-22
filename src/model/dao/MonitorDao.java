@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import model.entities.Monitor;
 
@@ -10,9 +10,11 @@ public interface MonitorDao {
 
 	void update(Monitor obj);
 
-	void updateStatus(Monitor obj);
+	void updateStatusForUser(Monitor obj);
+
+	void updateStatusForWorkPosition(Monitor obj);
 
 	void disable(Monitor obj);
 
-	List<Monitor> findAll();
+	Map<String, Monitor> findAll();
 }

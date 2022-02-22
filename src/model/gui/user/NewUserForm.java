@@ -30,7 +30,6 @@ import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
-import model.gui.MainWindow;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
 import model.util.JTextFieldFilter;
@@ -84,10 +83,12 @@ public class NewUserForm extends JDialog {
 	private UserTableModel model;
 	private User user;
 	private List<Option> options;
+	private List<Project> projects;
 
-	public NewUserForm(UserTableModel model, List<Option> options) {
+	public NewUserForm(UserTableModel model, List<Option> options, List<Project> projects) {
 		this.model = model;
 		this.options = options;
+		this.projects = projects;
 		initComponents();
 	}
 
@@ -189,7 +190,7 @@ public class NewUserForm extends JDialog {
 					HEIGHT_TEXTFIELD_COMBOBOX);
 			panel.add(comboBox_Department);
 
-			comboBox_Project = new JComboBox<>(new Vector<>(MainWindow.getProjectList().stream()
+			comboBox_Project = new JComboBox<>(new Vector<>(projects.stream()
 					.filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList())));
 			comboBox_Project.setSelectedIndex(-1);
 			comboBox_Project.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,

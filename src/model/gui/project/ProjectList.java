@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -52,7 +54,7 @@ public class ProjectList extends JPanel {
 	private TableRowSorter<ProjectTableModel> sorter;
 
 	public ProjectList() {
-		this.projects = MainWindow.getProjectList();
+		this.projects = loadDataProjects();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -171,6 +173,18 @@ public class ProjectList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
+	}
+	
+	private List<Project> loadDataProjects() {
+		Map<String, Project> projects = MainWindow.getProjects();
+		List<Project> list = new ArrayList<Project>();
+
+		for (String entry : projects.keySet()) {
+			list.add(projects.get(entry));
+		}
+
+		list.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
+		return list;
 	}
 
 	private List<Option> loadDataOptions() {

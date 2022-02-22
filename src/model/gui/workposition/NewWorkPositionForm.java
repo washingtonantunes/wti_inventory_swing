@@ -26,6 +26,7 @@ import model.entities.Equipment;
 import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.WorkPosition;
+import model.gui.MainWindow;
 import model.services.workposition.WorkPositionService;
 import model.services.workposition.WorkPositionTableModel;
 import model.util.JTextFieldFilter;
@@ -192,6 +193,7 @@ public class NewWorkPositionForm extends JDialog {
 				WorkPositionService service = new WorkPositionService();
 				service.save(workPosition);
 				model.addWorkPosition(workPosition);
+				MainWindow.addWorkPosition(workPosition);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Work Position successfully added", "Success saving object",
 						JOptionPane.INFORMATION_MESSAGE);

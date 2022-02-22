@@ -32,6 +32,10 @@ public class Monitor extends Beans implements Serializable, Cloneable {
 	public Monitor() {
 	}
 
+	public Monitor(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+	
 	public String getSerialNumber() {
 		return serialNumber;
 	}

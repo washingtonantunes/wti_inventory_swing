@@ -35,6 +35,10 @@ public class Equipment implements Serializable, Cloneable {
 	
 	public Equipment() {
 	}
+	
+	public Equipment(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
 
 	public String getSerialNumber() {
 		return serialNumber;

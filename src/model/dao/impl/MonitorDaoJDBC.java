@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import db.DB;
@@ -100,16 +101,42 @@ public class MonitorDaoJDBC implements MonitorDao {
 	}
 
 	@Override
-	public void updateStatus(Monitor obj) {
+	public void updateStatusForUser(Monitor obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `monitors` "
 					+ "SET `status` = ? "
+					+ "`user` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getSerialNumber());
+			st.setString(2, obj.getUser().getRegistration());
+			st.setString(3, obj.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void updateStatusForWorkPosition(Monitor obj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `monitors` " 
+					+ "SET `status` = ? " 
+					+ "`workPosition` = ? " 
+					+ "WHERE `serialNumber` = ?");
+
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getWorkPosition().getWorkPoint());
+			st.setString(3, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -144,7 +171,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 	}
 
 	@Override
-	public List<Monitor> findAll() {
+	public Map<String, Monitor> findAll() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -152,7 +179,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 
 			rs = st.executeQuery();
 
-			List<Monitor> monitors = new ArrayList<Monitor>();
+			Map<String, Monitor> monitors = new HashMap<String, Monitor>();
 
 			while (rs.next()) {
 				Monitor monitor = new Monitor();
@@ -171,7 +198,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 				monitor.setUser(instatiateUser(rs));
 				monitor.setWorkPosition(instatiateWorkPosition(rs));
 				monitor.setChanges(instatiateChanges(monitor.getSerialNumber()));
-				monitors.add(monitor);
+				monitors.put(monitor.getSerialNumber(), monitor);
 			}
 			return monitors;
 		} 

@@ -26,6 +26,7 @@ import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.User;
 import model.entities.WorkPosition;
+import model.gui.MainWindow;
 import model.services.monitor.MonitorService;
 import model.services.monitor.MonitorTableModel;
 import model.util.JTextFieldFilter;
@@ -259,6 +260,7 @@ public class NewMonitorForm extends JDialog {
 				MonitorService service = new MonitorService();
 				service.save(monitor);
 				model.addMonitor(monitor);
+				MainWindow.addMonitor(monitor);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Monitor successfully added", "Success saving object",
 						JOptionPane.INFORMATION_MESSAGE);

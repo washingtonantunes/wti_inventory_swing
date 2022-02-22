@@ -13,6 +13,8 @@ import db.DB;
 import db.DBException;
 import model.dao.UserDao;
 import model.entities.Change;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Project;
 import model.entities.User;
 import model.gui.MainWindow;
@@ -138,9 +140,9 @@ public class UserDaoJDBC implements UserDao {
 				user.setStatus(rs.getString("status"));
 				user.setDateEntry(rs.getDate("dateEntry"));
 				user.setProject(instatiateProject(rs));
-				user.setEquipment(null);
-				user.setMonitor1(null);
-				user.setMonitor2(null);
+				user.setEquipment(instatiateEquipment(rs));
+				user.setMonitor1(instatiateMonitor1(rs));
+				user.setMonitor2(instatiateMonitor2(rs));
 				user.setChanges(instatiateChanges(user.getRegistration()));
 				users.put(user.getRegistration(), user);
 			}
@@ -158,6 +160,21 @@ public class UserDaoJDBC implements UserDao {
 	private Project instatiateProject(ResultSet rs) throws SQLException {
 		Project project = MainWindow.getProject(rs.getString("project"));
 		return project;
+	}
+	
+	private Equipment instatiateEquipment(ResultSet rs) throws SQLException {
+		Equipment equipment = new Equipment(rs.getString("equipment"));
+		return equipment;
+	}
+	
+	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
+		Monitor monitor = new Monitor(rs.getString("monitor1"));
+		return monitor;
+	}
+	
+	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
+		Monitor monitor = new Monitor(rs.getString("monitor1"));
+		return monitor;
 	}
 	
 	private List<Change> instatiateChanges(String registration) {

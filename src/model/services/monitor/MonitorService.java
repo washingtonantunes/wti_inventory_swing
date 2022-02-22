@@ -3,7 +3,7 @@ package model.services.monitor;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
@@ -20,7 +20,7 @@ public class MonitorService {
 	private MonitorDao monitorDao = DaoFactory.createMonitorDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<Monitor> findAll() {
+	public Map<String, Monitor> findAll() {
 		return monitorDao.findAll();
 	}
 
@@ -31,7 +31,7 @@ public class MonitorService {
 
 			monitorDao.insert(obj);
 
-			Change change = getChange(obj, obj, 0);
+			Change change = getChange(obj, obj, 1);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -53,7 +53,7 @@ public class MonitorService {
 
 			monitorDao.update(objNew);
 
-			Change change = getChange(objOld, objNew, 1);
+			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
 
@@ -67,6 +67,30 @@ public class MonitorService {
 			}
 		}
 	}
+	
+	public void updateStatusForUser(Monitor obj) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			monitorDao.updateStatusForUser(obj);
+			
+			Change change = getChange(obj, obj, 3);
+			changeDao.insert(change);
+			obj.addChange(change);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
 
 	public void disable(Monitor obj) {
 		Connection conn = DB.getConnection();
@@ -75,7 +99,7 @@ public class MonitorService {
 
 			monitorDao.disable(obj);
 
-			Change change = getChange(obj, obj, 3);
+			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -102,13 +126,13 @@ public class MonitorService {
 
 	private String getTypeChange(int type) {
 		String typeChange = "";
-		if (type == 0) {
+		if (type == 1) {
 			typeChange = "Monitor Input";
-		} else if (type == 1) {
-			typeChange = "Monitor Update";
 		} else if (type == 2) {
-			typeChange = "Monitor Update Status";
+			typeChange = "Monitor Update";
 		} else if (type == 3) {
+			typeChange = "Monitor Update Status";
+		} else if (type == 4) {
 			typeChange = "Monitor Deactivation";
 		}
 		return typeChange;
@@ -116,13 +140,13 @@ public class MonitorService {
 
 	private String getChanges(Monitor objOld, Monitor objNew, int type) {
 		String changes = "";
-		if (type == 0) {
+		if (type == 1) {
 			changes = "New Monitor Added";
-		} else if (type == 1) {
-			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 2) {
-
+			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 3) {
+			changes = "Monitor entregue ao usuário: " + objNew.getUser().getName();
+		} else if (type == 4) {
 			changes = "Monitor Disabled for: " + objOld.getReason();
 		}
 		return changes;

@@ -26,10 +26,9 @@ import javax.swing.text.MaskFormatter;
 import db.DBException;
 import exception.ObjectException;
 import exception.ValidationException;
-import model.entities.User;
-import model.gui.MainWindow;
 import model.entities.Option;
 import model.entities.Project;
+import model.entities.User;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
 import model.util.JTextFieldFilter;
@@ -84,12 +83,14 @@ public class EditUserForm extends JDialog {
 	private UserTableModel model;
 	private User userOld;
 	private List<Option> options;
+	private List<Project> projects;
 	private int lineSelected;
 
-	public EditUserForm(UserTableModel model, User userOld, List<Option> options, int lineSelected) {
+	public EditUserForm(UserTableModel model, User userOld, List<Option> options, List<Project> projects, int lineSelected) {
 		this.model = model;
 		this.userOld = userOld;
 		this.options = options;
+		this.projects = projects;
 		this.lineSelected = lineSelected;
 		initComponents();
 	}
@@ -209,7 +210,7 @@ public class EditUserForm extends JDialog {
 					HEIGHT_TEXTFIELD_COMBOBOX);
 			panel.add(comboBox_Department);
 
-			comboBox_Project = new JComboBox<>(new Vector<>(MainWindow.getProjectList().stream()
+			comboBox_Project = new JComboBox<>(new Vector<>(projects.stream()
 					.filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList())));
 			comboBox_Project.setSelectedItem(userOld.getProject());
 			comboBox_Project.setForeground(COLOR2);

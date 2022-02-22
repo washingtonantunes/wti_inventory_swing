@@ -30,7 +30,6 @@ import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.workposition.CreateExlFileWorkPosition;
 import model.services.workposition.TableWorkPosition;
-import model.services.workposition.WorkPositionService;
 import model.services.workposition.WorkPositionTableModel;
 
 public class WorkPositionList extends JPanel {
@@ -177,8 +176,7 @@ public class WorkPositionList extends JPanel {
 	}
 
 	private List<WorkPosition> loadDataWorkPositions() {
-		final WorkPositionService service = new WorkPositionService();
-		Map<String, WorkPosition> workPositions = service.findAll();
+		Map<String, WorkPosition> workPositions = MainWindow.getWorkPositions();
 		List<WorkPosition> list = new ArrayList<WorkPosition>();
 
 		for (String entry : workPositions.keySet()) {

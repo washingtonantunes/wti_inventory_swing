@@ -3,7 +3,7 @@ package model.services.equipment;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
@@ -20,7 +20,7 @@ public class EquipmentService {
 	private EquipmentDao equipmentDao = DaoFactory.createEquipmentDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
 
-	public List<Equipment> findAll() {
+	public Map<String, Equipment> findAll() {
 		return equipmentDao.findAll();
 	}
 
@@ -31,7 +31,7 @@ public class EquipmentService {
 
 			equipmentDao.insert(obj);
 			
-			Change change = getChange(obj, obj, 0);
+			Change change = getChange(obj, obj, 1);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -55,7 +55,7 @@ public class EquipmentService {
 
 			equipmentDao.update(objNew);
 			
-			Change change = getChange(objOld, objNew, 1);
+			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
 
@@ -72,14 +72,14 @@ public class EquipmentService {
 		}
 	}
 	
-	public void updateStatus(Equipment obj) {
+	public void updateStatusForUser(Equipment obj) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.updateStatus(obj);
+			equipmentDao.updateStatusForUser(obj);
 			
-			Change change = getChange(obj, obj, 2);
+			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -103,7 +103,7 @@ public class EquipmentService {
 
 			equipmentDao.disable(obj);
 			
-			Change change = getChange(obj, obj, 3);
+			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -132,16 +132,16 @@ public class EquipmentService {
 
 	private String getTypeChange(int type) {
 		String typeChange = "";
-		if (type == 0) {
+		if (type == 1) {
 			typeChange = "Equipment Input";
 		} 
-		else if (type == 1) {
+		else if (type == 2) {
 			typeChange = "Equipment Update";
 		} 
-		else if (type == 2) {
+		else if (type == 3) {
 			typeChange = "Equipment Update Status";
 		} 
-		else if (type == 3) {
+		else if (type == 4) {
 			typeChange = "Equipment Deactivation";
 		}
 		return typeChange;
@@ -149,16 +149,16 @@ public class EquipmentService {
 
 	private String getChanges(Equipment objOld, Equipment objNew, int type) {
 		String changes = "";
-		if (type == 0) {
+		if (type == 1) {
 			changes = "New Equipment Added";
 		} 
-		else if (type == 1) {
+		else if (type == 2) {
 			changes = getFieldsUpdated(objOld, objNew);
 		} 
-		else if (type == 2) {
-			changes = "";
-		} 
 		else if (type == 3) {
+			changes = "Equipamento entregue ao usuário: " + objNew.getUser().getName();
+		} 
+		else if (type == 4) {
 			changes = "Equipment Disabled for: " + objOld.getReason();
 		}
 		return changes;

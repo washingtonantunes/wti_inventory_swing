@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +15,14 @@ import javax.swing.JPanel;
 
 import model.entities.Change;
 import model.entities.Collaborator;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Project;
 import model.entities.User;
 import model.entities.WorkPosition;
 import model.services.change.ChangeService;
+import model.services.equipment.EquipmentService;
+import model.services.monitor.MonitorService;
 import model.services.project.ProjectService;
 import model.services.user.UserService;
 import model.services.workposition.WorkPositionService;
@@ -42,12 +45,16 @@ public class MainWindow extends JFrame {
 	private static Map<String, Project> projects;
 	private static Map<String, User> users;
 	private static Map<String, WorkPosition> workPositions;
+	private static Map<String, Equipment> equipments;
+	private static Map<String, Monitor> monitors;
 
 	public MainWindow() {
 		changes = loadDataChanges();
 		projects = loadDataProjects();
 		users = loadDataUsers();
 		workPositions = loadDataWorkPositions();
+		equipments = loadDataEquipments();
+		monitors = loadDataMonitors();
 		initComponents();
 	}
 
@@ -101,17 +108,18 @@ public class MainWindow extends JFrame {
 	public JDesktopPane getMain() {
 		return main;
 	}
-	
+
 	public static void addProject(Change change) {
-		changes.add(change);		
+		changes.add(change);
 	}
 
 	public static List<Change> getChanges() {
 		return changes;
 	}
-	
+
+	// User
 	public static void addUser(User User) {
-		users.put(User.getRegistration(), User);		
+		users.put(User.getRegistration(), User);
 	}
 
 	public static Map<String, User> getUsers() {
@@ -127,12 +135,33 @@ public class MainWindow extends JFrame {
 		else {
 			user = new User();
 		}
-
 		return user;
 	}
-	
+
+	// Project
+	public static void addProject(Project project) {
+		projects.put(project.getCostCenter(), project);
+	}
+
+	public static Map<String, Project> getProjects() {
+		return projects;
+	}
+
+	public static Project getProject(String costCenter) {
+		Project project;
+
+		if (projects.containsKey(costCenter)) {
+			project = projects.get(costCenter);
+		} 
+		else {
+			project = new Project();
+		}
+		return project;
+	}
+
+	// Work Position
 	public static void addWorkPosition(WorkPosition workPosition) {
-		workPositions.put(workPosition.getWorkPoint(), workPosition);		
+		workPositions.put(workPosition.getWorkPoint(), workPosition);
 	}
 
 	public static Map<String, WorkPosition> getWorkPositions() {
@@ -142,44 +171,54 @@ public class MainWindow extends JFrame {
 	public static WorkPosition getWorkPosition(String workPoint) {
 		WorkPosition workPosition;
 
-		if (users.containsKey(workPoint)) {
+		if (workPositions.containsKey(workPoint)) {
 			workPosition = workPositions.get(workPoint);
 		} 
 		else {
 			workPosition = new WorkPosition();
 		}
-
 		return workPosition;
 	}
+
+	// Equipment
+	public static void addEquipment(Equipment equipment) {
+		equipments.put(equipment.getSerialNumber(), equipment);
+	}
+
+	public static Map<String, Equipment> getEquipments() {
+		return equipments;
+	}
+
+	public static Equipment getEquipment(String equipment) {
+		Equipment Equipment;
+
+		if (equipments.containsKey(equipment)) {
+			Equipment = equipments.get(equipment);
+		} 
+		else {
+			Equipment = new Equipment();
+		}
+		return Equipment;
+	}
 	
-	public static void addProject(Project project) {
-		projects.put(project.getCostCenter(), project);		
+	// Monitor
+	public static void addMonitor(Monitor monitor) {
+		monitors.put(monitor.getSerialNumber(), monitor);
 	}
 
-	public static Map<String, Project> getProjects() {
-		return projects;
+	public static Map<String, Monitor> getMonitors() {
+		return monitors;
 	}
 
-	public static List<Project> getProjectList() {
+	public static Monitor getMonitor(String monitor) {
+		Monitor Monitor;
 
-		List<Project> list = new ArrayList<Project>();
-
-		for (String entry : projects.keySet()) {
-			list.add(projects.get(entry));
-		}
-		return list;
-	}
-
-	public static Project getProject(String costCenter) {
-		Project project;
-
-		if (projects.containsKey(costCenter)) {
-			project = projects.get(costCenter);
+		if (monitors.containsKey(monitor)) {
+			Monitor = monitors.get(monitor);
 		} else {
-			project = new Project();
+			Monitor = new Monitor();
 		}
-
-		return project;
+		return Monitor;
 	}
 
 	private List<Change> loadDataChanges() {
@@ -203,6 +242,18 @@ public class MainWindow extends JFrame {
 	private Map<String, Project> loadDataProjects() {
 		final ProjectService service = new ProjectService();
 		Map<String, Project> list = service.findAll();
+		return list;
+	}
+	
+	private Map<String, Equipment> loadDataEquipments() {
+		final EquipmentService service = new EquipmentService();
+		Map<String, Equipment> list = service.findAll();
+		return list;
+	}
+	
+	private Map<String, Monitor> loadDataMonitors() {
+		final MonitorService service = new MonitorService();
+		Map<String, Monitor> list = service.findAll();
 		return list;
 	}
 }

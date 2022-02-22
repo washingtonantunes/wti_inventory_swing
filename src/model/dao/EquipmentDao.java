@@ -1,6 +1,6 @@
 package model.dao;
 
-import java.util.List;
+import java.util.Map;
 
 import model.entities.Equipment;
 
@@ -10,9 +10,11 @@ public interface EquipmentDao {
 
 	void update(Equipment obj);
 
-	void updateStatus(Equipment obj);
+	void updateStatusForUser(Equipment obj);
+	
+	void updateStatusForWorkPosition(Equipment obj);
 
 	void disable(Equipment obj);
 
-	List<Equipment> findAll();
+	Map<String, Equipment> findAll();
 }

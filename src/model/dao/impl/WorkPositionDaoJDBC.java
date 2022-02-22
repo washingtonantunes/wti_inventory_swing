@@ -164,17 +164,17 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 	}
 	
 	private Equipment instatiateEquipment(ResultSet rs) throws SQLException {
-		Equipment equipment = new Equipment();
+		Equipment equipment = new Equipment(rs.getString("equipment"));
 		return equipment;
 	}
 	
 	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
-		Monitor monitor = new Monitor();
+		Monitor monitor = new Monitor(rs.getString("monitor1"));
 		return monitor;
 	}
 	
 	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
-		Monitor monitor = new Monitor();
+		Monitor monitor = new Monitor(rs.getString("monitor1"));
 		return monitor;
 	}
 	

@@ -14,8 +14,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.entities.Equipment;
 import model.entities.Item;
+import model.entities.Monitor;
 import model.entities.User;
+import model.gui.MainWindow;
 import model.gui.change.ChangesPanel;
 import model.gui.item.ItemList;
 
@@ -49,6 +52,7 @@ public class ViewUserForm extends JDialog {
 
 	public ViewUserForm(User user) {
 		this.user = user;
+		initObjects();
 		initComponents();
 	}
 
@@ -173,17 +177,17 @@ public class ViewUserForm extends JDialog {
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonItens = new JButton("Itens");
-		buttonItens.setBounds(15, 330, 100, 25);
+		buttonItens.setBounds(25, 330, 110, 25);
 		buttonItens.addActionListener(new buttonItensListener());
 		panel.add(buttonItens);
 
 		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(130, 330, 90, 25);
+		buttonChanges.setBounds(155, 330, 110, 25);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(235, 330, 120, 25);
+		buttonClose.setBounds(285, 330, 110, 25);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
@@ -192,7 +196,7 @@ public class ViewUserForm extends JDialog {
 
 		public void actionPerformed(ActionEvent event) {
 			final List<Item> itens = getItens();
-			new ItemList(itens).setVisible(true);;
+			new ItemList(itens, user).setVisible(true);;
 		}
 	}
 
@@ -210,8 +214,39 @@ public class ViewUserForm extends JDialog {
 		}
 	}
 	
+	private void initObjects() {
+		if (user.getEquipment().getSerialNumber() != null) {
+			Equipment equipment = MainWindow.getEquipment(user.getEquipment().getSerialNumber());
+			user.setEquipment(equipment);
+		}
+		if (user.getMonitor1().getSerialNumber() != null) {
+			Monitor monitor = MainWindow.getMonitor(user.getMonitor1().getSerialNumber());
+			user.setMonitor1(monitor);
+		}
+		if (user.getMonitor2().getSerialNumber() != null) {
+			Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
+			user.setMonitor2(monitor);
+		}
+
+	}
+	
 	private List<Item> getItens() {
 		final List<Item> itens = new ArrayList<Item>();
+		
+		int index = 0;
+		
+		if (user.getEquipment().getSerialNumber() != null) {
+			Equipment equipment = user.getEquipment();
+			itens.add(new Item(++index, "Equipment",equipment.getSerialNumber(), equipment.getValue()));
+		}
+		if (user.getMonitor1().getSerialNumber() != null) {
+			Monitor monitor = user.getMonitor1();
+			itens.add(new Item(++index, "Monitor",monitor.getSerialNumber(), monitor.getValue()));			
+		}
+		if (user.getMonitor2().getSerialNumber() != null) {
+			Monitor monitor = user.getMonitor1();
+			itens.add(new Item(++index, "Monitor",monitor.getSerialNumber(), monitor.getValue()));			
+		}
 		
 		return itens;
 	}

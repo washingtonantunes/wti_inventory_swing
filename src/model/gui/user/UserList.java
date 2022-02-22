@@ -24,13 +24,15 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Option;
+import model.entities.Project;
 import model.entities.User;
 import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.user.CreateExlFileUser;
 import model.services.user.TableUser;
-import model.services.user.UserService;
 import model.services.user.UserTableModel;
 
 public class UserList extends JPanel {
@@ -48,6 +50,7 @@ public class UserList extends JPanel {
 
 	private List<User> users;
 	private List<Option> options;
+	private List<Project> projects;
 
 	private JLabel label_Show_Quantity;
 
@@ -57,6 +60,8 @@ public class UserList extends JPanel {
 	public UserList() {
 		this.users = loadDataUsers();
 		this.options = loadDataOptions();
+		this.projects = loadDataProjects();
+		initObjects();
 		initComponents();
 	}
 
@@ -177,8 +182,7 @@ public class UserList extends JPanel {
 	}
 
 	private List<User> loadDataUsers() {
-		final UserService service = new UserService();
-		Map<String, User> users = service.findAll();
+		Map<String, User> users = MainWindow.getUsers();
 		List<User> list = new ArrayList<User>();
 		
 		for (String entry : users.keySet()) {
@@ -195,6 +199,18 @@ public class UserList extends JPanel {
 		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
 		return list;
 	}
+	
+	private List<Project> loadDataProjects() {
+		Map<String, Project> projects = MainWindow.getProjects();
+		List<Project> list = new ArrayList<Project>();
+
+		for (String entry : projects.keySet()) {
+			list.add(projects.get(entry));
+		}
+
+		list.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
+		return list;
+	}
 
 	private class buttonNewListener implements ActionListener {
 
@@ -204,7 +220,7 @@ public class UserList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewUserForm(model, options).setVisible(true);
+				new NewUserForm(model, options, projects).setVisible(true);
 				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
@@ -230,7 +246,7 @@ public class UserList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This user is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditUserForm(model, user, options, modelRow).setVisible(true);
+						new EditUserForm(model, user, options, projects, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -340,6 +356,23 @@ public class UserList extends JPanel {
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				User user = model.getUser(modelRow);
 				new ViewUserForm(user).setVisible(true);
+			}
+		}
+	}
+	
+	private void initObjects() {
+		for (User user : users) {
+			if (user.getEquipment().getSerialNumber() != null) {
+				Equipment equipment = MainWindow.getEquipment(user.getEquipment().getSerialNumber());
+				user.setEquipment(equipment);
+			}
+			if (user.getMonitor1().getSerialNumber()!= null) {
+				Monitor monitor = MainWindow.getMonitor(user.getMonitor1().getSerialNumber());
+				user.setMonitor1(monitor);
+			}
+			if (user.getMonitor2().getSerialNumber()!= null) {
+				Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
+				user.setMonitor2(monitor);
 			}
 		}
 	}

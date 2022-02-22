@@ -669,6 +669,7 @@ public class NewInventoryForm extends JDialog {
 	
 	private class buttonSaveListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
 				inventory = getFormData();
@@ -689,6 +690,7 @@ public class NewInventoryForm extends JDialog {
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}

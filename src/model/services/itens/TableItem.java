@@ -18,10 +18,15 @@ public class TableItem extends JTable {
 
 	public TableItem(ItemTableModel model) {
 		super(model);
-		initComponents();
+		initComponents1();
 	}
-
-	private void initComponents() {
+	
+	public TableItem(DeliveryTableModel model) {
+		super(model);
+		initComponents2();
+	}
+	
+	private void initComponents1() {
 		setFillsViewportHeight(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setRowHeight(30);
@@ -29,6 +34,15 @@ public class TableItem extends JTable {
 		configureHeader();
 		configureSizeColumn();
 		configureColumnValue();
+	}
+
+	private void initComponents2() {
+		setFillsViewportHeight(true);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setRowHeight(30);
+		setFont(new java.awt.Font(null, Font.BOLD, 20));
+		configureHeader();
+		configureSizeColumn();
 	}
 
 	private void configureHeader() {

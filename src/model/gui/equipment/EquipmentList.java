@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -28,7 +29,6 @@ import model.entities.Option;
 import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.equipment.CreateExlFileEquipment;
-import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
 import model.services.equipment.TableEquipment;
 
@@ -176,9 +176,14 @@ public class EquipmentList extends JPanel {
 	}
 
 	private List<Equipment> loadDataEquipments() {
-		final EquipmentService service = new EquipmentService();
-		List<Equipment> list = service.findAll();
-		list.sort((e1, e2) -> e1.getSerialNumber().compareTo(e2.getSerialNumber()));
+		Map<String, Equipment> equipments = MainWindow.getEquipments();
+		List<Equipment> list = new ArrayList<Equipment>();
+
+		for (String entry : equipments.keySet()) {
+			list.add(equipments.get(entry));
+		}
+
+		list.sort((e1, p2) -> e1.getSerialNumber().compareTo(p2.getSerialNumber()));
 		return list;
 	}
 

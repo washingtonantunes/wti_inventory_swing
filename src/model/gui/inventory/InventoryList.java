@@ -78,8 +78,8 @@ public class InventoryList extends JPanel {
 		workPositions = loadDataWorkPositions();
 		projects = loadDataProjects();
 		users = loadDataUsers();
-		equipments = loadDataEquipments();
-		monitors = loadDataMonitors();
+		//equipments = loadDataEquipments();
+		//monitors = loadDataMonitors();
 		initComponents();
 	}
 
@@ -259,21 +259,21 @@ public class InventoryList extends JPanel {
 		return list;
 	}
 	
-	private List<Equipment> loadDataEquipments() {
-		final EquipmentService service = new EquipmentService();
-		List<Equipment> list = service.findAll();
-		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
-		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
-		return list;
-	}
+//	private List<Equipment> loadDataEquipments() {
+//		final EquipmentService service = new EquipmentService();
+//		List<Equipment> list = service.findAll();
+//		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
+//		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
+//		return list;
+//	}
 	
-	private List<Monitor> loadDataMonitors() {
-		final MonitorService service = new MonitorService();
-		List<Monitor> list = service.findAll();
-		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
-		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
-		return list;
-	}
+//	private List<Monitor> loadDataMonitors() {
+//		final MonitorService service = new MonitorService();
+//		List<Monitor> list = service.findAll();
+//		list = list.stream().filter(e -> e.getStatus().equals("STAND BY")).collect(Collectors.toList());
+//		list.sort((w1, w2) -> w1.getSerialNumber().compareTo(w2.getSerialNumber()));
+//		return list;
+//	}
 	
 	private class buttonNewListener implements ActionListener {
 

@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import model.entities.Item;
+import model.entities.User;
 import model.gui.MainWindow;
 import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
@@ -35,14 +36,17 @@ public class ItemList extends JDialog {
 	private JScrollPane scrollPane;
 	private TableItem table;
 	private ItemTableModel model;
+	
+	private User user;
 
 	private List<Item> itens;
 
 	private JLabel label_Show_Quantity;
 	private JLabel label_Show_CostTotal;
 
-	public ItemList(List<Item> itens) {
+	public ItemList(List<Item> itens, User user) {
 		this.itens = itens;
+		this.user = user;
 		initComponents();
 	}
 
@@ -77,15 +81,20 @@ public class ItemList extends JDialog {
 		panel.setPreferredSize(new Dimension(460, 55));
 		panel.setBackground(COLOR1);
 
-		JButton buttonNew = new JButton("New");
-		buttonNew.setPreferredSize(DIMENSIONBUTTON);
-		buttonNew.addActionListener(new buttonNewListener());
-		panel.add(buttonNew);
+		JButton buttonDelivery = new JButton("Delivery");
+		buttonDelivery.setPreferredSize(DIMENSIONBUTTON);
+		buttonDelivery.addActionListener(new buttonDeliveryListener());
+		panel.add(buttonDelivery);
+		
+		JButton buttonExchange = new JButton("Exchange");
+		buttonExchange.setPreferredSize(DIMENSIONBUTTON);
+		buttonExchange.addActionListener(new buttonExchangeListener());
+		panel.add(buttonExchange);
 
-		JButton buttonRemove = new JButton("Remove");
-		buttonRemove.setPreferredSize(DIMENSIONBUTTON);
-		buttonRemove.addActionListener(new buttonRemoveListener());
-		panel.add(buttonRemove);
+		JButton buttonDevolution = new JButton("Devolution");
+		buttonDevolution.setPreferredSize(DIMENSIONBUTTON);
+		buttonDevolution.addActionListener(new buttonDevolutionListener());
+		panel.add(buttonDevolution);
 
 		JButton buttonReport = new JButton("Report");
 		buttonReport.setPreferredSize(DIMENSIONBUTTON);
@@ -157,7 +166,7 @@ public class ItemList extends JDialog {
 		return costTotal;
 	}
 	
-	private class buttonNewListener implements ActionListener {
+	private class buttonDeliveryListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -165,15 +174,38 @@ public class ItemList extends JDialog {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				System.out.println("buttonNewListener");
+				AddItemForm addItemForm = new AddItemForm(model, user);
+				updateItens(addItemForm.getItens());
 				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
-				label_Show_CostTotal.setText(String.format("R$ %.1f", getCostTotal()));
+				label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 				repaint();
 			}
 		}
 	}
+
+	private class buttonExchangeListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (MainWindow.collaborator.getPrivilege() == 2) {
+				JOptionPane.showMessageDialog(null, "You do not have access to this function", "Access denied",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				if (lineSelected < 0) {
+					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
+					label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
+					repaint();
+				}
+			}
+		}
+	}
 	
-	private class buttonRemoveListener implements ActionListener {
+	private class buttonDevolutionListener implements ActionListener {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -183,16 +215,16 @@ public class ItemList extends JDialog {
 			else {
 				int lineSelected = -1;
 				lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
 				if (lineSelected < 0) {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				else {
 					int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove");
 					if (i == JOptionPane.OK_OPTION) {
-						System.out.println("buttonRemoveListener");
+						Item item = model.getItem(lineSelected);
+						System.out.println(item);
 						label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
-						label_Show_CostTotal.setText(String.format("R$ %.1f", getCostTotal()));
+						label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 						repaint();
 					}
 				}
@@ -235,9 +267,15 @@ public class ItemList extends JDialog {
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 2) {
 				int lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
-				System.out.println("MouseListener");
+				System.out.println(lineSelected);
 			}
+		}
+	}
+	
+	private void updateItens(List<Item> itens) {
+		
+		for (Item item : itens) {
+			model.addItem(item);
 		}
 	}
 }

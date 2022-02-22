@@ -124,7 +124,7 @@ public class InventoryDaoJDBC implements InventoryDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("CALL `wti_inventory_1.2`.`list_inventories`()");
+			st = conn.prepareStatement("SELECT * FROM `inventories`");
 
 			rs = st.executeQuery();
 			

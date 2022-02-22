@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import db.DB;
@@ -122,20 +123,42 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 	}
 
 	@Override
-	public void updateStatus(Equipment obj) {
+	public void updateStatusForUser(Equipment obj) {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
 					+ "SET `status` = ? "
-					+ "`user` = ?, "
+					+ "`user` = ? "
+					+ "WHERE `serialNumber` = ?");
+
+			st.setString(1, obj.getStatus());
+			st.setString(2, obj.getUser().getRegistration());
+			st.setString(3, obj.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void updateStatusForWorkPosition(Equipment obj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `equipments` "
+					+ "SET `status` = ? "
 					+ "`workPosition` = ? "
 					+ "WHERE `serialNumber` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getUser().getName());
-			st.setString(3, obj.getWorkPosition().getWorkPoint());
-			st.setString(4, obj.getSerialNumber());
+			st.setString(2, obj.getWorkPosition().getWorkPoint());
+			st.setString(3, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -170,7 +193,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 	}
 	
 	@Override
-	public List<Equipment> findAll() {
+	public Map<String, Equipment> findAll() {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -178,7 +201,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 
 			rs = st.executeQuery();
 
-			List<Equipment> equipments = new ArrayList<Equipment>();
+			Map<String, Equipment> equipments = new HashMap<String, Equipment>();
 
 			while (rs.next()) {
 				Equipment equipment = new Equipment();
@@ -202,7 +225,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 				equipment.setUser(instatiateUser(rs));
 				equipment.setWorkPosition(instatiateWorkPosition(rs));
 				equipment.setChanges(instatiateChanges(equipment.getSerialNumber()));
-				equipments.add(equipment);
+				equipments.put(equipment.getSerialNumber(), equipment);
 			}
 			return equipments;
 		} 

@@ -3,12 +3,17 @@ package model.entities;
 import java.util.Objects;
 
 public class Peripheral {
-	
+
 	private String name;
-	private String type;
 	private Double value;
 
 	public Peripheral() {
+	}
+
+	public Peripheral(String name, Double value) {
+		super();
+		this.name = name;
+		this.value = value;
 	}
 
 	public String getName() {
@@ -17,14 +22,6 @@ public class Peripheral {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Double getValue() {
@@ -37,7 +34,7 @@ public class Peripheral {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, type);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -49,6 +46,14 @@ public class Peripheral {
 		if (getClass() != obj.getClass())
 			return false;
 		Peripheral other = (Peripheral) obj;
-		return Objects.equals(name, other.name) && Objects.equals(type, other.type);
+		return Objects.equals(name, other.name);
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }
+
+	
