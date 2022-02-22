@@ -28,7 +28,7 @@ public class ItemList extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension DIMENSIONBUTTON = new Dimension(90, 30);
+	private final Dimension DIMENSIONBUTTON = new Dimension(100, 30);
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
@@ -59,7 +59,7 @@ public class ItemList extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Itens");
-		setPreferredSize(new Dimension(600, 500));
+		setPreferredSize(new Dimension(700, 500));
 		setResizable(false);
 
 		pack();
@@ -68,7 +68,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setPreferredSize(new Dimension(600, 55));
+		panel.setPreferredSize(new Dimension(700, 55));
 
 		panel.add(createPanelButtonWest());
 		panel.add(createPanelButtonEast());
@@ -78,7 +78,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonWest() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-		panel.setPreferredSize(new Dimension(460, 55));
+		panel.setPreferredSize(new Dimension(530, 55));
 		panel.setBackground(COLOR1);
 
 		JButton buttonDelivery = new JButton("Delivery");
@@ -106,7 +106,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonEast() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
-		panel.setPreferredSize(new Dimension(120, 55));
+		panel.setPreferredSize(new Dimension(150, 55));
 		panel.setBackground(COLOR1);
 
 		JLabel label_Quantity = new JLabel("Quantity:");
@@ -137,19 +137,19 @@ public class ItemList extends JDialog {
 	private JPanel createPanelSouth() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(450, 50));
+		panel.setPreferredSize(new Dimension(700, 50));
 		panel.setBackground(COLOR2);
 
-		JLabel label_Quantity = new JLabel("Cost Total:");
-		label_Quantity.setPreferredSize(new Dimension(80, 35));
-		label_Quantity.setBounds(310, 15, 110, 25);
-		label_Quantity.setFont(new java.awt.Font(null, Font.BOLD, 20));
-		label_Quantity.setForeground(Color.WHITE);
-		panel.add(label_Quantity);
+		JLabel label_CostTotal = new JLabel("Cost Total:");
+		label_CostTotal.setPreferredSize(new Dimension(80, 35));
+		label_CostTotal.setBounds(390, 15, 110, 25);
+		label_CostTotal.setFont(new java.awt.Font(null, Font.BOLD, 20));
+		label_CostTotal.setForeground(Color.WHITE);
+		panel.add(label_CostTotal);
 
 		label_Show_CostTotal = new JLabel(String.format("R$ %.2f", getCostTotal()));
 		label_Show_CostTotal.setPreferredSize(new Dimension(30, 35));
-		label_Show_CostTotal.setBounds(460, 15, 110, 25);
+		label_Show_CostTotal.setBounds(540, 15, 110, 25);
 		label_Show_CostTotal.setFont(new java.awt.Font(null, Font.BOLD, 20));
 		label_Show_CostTotal.setForeground(Color.WHITE);
 		panel.add(label_Show_CostTotal);

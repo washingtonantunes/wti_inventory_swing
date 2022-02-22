@@ -3,6 +3,7 @@ package model.gui.user;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -29,15 +30,15 @@ public class ViewUserForm extends JDialog {
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private final int COLUMN1 = 20;
-	private final int COLUMN2 = 120;
+	private final int COLUMN2 = 140;
 
 	private int line = 0;
 	private int line_multiplier = 30;
 
-	private final int WIDTH_LABEL = 80;
+	private final int WIDTH_LABEL = 100;
 	private final int HEIGHT_LABEL = 30;
 
-	private final int WIDTH_LABEL_SHOW = 300;
+	private final int WIDTH_LABEL_SHOW = 450;
 	private final int HEIGHT_LABEL_SHOW = 30;
 
 	private final int widthPanel = WIDTH_LABEL + WIDTH_LABEL_SHOW + 50; // largura
@@ -47,6 +48,8 @@ public class ViewUserForm extends JDialog {
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
+	
+	private final Font FONT = new Font(null, Font.BOLD, 15);
 
 	private User user;
 
@@ -84,46 +87,55 @@ public class ViewUserForm extends JDialog {
 	private void addLabels(JPanel panel) {
 		final JLabel label_Registration = new JLabel("Registration:");
 		label_Registration.setForeground(COLOR1);
+		label_Registration.setFont(FONT);
 		label_Registration.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Registration);
 
 		final JLabel label_Name = new JLabel("Name:");
 		label_Name.setForeground(COLOR1);
+		label_Name.setFont(FONT);
 		label_Name.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Name);
 
 		final JLabel label_CPF = new JLabel("CPF:");
 		label_CPF.setForeground(COLOR1);
+		label_CPF.setFont(FONT);
 		label_CPF.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_CPF);
 
 		final JLabel label_Phone = new JLabel("Phone:");
 		label_Phone.setForeground(COLOR1);
+		label_Phone.setFont(FONT);
 		label_Phone.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Phone);
 
 		final JLabel label_Email = new JLabel("Email:");
 		label_Email.setForeground(COLOR1);
+		label_Email.setFont(FONT);
 		label_Email.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Email);
 
 		final JLabel label_Department = new JLabel("Department:");
 		label_Department.setForeground(COLOR1);
+		label_Department.setFont(FONT);
 		label_Department.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Department);
 
 		final JLabel label_Project = new JLabel("Project:");
 		label_Project.setForeground(COLOR1);
+		label_Project.setFont(FONT);
 		label_Project.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Project);
 		
 		JLabel label_Status = new JLabel("Status:");
 		label_Status.setForeground(COLOR1);
+		label_Status.setFont(FONT);
 		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_Status);
 
 		JLabel label_DateEntry = new JLabel("DateEntry:");
 		label_DateEntry.setForeground(COLOR1);
+		label_DateEntry.setFont(FONT);
 		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
 		panel.add(label_DateEntry);
 	}
@@ -131,63 +143,75 @@ public class ViewUserForm extends JDialog {
 	private void addLabelsShow(JPanel panel) {
 		final JLabel label_Show_Registration = new JLabel(user.getRegistration());
 		label_Show_Registration.setForeground(COLOR2);
+		label_Show_Registration.setFont(FONT);
 		label_Show_Registration.setBounds(COLUMN2, line = 30, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Registration);
 
 		final JLabel label_Show_Name = new JLabel(user.getName());
 		label_Show_Name.setForeground(COLOR2);
+		label_Show_Name.setFont(FONT);
 		label_Show_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Name);
 
 		final JLabel label_Show_CPF = new JLabel(user.getCpf());
 		label_Show_CPF.setForeground(COLOR2);
+		label_Show_CPF.setFont(FONT);
 		label_Show_CPF.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_CPF);
 
 		final JLabel label_Show_Phone = new JLabel(user.getPhone());
 		label_Show_Phone.setForeground(COLOR2);
+		label_Show_Phone.setFont(FONT);
 		label_Show_Phone.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Phone);
 
 		final JLabel label_Show_Email = new JLabel(user.getEmail());
 		label_Show_Email.setForeground(COLOR2);
+		label_Show_Email.setFont(FONT);
 		label_Show_Email.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Email);
 
 		final JLabel label_Show_Department = new JLabel(user.getDepartment());
 		label_Show_Department.setForeground(COLOR2);
+		label_Show_Department.setFont(FONT);
 		label_Show_Department.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Department);
 
 		final JLabel label_Show_Project = new JLabel(user.getProject().getName());
 		label_Show_Project.setForeground(COLOR2);
+		label_Show_Project.setFont(FONT);
 		label_Show_Project.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Project);
 		
 		final JLabel label_Show_Status = new JLabel(user.getStatus());
 		label_Show_Status.setForeground(COLOR2);
+		label_Show_Status.setFont(FONT);
 		label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_Status);
 
 		final JLabel label_Show_DateEntry = new JLabel(sdf.format(user.getDateEntry()));
 		label_Show_DateEntry.setForeground(COLOR2);
+		label_Show_DateEntry.setFont(FONT);
 		label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
 		panel.add(label_Show_DateEntry);
 	}
 
 	private void addButtons(JPanel panel) {
 		final JButton buttonItens = new JButton("Itens");
-		buttonItens.setBounds(25, 330, 110, 25);
+		buttonItens.setBounds(90, 330, 120, 30);
+		buttonItens.setFont(FONT);
 		buttonItens.addActionListener(new buttonItensListener());
 		panel.add(buttonItens);
 
 		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(155, 330, 110, 25);
+		buttonChanges.setBounds(240, 330, 120, 30);
+		buttonChanges.setFont(FONT);
 		buttonChanges.addActionListener(new buttonChangesListener());
 		panel.add(buttonChanges);
 
 		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(285, 330, 110, 25);
+		buttonClose.setBounds(390, 330, 120, 30);
+		buttonClose.setFont(FONT);
 		buttonClose.addActionListener(new buttonCloseListener());
 		panel.add(buttonClose);
 	}
