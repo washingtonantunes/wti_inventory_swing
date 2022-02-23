@@ -3,10 +3,11 @@ package model.util;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.List;
 
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
-public class MyTextField extends JTextField {
+public class MyComboBox extends JComboBox<Object> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,11 +23,23 @@ public class MyTextField extends JTextField {
 
 	private static final Font FONT = new Font(null, Font.BOLD, 15);
 
+	private List<Object> objects;
+	private Object selectedObject;
 	private int size;
 
-	public MyTextField(String text, int size) {
-		super(text);
+	public MyComboBox(List<Object> objects, Object selectedObject, int size) {
+		this.objects = objects;
+		this.selectedObject = selectedObject;
 		this.size = size;
+		addObjects();
+		initObject();
+		selectObject();
+	}
+	
+	public MyComboBox(List<Object> objects, int size) {
+		this.objects = objects;
+		this.size = size;
+		addObjects();
 		initObject();
 	}
 
@@ -35,6 +48,7 @@ public class MyTextField extends JTextField {
 		setPreferredSize(setDimension());
 		setForeground(COLOR);
 		setFont(FONT);
+		setSelectedIndex(-1);
 	}
 
 	private Dimension setDimension() {
@@ -60,5 +74,16 @@ public class MyTextField extends JTextField {
 			return DIMENSION7;
 		}
 		return null;
+	}
+	
+	private void addObjects() {
+		
+		for (Object object : objects) {
+			addItem(object);
+		}
+	}
+	
+	private void selectObject() {
+		setSelectedItem(selectedObject);
 	}
 }

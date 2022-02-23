@@ -5,33 +5,34 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 
 import db.DBException;
 import exception.ObjectException;
 import exception.ValidationException;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
-import model.util.JTextFieldFilter;
+import model.util.MyButton;
+import model.util.MyComboBox;
+import model.util.MyLabel;
+import model.util.MyTextField;
 import model.util.Utils;
 
 public class EditUserForm extends JDialog {
@@ -40,38 +41,39 @@ public class EditUserForm extends JDialog {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private final int COLUMN1 = 20;
-	private final int COLUMN2 = 120;
-	private final int COLUMN3 = 380;
-
-	private int line = 0;
-	private int line_multiplier = 30;
-
-	private final int WIDTH_LABEL = 80;
-	private final int HEIGHT_LABEL = 25;
-
-	private final int WIDTH_TEXTFIELD_COMBOBOX = 250;
-	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
-
-	private final int WIDTH_LABEL_ERROR = 230;
-	private final int HEIGHT_LABEL_ERROR = 25;
-
-	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
-	private final int heightPanel = (30 * 9) + 140; //altura
-
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
-	
-	private final int positionButton = (widthPanel / 2) - 140;
-
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
+
+	private final int SIZE_LABELS = 1;
+	private final int SIZE_LABELS_SHOW = 3;
+	private final int SIZE_FIELDS_COMBOX = 3;
+	private final int SIZE_LABELS_ERROR = 5;
+
+	private final int SIZEBUTTONS = 1;
+
+	private final int COLOR_LABEL = 1;
+	private final int COLOR_LABEL_SHOW = 2;
+	private final int COLOR_LABEL_ERROR = 3;
+
+	private final int WIDTH_INTERNAL_PANEL = (100 + 200 + 275) + 40;
+
+	private final int HEIGHT_TOP_PANEL = 10;
+	private final int HEIGHT_FIELD_PANEL = 42 * 9;
+	private final int HEIGHT_BUTTON_PANEL = 50;
+
+	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 64 + 20;
+
+	private UserTableModel model;
+	private final User userOld;
+	private final int lineSelected;
 
 	private JTextField textField_Name;
 	private JTextField textField_CPF;
 	private JTextField textField_Phone;
 	private JTextField textField_Email;
-	private JComboBox<String> comboBox_Department;
-	private JComboBox<Project> comboBox_Project;
+	private JComboBox<Object> comboBox_Department;
+	private JComboBox<Object> comboBox_Project;
 
 	private JLabel labelError_Name;
 	private JLabel labelError_CPF;
@@ -80,207 +82,152 @@ public class EditUserForm extends JDialog {
 	private JLabel labelError_Department;
 	private JLabel labelError_Project;
 
-	private UserTableModel model;
-	private User userOld;
-	private List<Option> options;
-	private List<Project> projects;
-	private int lineSelected;
-
-	public EditUserForm(UserTableModel model, User userOld, List<Option> options, List<Project> projects, int lineSelected) {
+	public EditUserForm(UserTableModel model, User userOld, int lineSelected) {
 		this.model = model;
 		this.userOld = userOld;
-		this.options = options;
-		this.projects = projects;
 		this.lineSelected = lineSelected;
 		initComponents();
 	}
 
 	private void initComponents() {
-		setModal(true);
-
-		add(createPanelMain());
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Edit User");
-		setPreferredSize(DIMENSIONMAINPANEL);
+		setModal(true);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 40, 10));
+		setPreferredSize(new Dimension(WIDTH_MAIN_PANEL, HEIGHT_MAIN_PANEL));
 		setResizable(false);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+		add(createTopPanel());
+		add(createFieldsPanel());
+		add(createButtonPanel());
 
 		pack();
 		setLocationRelativeTo(null);
 	}
 
-	private JPanel createPanelMain() {
-		final JPanel panel = new JPanel(new FlowLayout());
-		panel.setLayout(null);
+	private JPanel createTopPanel() {
+		final JPanel buttonPanel = new JPanel();
+		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		buttonPanel.setBackground(COLOR1);
 
-		addLabels(panel);
-		addTextFieldsAndComboBoxes(panel);
-		addLabelsError(panel);
-		addButtons(panel);
-
-		return panel;
+		return buttonPanel;
 	}
 
-	private void addLabels(JPanel panel) {
-		final JLabel label_Registration = new JLabel("Registration:");
-		label_Registration.setForeground(COLOR1);
-		label_Registration.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Registration);
+	private JPanel createFieldsPanel() {
+		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-		final JLabel label_Name = new JLabel("Name:");
-		label_Name.setForeground(COLOR1);
-		label_Name.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Name);
+		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Registration);
 
-		final JLabel label_CPF = new JLabel("CPF:");
-		label_CPF.setForeground(COLOR1);
-		label_CPF.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_CPF);
+		final JLabel label_Show_Registration = new MyLabel(userOld.getRegistration(), SIZE_LABELS_SHOW,
+				COLOR_LABEL_SHOW);
+		fieldsPanel.add(label_Show_Registration);
 
-		final JLabel label_Phone = new JLabel("Phone:");
-		label_Phone.setForeground(COLOR1);
-		label_Phone.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Phone);
+		final JLabel labelError_Registration_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Registration_Empty);
 
-		final JLabel label_Email = new JLabel("Email:");
-		label_Email.setForeground(COLOR1);
-		label_Email.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Email);
+		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Name);
 
-		final JLabel label_Department = new JLabel("Department:");
-		label_Department.setForeground(COLOR1);
-		label_Department.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Department);
+		textField_Name = new MyTextField(userOld.getName(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(textField_Name);
 
-		final JLabel label_Project = new JLabel("Project:");
-		label_Project.setForeground(COLOR1);
-		label_Project.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Project);
+		labelError_Name = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Name);
 
-		JLabel label_Status = new JLabel("Status:");
-		label_Status.setForeground(COLOR1);
-		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Status);
+		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_CPF);
 
-		JLabel label_DateEntry = new JLabel("DateEntry:");
-		label_DateEntry.setForeground(COLOR1);
-		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_DateEntry);
+		textField_CPF = new MyTextField(userOld.getCpf(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(textField_CPF);
+
+		labelError_CPF = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_CPF);
+
+		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Phone);
+
+		textField_Phone = new MyTextField(userOld.getPhone(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(textField_Phone);
+
+		labelError_Phone = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Phone);
+
+		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Email);
+
+		textField_Email = new MyTextField(userOld.getEmail(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(textField_Email);
+
+		labelError_Email = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Email);
+
+		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Department);
+
+		comboBox_Department = new MyComboBox(
+				UserList.options.stream()
+						.filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
+						.map(Option::getOption).collect(Collectors.toList()),
+				userOld.getDepartment(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Department);
+
+		labelError_Department = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Department);
+
+		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Project);
+
+		comboBox_Project = new MyComboBox(
+				UserList.projects.stream().filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList()),
+				userOld.getPhone(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Project);
+
+		labelError_Project = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Project);
+
+		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_Status);
+
+		final JLabel label_Show_Status = new MyLabel(userOld.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		fieldsPanel.add(label_Show_Status);
+
+		final JLabel labelError_Status_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_Status_Empty);
+
+		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL);
+		fieldsPanel.add(label_DateEntry);
+
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(userOld.getDateEntry()), SIZE_LABELS_SHOW,
+				COLOR_LABEL_SHOW);
+		fieldsPanel.add(label_Show_DateEntry);
+
+		final JLabel labelError_DateEntry_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		fieldsPanel.add(labelError_DateEntry_Empty);
+
+		return fieldsPanel;
 	}
 
-	private void addTextFieldsAndComboBoxes(JPanel panel) {
-		try {
-			final JLabel label_Show_Registration = new JLabel(userOld.getRegistration());
-			label_Show_Registration.setForeground(COLOR2);
-			label_Show_Registration.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_Registration);
+	private JPanel createButtonPanel() {
+		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_BUTTON_PANEL));
+		buttonPanel.setBackground(COLOR2);
 
-			textField_Name = new JTextField();
-			textField_Name.setText(userOld.getName());
-			textField_Name.setForeground(COLOR2);
-			textField_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_Name);
-
-			textField_CPF = new JFormattedTextField(new MaskFormatter("###.###.###-##"));
-			textField_CPF.setText(userOld.getCpf());
-			textField_CPF.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_CPF);
-
-			textField_Phone = new JFormattedTextField(new MaskFormatter("(##) #####-####"));
-			textField_Phone.setText(userOld.getPhone());
-			textField_Phone.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_Phone);
-
-			textField_Email = new JTextField();
-			textField_Email.setDocument(new JTextFieldFilter(JTextFieldFilter.MYEMAIL, 50));
-			textField_Email.setText(userOld.getEmail());
-			textField_Email.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_Email);
-
-			comboBox_Department = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_Department.setSelectedItem(userOld.getDepartment());
-			comboBox_Department.setForeground(COLOR2);
-			comboBox_Department.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_Department);
-
-			comboBox_Project = new JComboBox<>(new Vector<>(projects.stream()
-					.filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList())));
-			comboBox_Project.setSelectedItem(userOld.getProject());
-			comboBox_Project.setForeground(COLOR2);
-			comboBox_Project.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_Project);
-
-			final JLabel label_Show_Status = new JLabel(userOld.getStatus());
-			label_Show_Status.setForeground(COLOR2);
-			label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_Status);
-
-			final JLabel label_Show_DateEntry = new JLabel(sdf.format(userOld.getDateEntry()));
-			label_Show_DateEntry.setForeground(COLOR2);
-			label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_DateEntry);
-		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error input data",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
-	private void addLabelsError(JPanel panel) {
-		labelError_Name = new JLabel();
-		labelError_Name.setForeground(Color.RED);
-		labelError_Name.setBounds(COLUMN3, line = 60, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Name);
-
-		labelError_CPF = new JLabel();
-		labelError_CPF.setForeground(Color.RED);
-		labelError_CPF.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_CPF);
-
-		labelError_Phone = new JLabel();
-		labelError_Phone.setForeground(Color.RED);
-		labelError_Phone.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Phone);
-
-		labelError_Email = new JLabel();
-		labelError_Email.setForeground(Color.RED);
-		labelError_Email.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Email);
-
-		labelError_Department = new JLabel();
-		labelError_Department.setForeground(Color.RED);
-		labelError_Department.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Department);
-
-		labelError_Project = new JLabel();
-		labelError_Project.setForeground(Color.RED);
-		labelError_Project.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Project);
-	}
-
-	private void addButtons(JPanel panel) {
-		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(positionButton, 330, 120, 25);
+		final JButton buttonSave = new MyButton("Save", SIZEBUTTONS);
 		buttonSave.addActionListener(new buttonSaveListener());
-		panel.add(buttonSave);
+		buttonPanel.add(buttonSave);
 
-		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(positionButton + 160, 330, 120, 25);
+		final JButton buttonClose = new MyButton("Close", SIZEBUTTONS);
 		buttonClose.addActionListener(new buttonCloseListener());
-		panel.add(buttonClose);
+		buttonPanel.add(buttonClose);
+
+		return buttonPanel;
 	}
 
 	private class buttonSaveListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
 				final User userNew = getFormData();
@@ -293,7 +240,7 @@ public class EditUserForm extends JDialog {
 			} catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
 			} catch (DBException e) {
-				setErroMessagesDBException(e);
+				setErrorMessagesDBException(e);
 			} catch (ObjectException e) {
 				if (e.getMessage().contains("There is no change")) {
 					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object",
@@ -305,6 +252,7 @@ public class EditUserForm extends JDialog {
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}
@@ -368,6 +316,21 @@ public class EditUserForm extends JDialog {
 			user.setProject((Project) comboBox_Project.getSelectedItem());
 		}
 
+		// Insert Status
+		user.setStatus("ACTIVE");
+
+		// Insert DateEntry
+		user.setDateEntry(new Date());
+
+		// Insert Equipment
+		user.setEquipment(new Equipment());
+
+		// Insert Monitor 1
+		user.setMonitor1(new Monitor());
+
+		// Insert Monitor 2
+		user.setMonitor2(new Monitor());
+
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
@@ -386,7 +349,7 @@ public class EditUserForm extends JDialog {
 		labelError_Project.setText(fields.contains("project") ? errors.get("project") : "");
 	}
 
-	private void setErroMessagesDBException(DBException e) {
+	private void setErrorMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("users.cpf_UNIQUE")) {
 				JOptionPane.showMessageDialog(rootPane, "This CPF already exists", "Error update object",

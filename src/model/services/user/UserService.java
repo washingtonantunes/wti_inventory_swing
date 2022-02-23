@@ -34,16 +34,17 @@ public class UserService {
 			Change change = getChange(obj,obj, 0);
 			changeDao.insert(change);
 			obj.addChange(change);
+			MainWindow.addChange(change);
 
 			conn.commit();
 		} 
-		catch (SQLException e) {
+		catch (SQLException db1) {
 			try {
 				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
 			} 
-			catch (SQLException e1) {
-				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			catch (SQLException db2) {
+				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
 			}
 		}
 	}
@@ -58,16 +59,17 @@ public class UserService {
 			Change change = getChange(objOld, objNew, 1);
 			changeDao.insert(change);
 			objNew.addChange(change);
+			MainWindow.addChange(change);
 
 			conn.commit();
 		} 
-		catch (SQLException e) {
+		catch (SQLException db1) {
 			try {
 				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
 			} 
-			catch (SQLException e1) {
-				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			catch (SQLException db2) {
+				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
 			}
 		}
 	}
@@ -82,16 +84,17 @@ public class UserService {
 			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
+			MainWindow.addChange(change);
 
 			conn.commit();
 		} 
-		catch (SQLException e) {
+		catch (SQLException db1) {
 			try {
 				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
 			} 
-			catch (SQLException e1) {
-				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			catch (SQLException db2) {
+				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
 			}
 		}
 	}

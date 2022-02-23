@@ -109,7 +109,7 @@ public class MainWindow extends JFrame {
 		return main;
 	}
 
-	public static void addProject(Change change) {
+	public static void addChange(Change change) {
 		changes.add(change);
 	}
 

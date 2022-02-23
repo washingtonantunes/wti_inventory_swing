@@ -25,6 +25,7 @@ public class TableUser extends JTable {
 	private void initComponents() {
 		setFillsViewportHeight(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setRowHeight(25);
 		configureHeader();
 		configureSizeColumn();
 		configureColumnDate();
@@ -44,6 +45,7 @@ public class TableUser extends JTable {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
 				column.setPreferredWidth(70); // Registration
+				column.setCellRenderer(new CellRenderer());
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
@@ -68,10 +70,12 @@ public class TableUser extends JTable {
 			} 
 			else if (i == 6) {
 				column.setPreferredWidth(70); // Status
+				column.setCellRenderer(new CellRenderer());
 				column.setResizable(false);
 			} 
 			else if (i == 7) {
 				column.setPreferredWidth(70); // Date Entry
+				column.setCellRenderer(new CellRenderer());
 				column.setResizable(false);
 			}
 			else if (i == 8) {
@@ -110,5 +114,19 @@ public class TableUser extends JTable {
 			coleur = null;
 		}
 		return c;
+	}
+	
+	public class CellRenderer extends DefaultTableCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		public CellRenderer() {
+			super();
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			this.setHorizontalAlignment(CENTER);
+
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		}
 	}
 }

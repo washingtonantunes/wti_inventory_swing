@@ -24,8 +24,6 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
-import model.entities.Equipment;
-import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
@@ -34,23 +32,24 @@ import model.services.OptionService;
 import model.services.user.CreateExlFileUser;
 import model.services.user.TableUser;
 import model.services.user.UserTableModel;
+import model.util.MyButton;
 
 public class UserList extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-
-	private final Dimension DIMENSIONBUTTON = new Dimension(130, 35);
+private static final long serialVersionUID = 1L;
 
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
+
+	private final int SIZEBUTTONS = 2; 	
 
 	private JScrollPane scrollPane;
 	private TableUser table;
 	private UserTableModel model;
 
 	private List<User> users;
-	private List<Option> options;
-	private List<Project> projects;
+	protected static List<Option> options;
+	protected static List<Project> projects;
 
 	private JLabel label_Show_Quantity;
 
@@ -59,9 +58,8 @@ public class UserList extends JPanel {
 
 	public UserList() {
 		this.users = loadDataUsers();
-		this.options = loadDataOptions();
-		this.projects = loadDataProjects();
-		initObjects();
+		UserList.options = loadDataOptions();
+		UserList.projects = loadDataProjects();
 		initComponents();
 	}
 
@@ -101,49 +99,44 @@ public class UserList extends JPanel {
 		panel.setPreferredSize(new Dimension(0, 60));
 		panel.setBackground(COLOR1);
 
-		panel.add(createPanelButton1());
-		panel.add(createPanelButton2());
+		panel.add(createPanelButtonWest());
+		panel.add(createPanelButtonEast());
 
 		return panel;
 	}
 
-	private JPanel createPanelButton1() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-		panel.setPreferredSize(new Dimension(800, 60));
+	private JPanel createPanelButtonWest() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+		panel.setPreferredSize(new Dimension(800, 50));
 		panel.setBackground(COLOR2);
 
-		JButton buttonNew = new JButton("New");
-		buttonNew.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonNew = new MyButton("New", SIZEBUTTONS);
 		buttonNew.addActionListener(new buttonNewListener());
 		panel.add(buttonNew);
 
-		JButton buttonEdit = new JButton("Edit");
-		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonEdit = new MyButton("Edit", SIZEBUTTONS);
 		buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
-		JButton buttonView = new JButton("View");
-		buttonView.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonView = new MyButton("View", SIZEBUTTONS);
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonDisable = new JButton("Disable");
-		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonDisable = new MyButton("Disable", SIZEBUTTONS);
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonExport = new JButton("Export");
-		buttonExport.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonExport = new MyButton("Export", SIZEBUTTONS);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
 
 		return panel;
 	}
 
-	private JPanel createPanelButton2() {
+	private JPanel createPanelButtonEast() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(450, 60));
+		panel.setPreferredSize(new Dimension(450, 50));
 		panel.setBackground(COLOR2);
 
 		final JLabel label_Search = new JLabel("Enter to filter");
@@ -157,13 +150,11 @@ public class UserList extends JPanel {
 		panel.add(textField_Filter);
 
 		JLabel label_Quantity = new JLabel("Quantity:");
-		label_Quantity.setPreferredSize(new Dimension(80, 35));
 		label_Quantity.setBounds(340, 15, 80, 25);
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
 
 		label_Show_Quantity = new JLabel(String.valueOf(users.size()));
-		label_Show_Quantity.setPreferredSize(new Dimension(30, 35));
 		label_Show_Quantity.setBounds(400, 15, 50, 25);
 		label_Show_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Show_Quantity);
@@ -220,7 +211,7 @@ public class UserList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewUserForm(model, options, projects).setVisible(true);
+				new NewUserForm(model).setVisible(true);
 				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
@@ -246,7 +237,7 @@ public class UserList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This user is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditUserForm(model, user, options, projects, modelRow).setVisible(true);
+						new EditUserForm(model, user, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -290,7 +281,7 @@ public class UserList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This user is in possession of a device", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
 					*/else {
-						new DisableUserForm(model, user, options, modelRow).setVisible(true);
+						new DisableUserForm(model, user, modelRow).setVisible(true);
 					}
 				}
 			}
@@ -356,23 +347,6 @@ public class UserList extends JPanel {
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				User user = model.getUser(modelRow);
 				new ViewUserForm(user).setVisible(true);
-			}
-		}
-	}
-	
-	private void initObjects() {
-		for (User user : users) {
-			if (user.getEquipment().getSerialNumber() != null) {
-				Equipment equipment = MainWindow.getEquipment(user.getEquipment().getSerialNumber());
-				user.setEquipment(equipment);
-			}
-			if (user.getMonitor1().getSerialNumber()!= null) {
-				Monitor monitor = MainWindow.getMonitor(user.getMonitor1().getSerialNumber());
-				user.setMonitor1(monitor);
-			}
-			if (user.getMonitor2().getSerialNumber()!= null) {
-				Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
-				user.setMonitor2(monitor);
 			}
 		}
 	}
