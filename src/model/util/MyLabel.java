@@ -18,21 +18,25 @@ public class MyLabel extends JLabel {
 	private static final Dimension DIMENSION6 = new Dimension(300, 30);
 	private static final Dimension DIMENSION7 = new Dimension(400, 30);
 	private static final Dimension DIMENSION8 = new Dimension(30, 30);
+	private static final Dimension DIMENSION9 = new Dimension(80, 30);
 
 	private static final Color COLOR1 = new Color(0, 65, 83);
 	private static final Color COLOR2 = new Color(2, 101, 124);
 	private static final Color COLOR3 = new Color(237, 28, 36);
 	private static final Color COLOR4 = new Color(255, 255, 255); // White
 
-	private static final Font FONT = new Font(null, Font.BOLD, 15);
+	private static final Font FONT1 = new Font(null, Font.BOLD, 15);
+	private static final Font FONT2 = new Font(null, Font.BOLD, 20);
 
 	private int size;
 	private int color;
+	private int font;
 
-	public MyLabel(String text, int size, int color) {
+	public MyLabel(String text, int size, int color, int font) {
 		super(text);
 		this.size = size;
 		this.color = color;
+		this.font = font;
 		initObject();
 	}
 
@@ -40,7 +44,7 @@ public class MyLabel extends JLabel {
 
 		setPreferredSize(setDimension());
 		setForeground(setColor());
-		setFont(FONT);
+		setFont(setFont());
 	}
 
 	private Dimension setDimension() {
@@ -68,6 +72,9 @@ public class MyLabel extends JLabel {
 		if (size == 8) {
 			return DIMENSION8;
 		}
+		if (size == 9) {
+			return DIMENSION9;
+		}
 		return null;
 	}
 
@@ -83,6 +90,16 @@ public class MyLabel extends JLabel {
 		}
 		if (color == 4) {
 			return COLOR4;
+		}
+		return null;
+	}
+	
+	private Font setFont() {
+		if (font == 1) {
+			return FONT1;
+		}
+		if (font == 2) {
+			return FONT2;
 		}
 		return null;
 	}

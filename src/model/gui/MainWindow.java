@@ -16,13 +16,17 @@ import javax.swing.JPanel;
 import model.entities.Change;
 import model.entities.Collaborator;
 import model.entities.Equipment;
+import model.entities.License;
 import model.entities.Monitor;
+import model.entities.Peripheral;
 import model.entities.Project;
 import model.entities.User;
 import model.entities.WorkPosition;
 import model.services.change.ChangeService;
 import model.services.equipment.EquipmentService;
+import model.services.license.LicenseService;
 import model.services.monitor.MonitorService;
+import model.services.peripheral.PeripheralService;
 import model.services.project.ProjectService;
 import model.services.user.UserService;
 import model.services.workposition.WorkPositionService;
@@ -47,6 +51,8 @@ public class MainWindow extends JFrame {
 	private static Map<String, WorkPosition> workPositions;
 	private static Map<String, Equipment> equipments;
 	private static Map<String, Monitor> monitors;
+	private static Map<String, Peripheral> peripherals;
+	private static Map<String, License> licenses;
 
 	public MainWindow() {
 		changes = loadDataChanges();
@@ -55,6 +61,8 @@ public class MainWindow extends JFrame {
 		workPositions = loadDataWorkPositions();
 		equipments = loadDataEquipments();
 		monitors = loadDataMonitors();
+		peripherals = loadDataPeripherals();
+		licenses = loadDataLicenses();
 		initComponents();
 	}
 
@@ -220,6 +228,46 @@ public class MainWindow extends JFrame {
 		}
 		return Monitor;
 	}
+	
+	// Peripheral
+	public static void addPeripheral(Peripheral peripheral) {
+		peripherals.put(peripheral.getName(), peripheral);
+	}
+
+	public static Map<String, Peripheral> getPeripherals() {
+		return peripherals;
+	}
+
+	public static Peripheral getPeripheral(String peripheral) {
+		Peripheral Peripheral;
+
+		if (peripherals.containsKey(peripheral)) {
+			Peripheral = peripherals.get(peripheral);
+		} else {
+			Peripheral = new Peripheral();
+		}
+		return Peripheral;
+	}
+		
+	// License
+	public static void addLicense(License license) {
+		licenses.put(license.getName(), license);
+	}
+
+	public static Map<String, License> getLicenses() {
+		return licenses;
+	}
+
+	public static License getLicense(String license) {
+		License License;
+
+		if (licenses.containsKey(license)) {
+			License = licenses.get(license);
+		} else {
+			License = new License();
+		}
+		return License;
+	}
 
 	private List<Change> loadDataChanges() {
 		final ChangeService service = new ChangeService();
@@ -254,6 +302,18 @@ public class MainWindow extends JFrame {
 	private Map<String, Monitor> loadDataMonitors() {
 		final MonitorService service = new MonitorService();
 		Map<String, Monitor> list = service.findAll();
+		return list;
+	}
+	
+	private Map<String, Peripheral> loadDataPeripherals() {
+		final PeripheralService service = new PeripheralService();
+		Map<String, Peripheral> list = service.findAll();
+		return list;
+	}
+	
+	private Map<String, License> loadDataLicenses() {
+		final LicenseService service = new LicenseService();
+		Map<String, License> list = service.findAll();
 		return list;
 	}
 }

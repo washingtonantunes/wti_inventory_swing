@@ -9,6 +9,8 @@ public interface UserDao {
 	void insert(User obj);
 
 	void update(User obj);
+	
+	void updateItem(User obj);
 
 	void disable(User obj);
 

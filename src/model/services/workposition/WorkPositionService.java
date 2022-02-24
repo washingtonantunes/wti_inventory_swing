@@ -128,6 +128,7 @@ public class WorkPositionService {
 		return changes;
 	}
 
+	//Get the old value of fields that were changed
 	private String getFieldsUpdated(WorkPosition objOld, WorkPosition objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
@@ -145,11 +146,13 @@ public class WorkPositionService {
 			fieldsUpdated += " 'NetPoint Old: " + objOld.getNetPoint() + "'";
 		}
 
+		// Remove the ',' at the end of the String
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
 		}
-		
+
+		// Validation if there was a change
 		String validation = fieldsUpdated.substring(16);
 		if (validation.length() == 0) {
 			throw new ObjectException("There is no change");

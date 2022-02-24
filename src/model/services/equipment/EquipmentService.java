@@ -77,11 +77,13 @@ public class EquipmentService {
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.updateStatusForUser(obj);
+//			equipmentDao.updateStatusForUser(obj);
 			
 			Change change = getChange(obj, obj, 3);
-			changeDao.insert(change);
-			obj.addChange(change);
+//			changeDao.insert(change);
+//			obj.addChange(change);
+			System.out.println(obj.getSerialNumber());
+			System.out.println(change);
 
 			conn.commit();
 		} 
@@ -156,7 +158,7 @@ public class EquipmentService {
 			changes = getFieldsUpdated(objOld, objNew);
 		} 
 		else if (type == 3) {
-			changes = "Equipamento entregue ao usuário: " + objNew.getUser().getName();
+			changes = "Equipment delivered to the user: " + objNew.getUser().getName();
 		} 
 		else if (type == 4) {
 			changes = "Equipment Disabled for: " + objOld.getReason();
@@ -164,6 +166,7 @@ public class EquipmentService {
 		return changes;
 	}
 
+	//Get the old value of fields that were changed
 	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
@@ -203,11 +206,13 @@ public class EquipmentService {
 			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "'";
 		}
 
+		//Remove the ',' at the end of the String
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
 		}
 		
+		//Validation if there was a change
 		String validation = fieldsUpdated.substring(16);
 		if (validation.length() == 0) {
 			throw new ObjectException("There is no change");

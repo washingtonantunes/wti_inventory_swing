@@ -1,33 +1,36 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class License implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String code;
 	private String name;
 	private Double value;
+	private Integer quantity;
+	private String status;
+	
+	private String reason;
+	private String user;
 
-	private User user;
+	private List<Change> changes = new ArrayList<>();
 
 	public License() {
 	}
 
-	public License(String code, String name, Double value) {
-		this.code = code;
+	public License(String name) {
+		this.name = name;
+	}
+	
+	public License(String name, Double value, Integer quantity, String status) {
 		this.name = name;
 		this.value = value;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
+		this.quantity = quantity;
+		this.status = status;
 	}
 
 	public String getName() {
@@ -46,17 +49,53 @@ public class License implements Serializable {
 		this.value = value;
 	}
 
-	public User getUser() {
+	public String getStatus() {
+		return status;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(String user) {
 		this.user = user;
+	}
+
+	public List<Change> getChanges() {
+		return changes;
+	}
+
+	public void addChange(Change change) {
+		this.changes.add(change);
+	}
+
+	public void setChanges(List<Change> changes) {
+		this.changes = changes;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(code);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -68,7 +107,7 @@ public class License implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		License other = (License) obj;
-		return Objects.equals(code, other.code);
+		return Objects.equals(name, other.name);
 	}
 
 	@Override

@@ -41,6 +41,8 @@ public class DisableUserForm extends JDialog {
 
 	private final int COLOR_LABEL = 1; 
 	private final int COLOR_LABEL_ERROR = 3; 
+	
+	private final int FONT = 1;
 
 	private final int WIDTH_INTERNAL_PANEL = (100 + 150 + 250) + 40; 
 
@@ -94,14 +96,14 @@ public class DisableUserForm extends JDialog {
 		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-		final JLabel label_Registration = new MyLabel("Reason:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Registration = new MyLabel("Reason:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
 		comboBox_Reason = new MyComboBox(UserList.options.stream().filter(o -> o.getType().equals("REASON-USER") && o.getStatus().equals("ACTIVE"))
 				.map(Option::getOption).collect(Collectors.toList()), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Reason);
 
-		labelError_Reason = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Reason = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Reason);	
 
 		return fieldsPanel;

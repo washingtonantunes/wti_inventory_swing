@@ -2,6 +2,7 @@ package model.services.itens;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -56,6 +57,10 @@ public class DeliveryTableModel extends AbstractTableModel {
 		return "";
 	}
 
+	public List<ItemDelivery> getItemDelivery(String type) {
+		return itens.stream().filter(i -> i.getType().equals(type)).collect(Collectors.toList());
+	}
+	
 	public ItemDelivery getItemDelivery(int indexLine) {
 		return itens.get(indexLine);
 	}

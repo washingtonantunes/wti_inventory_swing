@@ -49,6 +49,8 @@ public class NewUserForm extends JDialog {
 
 	private final int COLOR_LABEL = 1;
 	private final int COLOR_LABEL_ERROR = 3;
+	
+	private final int FONT = 1;
 
 	private final int WIDTH_INTERNAL_PANEL = (100 + 200 + 275) + 40;
 
@@ -111,52 +113,52 @@ public class NewUserForm extends JDialog {
 		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
 		textField_Registration = new MyTextField("", SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(textField_Registration);
 
-		labelError_Registration = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Registration = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Registration);
 
-		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Name);
 
 		textField_Name = new MyTextField("", SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(textField_Name);
 
-		labelError_Name = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Name = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Name);
 
-		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_CPF);
 
 		textField_CPF = new MyTextField("", SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(textField_CPF);
 
-		labelError_CPF = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_CPF = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_CPF);
 
-		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Phone);
 
 		textField_Phone = new MyTextField("", SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(textField_Phone);
 
-		labelError_Phone = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Phone = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Phone);
 
-		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Email);
 
 		textField_Email = new MyTextField("", SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(textField_Email);
 
-		labelError_Email = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Email = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Email);
 
-		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
 		comboBox_Department = new MyComboBox(
@@ -165,10 +167,10 @@ public class NewUserForm extends JDialog {
 				SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Department);
 
-		labelError_Department = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Department = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Department);
 
-		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
 		comboBox_Project = new MyComboBox(
@@ -176,7 +178,7 @@ public class NewUserForm extends JDialog {
 				SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Project);
 
-		labelError_Project = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR);
+		labelError_Project = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Project);
 
 		return fieldsPanel;

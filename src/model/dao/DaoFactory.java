@@ -5,8 +5,10 @@ import model.dao.impl.ChangeDaoJDBC;
 import model.dao.impl.CollaboratorDaoJDBC;
 import model.dao.impl.EquipmentDaoJDBC;
 import model.dao.impl.InventoryDaoJDBC;
+import model.dao.impl.LicenseDaoJDBC;
 import model.dao.impl.MonitorDaoJDBC;
 import model.dao.impl.OptionDaoJDBC;
+import model.dao.impl.PeripheralDaoJDBC;
 import model.dao.impl.ProjectDaoJDBC;
 import model.dao.impl.UserDaoJDBC;
 import model.dao.impl.WorkPositionDaoJDBC;
@@ -47,5 +49,13 @@ public class DaoFactory {
 
 	public static MonitorDao createMonitorDao() {
 		return new MonitorDaoJDBC(DB.getConnection());
+	}
+	
+	public static PeripheralDao createPeripheralDao() {
+		return new PeripheralDaoJDBC(DB.getConnection());
+	}
+	
+	public static LicenseDao createLicenseDao() {
+		return new LicenseDaoJDBC(DB.getConnection());
 	}
 }

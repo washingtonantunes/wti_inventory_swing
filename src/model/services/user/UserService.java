@@ -31,20 +31,23 @@ public class UserService {
 
 			userDao.insert(obj);
 			
-			Change change = getChange(obj,obj, 0);
+			Change change = getChange(obj, 1);
+			
+			change.setChanges("New User Added");
+			
 			changeDao.insert(change);
 			obj.addChange(change);
 			MainWindow.addChange(change);
-
+			
 			conn.commit();
 		} 
-		catch (SQLException db1) {
+		catch (SQLException e) {
 			try {
 				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
 			} 
-			catch (SQLException db2) {
-				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
 	}
@@ -56,10 +59,35 @@ public class UserService {
 
 			userDao.update(objNew);
 			
-			Change change = getChange(objOld, objNew, 1);
+			Change change = getChange(objOld, 2);
+			
+			change.setChanges(getFieldsUpdated(objOld, objNew));
+			
 			changeDao.insert(change);
 			objNew.addChange(change);
 			MainWindow.addChange(change);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void updateItem(User obj) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+//			userDao.updateItem(obj);
+
+			System.out.println(obj);
 
 			conn.commit();
 		} 
@@ -81,29 +109,31 @@ public class UserService {
 
 			userDao.disable(obj);
 			
-			Change change = getChange(obj, obj, 3);
+			Change change = getChange(obj, 4);
+			
+			change.setChanges("User Disabled for: " + obj.getReason());
+			
 			changeDao.insert(change);
 			obj.addChange(change);
 			MainWindow.addChange(change);
 
 			conn.commit();
 		} 
-		catch (SQLException db1) {
+		catch (SQLException e) {
 			try {
 				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
 			} 
-			catch (SQLException db2) {
-				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
 			}
 		}
 	}
-
-	private Change getChange(User objOld, User objNew, int type) {
+	
+	private Change getChange(User obj, int type) {
 		Change change = new Change();
-		change.setObject(objOld.getRegistration());
+		change.setObject(obj.getRegistration());
 		change.setType(getTypeChange(type));
-		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
@@ -111,42 +141,25 @@ public class UserService {
 
 	private String getTypeChange(int type) {
 		String typeChange = "";
-		if (type == 0) {
+		if (type == 1) {
 			typeChange = "User Input";
 		} 
-		else if (type == 1) {
+		else if (type == 2) {
 			typeChange = "User Update";
 		} 
-		else if (type == 2) {
+		else if (type == 3) {
 			typeChange = "User Update Status";
 		} 
-		else if (type == 3) {
+		else if (type == 4) {
 			typeChange = "User Deactivation";
 		}
 		return typeChange;
 	}
 
-	private String getChanges(User objOld, User objNew, int type) {
-		String changes = "";
-		if (type == 0) {
-			changes = "New User Added";
-		} 
-		else if (type == 1) {
-			changes = getFieldsUpdated(objOld, objNew);
-		} 
-		else if (type == 2) {
-
-		} 
-		else if (type == 3) {
-			changes = "User Disabled for: " + objOld.getReason();
-		}
-		return changes;
-	}
-
 	private String getFieldsUpdated(User objOld, User objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
-		if (!objOld.getName().equals(objNew.getName())) {
+		if (!objOld.getName().equalsIgnoreCase(objNew.getName())) {
 			fieldsUpdated += " 'Name Old: " + objOld.getName() + "',";
 		}
 		if (!objOld.getCpf().equals(objNew.getCpf())) {
@@ -155,7 +168,7 @@ public class UserService {
 		if (!objOld.getPhone().equals(objNew.getPhone())) {
 			fieldsUpdated += " 'Phone Old: " + objOld.getPhone() + "',";
 		}
-		if (!objOld.getEmail().equals(objNew.getEmail())) {
+		if (!objOld.getEmail().equalsIgnoreCase(objNew.getEmail())) {
 			fieldsUpdated += " 'Email Old: " + objOld.getEmail() + "',";
 		}
 		if (!objOld.getDepartment().equals(objNew.getDepartment())) {
@@ -176,5 +189,5 @@ public class UserService {
 		}
 
 		return fieldsUpdated;
-	}
+	}	
 }

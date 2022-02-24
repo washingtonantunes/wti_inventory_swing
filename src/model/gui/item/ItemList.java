@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,13 +22,13 @@ import model.entities.User;
 import model.gui.MainWindow;
 import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
+import model.util.MyButton;
+import model.util.MyLabel;
 
 public class ItemList extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-
-	private final Dimension DIMENSIONBUTTON = new Dimension(100, 30);
-
+	
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
 
@@ -59,7 +58,7 @@ public class ItemList extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Itens");
-		setPreferredSize(new Dimension(700, 500));
+		setPreferredSize(new Dimension(720, 500));
 		setResizable(false);
 
 		pack();
@@ -68,7 +67,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setPreferredSize(new Dimension(700, 55));
+		panel.setPreferredSize(new Dimension(720, 55));
 
 		panel.add(createPanelButtonWest());
 		panel.add(createPanelButtonEast());
@@ -77,48 +76,38 @@ public class ItemList extends JDialog {
 	}
 
 	private JPanel createPanelButtonWest() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
-		panel.setPreferredSize(new Dimension(530, 55));
-		panel.setBackground(COLOR1);
+		final JPanel panelButtonWest = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		panelButtonWest.setPreferredSize(new Dimension(560, 55));
+		panelButtonWest.setBackground(COLOR1);
 
-		JButton buttonDelivery = new JButton("Delivery");
-		buttonDelivery.setPreferredSize(DIMENSIONBUTTON);
+		final JButton buttonDelivery = new MyButton("Delivery", 2);
 		buttonDelivery.addActionListener(new buttonDeliveryListener());
-		panel.add(buttonDelivery);
+		panelButtonWest.add(buttonDelivery);
 		
-		JButton buttonExchange = new JButton("Exchange");
-		buttonExchange.setPreferredSize(DIMENSIONBUTTON);
+		final JButton buttonExchange = new MyButton("Exchange", 2);
 		buttonExchange.addActionListener(new buttonExchangeListener());
-		panel.add(buttonExchange);
-
-		JButton buttonDevolution = new JButton("Devolution");
-		buttonDevolution.setPreferredSize(DIMENSIONBUTTON);
+		panelButtonWest.add(buttonExchange);
+		
+		final JButton buttonDevolution = new MyButton("Devolution", 2);
 		buttonDevolution.addActionListener(new buttonDevolutionListener());
-		panel.add(buttonDevolution);
-
-		JButton buttonReport = new JButton("Report");
-		buttonReport.setPreferredSize(DIMENSIONBUTTON);
+		panelButtonWest.add(buttonDevolution);
+		
+		final JButton buttonReport = new MyButton("Report", 2);
 		buttonReport.addActionListener(new buttonReportListener());
-		panel.add(buttonReport);
+		panelButtonWest.add(buttonReport);
 
-		return panel;
+		return panelButtonWest;
 	}
 
 	private JPanel createPanelButtonEast() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 10));
-		panel.setPreferredSize(new Dimension(150, 55));
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 10));
+		panel.setPreferredSize(new Dimension(140, 55));
 		panel.setBackground(COLOR1);
 
-		JLabel label_Quantity = new JLabel("Quantity:");
-		label_Quantity.setPreferredSize(new Dimension(80, 35));
-		label_Quantity.setFont(new java.awt.Font(null, Font.BOLD, 15));
-		label_Quantity.setForeground(Color.WHITE);
+		final JLabel label_Quantity = new MyLabel("Quantity:", 1, 4, 2);
 		panel.add(label_Quantity);
 
-		label_Show_Quantity = new JLabel(String.valueOf(itens.size()));
-		label_Show_Quantity.setPreferredSize(new Dimension(30, 35));
-		label_Show_Quantity.setFont(new java.awt.Font(null, Font.BOLD, 15));
-		label_Show_Quantity.setForeground(Color.WHITE);
+		label_Show_Quantity = new MyLabel(String.valueOf(itens.size()), 8, 4, 2);
 		panel.add(label_Show_Quantity);
 
 		return panel;
@@ -135,23 +124,14 @@ public class ItemList extends JDialog {
 	}
 
 	private JPanel createPanelSouth() {
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(700, 50));
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+		panel.setPreferredSize(new Dimension(720, 50));
 		panel.setBackground(COLOR2);
 
-		JLabel label_CostTotal = new JLabel("Cost Total:");
-		label_CostTotal.setPreferredSize(new Dimension(80, 35));
-		label_CostTotal.setBounds(390, 15, 110, 25);
-		label_CostTotal.setFont(new java.awt.Font(null, Font.BOLD, 20));
-		label_CostTotal.setForeground(Color.WHITE);
+		final JLabel label_CostTotal = new MyLabel("Cost Total:", 2, 4, 2);
 		panel.add(label_CostTotal);
 
-		label_Show_CostTotal = new JLabel(String.format("R$ %.2f", getCostTotal()));
-		label_Show_CostTotal.setPreferredSize(new Dimension(30, 35));
-		label_Show_CostTotal.setBounds(540, 15, 110, 25);
-		label_Show_CostTotal.setFont(new java.awt.Font(null, Font.BOLD, 20));
-		label_Show_CostTotal.setForeground(Color.WHITE);
+		label_Show_CostTotal = new MyLabel(String.format("R$ %.2f", getCostTotal()), 2, 4, 2);
 		panel.add(label_Show_CostTotal);
 
 		return panel;
@@ -174,9 +154,8 @@ public class ItemList extends JDialog {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				AddItemForm addItemForm = new AddItemForm(model, user);
-				updateItens(addItemForm.getItens());
-				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
+				new AddItemForm(model, user, itens);
+				label_Show_Quantity.setText(String.valueOf(itens.size()));
 				label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 				repaint();
 			}
@@ -197,7 +176,7 @@ public class ItemList extends JDialog {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
+					label_Show_Quantity.setText(String.valueOf(itens.size()));
 					label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 					repaint();
 				}
@@ -223,7 +202,7 @@ public class ItemList extends JDialog {
 					if (i == JOptionPane.OK_OPTION) {
 						Item item = model.getItem(lineSelected);
 						System.out.println(item);
-						label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
+						label_Show_Quantity.setText(String.valueOf(itens.size()));
 						label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 						repaint();
 					}
@@ -238,8 +217,7 @@ public class ItemList extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			int i = table.getRowCount();
 			if (i <= 0) {
-				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export", JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				System.out.println("buttonReportListener");
 //				List<Inventory> Inventorys = new ArrayList<Inventory>();
@@ -269,13 +247,6 @@ public class ItemList extends JDialog {
 				int lineSelected = table.getSelectedRow();
 				System.out.println(lineSelected);
 			}
-		}
-	}
-	
-	private void updateItens(List<Item> itens) {
-		
-		for (Item item : itens) {
-			model.addItem(item);
 		}
 	}
 }

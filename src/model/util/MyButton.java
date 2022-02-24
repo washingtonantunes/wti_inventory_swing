@@ -12,6 +12,8 @@ public class MyButton extends JButton {
 	private static final Dimension DIMENSION1 = new Dimension(100, 30);
 	private static final Dimension DIMENSION2 = new Dimension(120, 30);
 	private static final Dimension DIMENSION3 = new Dimension(140, 30);
+	private static final Dimension DIMENSION4 = new Dimension(50,30);
+	private static final Dimension DIMENSION5 = new Dimension(70,30);
 
 	private static final Font FONT = new Font(null, Font.BOLD, 15);
 
@@ -38,6 +40,12 @@ public class MyButton extends JButton {
 		}
 		if (size == 3) {
 			return DIMENSION3;
+		}
+		if (size == 4) {
+			return DIMENSION4;
+		}
+		if (size == 5) {
+			return DIMENSION5;
 		}
 		return null;
 	}

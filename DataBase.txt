@@ -118,6 +118,22 @@ CREATE TABLE `projects` (
   UNIQUE KEY `costCenter_UNIQUE` (`costCenter`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `peripherals` (
+  `name` varchar(50) NOT NULL,
+  `value` decimal(5,2) DEFAULT NULL,
+  'quantity' int NOT NULL,
+  `status` varchar(30) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `licenses` (
+  `name` varchar(50) NOT NULL,
+  `value` decimal(5,2) DEFAULT NULL,
+  'quantity' int NOT NULL,
+  `status` varchar(30) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE `inventories` (
   `id` smallint NOT NULL AUTO_INCREMENT,

@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 
 import model.entities.Equipment;
 import model.entities.Item;
+import model.entities.License;
 import model.entities.Monitor;
+import model.entities.Peripheral;
 import model.entities.User;
 import model.gui.MainWindow;
 import model.gui.change.ChangesPanel;
@@ -40,6 +42,8 @@ public class ViewUserForm extends JDialog {
 
 	private final int COLOR_LABEL = 1;
 	private final int COLOR_LABEL_SHOW = 2;
+	
+	private final int FONT = 1;
 
 	private final int WIDTH_INTERNAL_PANEL = (100 + 400) + 20;
 
@@ -86,59 +90,58 @@ public class ViewUserForm extends JDialog {
 		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
-		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Registration);
 
-		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Name);
 
-		final JLabel label_Show_Name = new MyLabel(user.getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Name = new MyLabel(user.getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Name);
 
-		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_CPF);
 
-		final JLabel label_Show_CPF = new MyLabel(user.getCpf(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_CPF = new MyLabel(user.getCpf(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_CPF);
 
-		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Phone);
 
-		final JLabel label_Show_Phone = new MyLabel(user.getPhone(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Phone = new MyLabel(user.getPhone(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Phone);
 
-		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Email);
 
-		final JLabel label_Show_Email = new MyLabel(user.getEmail(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Email = new MyLabel(user.getEmail(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Email);
 
-		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
-		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Department);
 
-		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL);
+		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
-		final JLabel label_Show_Project = new MyLabel(user.getProject().getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Project = new MyLabel(user.getProject().getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Project);
 
-		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL);
+		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Status);
 
-		final JLabel label_Show_Status = new MyLabel(user.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW);
+		final JLabel label_Show_Status = new MyLabel(user.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Status);
 
-		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL);
+		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_DateEntry);
 
-		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW,
-				COLOR_LABEL_SHOW);
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_DateEntry);
 
 		return fieldsPanel;
@@ -202,7 +205,25 @@ public class ViewUserForm extends JDialog {
 			Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
 			user.setMonitor2(monitor);
 		}
-
+		
+		List<Peripheral> list1 = new ArrayList<Peripheral>();
+		for (Peripheral p : user.getPeripherals()) {
+			if (p.getName() != null) {
+				Peripheral peripheral = MainWindow.getPeripheral(p.getName());
+				list1.add(peripheral);
+			}
+		}
+		user.setPeripherals(list1);
+		
+		
+		List<License> list2 = new ArrayList<License>();
+		for (License p : user.getLicenses()) {
+			if (p.getName() != null) {
+				License license = MainWindow.getLicense(p.getName());
+				list2.add(license);
+			}
+		}
+		user.setLicenses(list2);
 	}
 
 	private List<Item> getItens() {
@@ -219,8 +240,20 @@ public class ViewUserForm extends JDialog {
 			itens.add(new Item(++index, "Monitor", monitor.getSerialNumber(), monitor.getValue()));
 		}
 		if (user.getMonitor2().getSerialNumber() != null) {
-			Monitor monitor = user.getMonitor1();
+			Monitor monitor = user.getMonitor2();
 			itens.add(new Item(++index, "Monitor", monitor.getSerialNumber(), monitor.getValue()));
+		}
+		
+		if (user.getPeripherals().size() != 0) {
+			for (Peripheral peripheral : user.getPeripherals()) {
+				itens.add(new Item(++index, "Peripheral", peripheral.getName(), peripheral.getValue()));
+			}
+		}
+		
+		if (user.getLicenses().size() != 0) {
+			for (License license : user.getLicenses()) {
+				itens.add(new Item(++index, "License", license.getName(), license.getValue()));
+			}
 		}
 
 		return itens;

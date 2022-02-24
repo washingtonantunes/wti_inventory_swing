@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,9 @@ import db.DBException;
 import model.dao.UserDao;
 import model.entities.Change;
 import model.entities.Equipment;
+import model.entities.License;
 import model.entities.Monitor;
+import model.entities.Peripheral;
 import model.entities.Project;
 import model.entities.User;
 import model.gui.MainWindow;
@@ -94,6 +97,47 @@ public class UserDaoJDBC implements UserDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public void updateItem(User obj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `users` "
+					+ "SET `equipment` = ?, "
+					+ "`monitor1` = ?, "
+					+ "`monitor2` = ?, "
+					+ "`email` = ?, "
+					+ "`peripheral1` = ?, "
+					+ "`peripheral2` = ?, "
+					+ "`peripheral3` = ?, "
+					+ "`peripheral4` = ?, "
+					+ "`peripheral5` = ?, "
+					+ "`peripheral6` = ?, "
+					+ "`license` = ? "
+					+ "WHERE `registration` = ?");
+
+			st.setString(1, obj.getEquipment().getSerialNumber());
+			st.setString(2, obj.getMonitor1().getSerialNumber());
+			st.setString(3, obj.getMonitor2().getSerialNumber());
+			st.setString(4, obj.getPeripherals().get(0).getName());
+			st.setString(5, obj.getPeripherals().get(1).getName());
+			st.setString(6, obj.getPeripherals().get(2).getName());
+			st.setString(7, obj.getPeripherals().get(3).getName());
+			st.setString(8, obj.getPeripherals().get(4).getName());
+			st.setString(9, obj.getPeripherals().get(5).getName());
+			st.setString(10, obj.getLicenses().get(0).getName());
+			st.setString(11, obj.getRegistration());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public void disable(User obj) {
@@ -143,6 +187,8 @@ public class UserDaoJDBC implements UserDao {
 				user.setEquipment(instatiateEquipment(rs));
 				user.setMonitor1(instatiateMonitor1(rs));
 				user.setMonitor2(instatiateMonitor2(rs));
+				user.setPeripherals(instatiatePeripherals(rs));
+				user.setLicenses(instatiateLicenses(rs));
 				user.setChanges(instatiateChanges(user.getRegistration()));
 				users.put(user.getRegistration(), user);
 			}
@@ -173,8 +219,35 @@ public class UserDaoJDBC implements UserDao {
 	}
 	
 	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
-		Monitor monitor = new Monitor(rs.getString("monitor1"));
+		Monitor monitor = new Monitor(rs.getString("monitor2"));
 		return monitor;
+	}
+	
+	private List<Peripheral> instatiatePeripherals(ResultSet rs) throws SQLException {
+		List<Peripheral> peripherals = new ArrayList<Peripheral>();
+		String title = "peripheral";
+		
+		for(int i = 1; i <=5; i++) {
+			title = title.substring(0, 10) + String.valueOf(i);
+			Peripheral peripheral = new Peripheral(rs.getString(title));
+			peripherals.add(peripheral);
+			
+		}
+		
+		return peripherals;
+	}
+	
+	private List<License> instatiateLicenses(ResultSet rs) throws SQLException {
+		List<License> licenses = new ArrayList<License>();
+		String title = "license";
+		
+		for(int i = 1; i <=2; i++) {
+			title = title.substring(0, 7) + String.valueOf(i);
+			License license = new License(rs.getString(title));
+			licenses.add(license);			
+		}
+		
+		return licenses;
 	}
 	
 	private List<Change> instatiateChanges(String registration) {
