@@ -73,13 +73,12 @@ public class MonitorService {
 		try {
 			conn.setAutoCommit(false);
 
-//			monitorDao.updateStatusForUser(obj);
+			monitorDao.updateStatusForUser(obj);
 			
 			Change change = getChange(obj, obj, 3);
-//			changeDao.insert(change);
-//			obj.addChange(change);
-			System.out.println(obj.getSerialNumber());
-			System.out.println(change);
+			changeDao.insert(change);
+			obj.addChange(change);
+			MainWindow.addChange(change);
 
 			conn.commit();
 		} 

@@ -74,7 +74,7 @@ public class InventoryList extends JPanel {
 
 	public InventoryList() {
 		changes = loadDataChanges();
-		inventories = loadDataInventories();
+		//inventories = loadDataInventories();
 		workPositions = loadDataWorkPositions();
 		projects = loadDataProjects();
 		users = loadDataUsers();
@@ -209,12 +209,12 @@ public class InventoryList extends JPanel {
 		return list;
 	}
 
-	private List<Inventory> loadDataInventories() {
-		final InventoryService service = new InventoryService();
-		List<Inventory> list = service.findAll();
-		list.sort((e1, e2) -> e1.getProject().getName().compareTo(e2.getProject().getName()));
-		return list;
-	}
+//	private List<Inventory> loadDataInventories() {
+//		final InventoryService service = new InventoryService();
+//		//List<Inventory> list = service.findAll();
+//		//list.sort((e1, e2) -> e1.getProject().getName().compareTo(e2.getProject().getName()));
+//		return list;
+//	}
 	
 	private List<WorkPosition> loadDataWorkPositions() {
 		final WorkPositionService service = new WorkPositionService();
@@ -348,7 +348,7 @@ public class InventoryList extends JPanel {
 					if (i == JOptionPane.OK_OPTION) {
 						Inventory inventory = model.getInventory(modelRow);
 						InventoryService service = new InventoryService();
-						service.delete(inventory);
+					//	service.delete(inventory);
 						model.removeInventory(modelRow);
 						label_Show__Quantity.setText(String.valueOf(table.getRowCount()));
 						repaint();

@@ -9,11 +9,13 @@ public class License implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private String code;
 	private String name;
+	private String brand;
 	private Double value;
 	private Integer quantity;
 	private String status;
-	
+
 	private String reason;
 	private String user;
 
@@ -21,16 +23,24 @@ public class License implements Serializable {
 
 	public License() {
 	}
-
-	public License(String name) {
-		this.name = name;
-	}
 	
-	public License(String name, Double value, Integer quantity, String status) {
+	public License(String code) {
+		this.code = code;
+	}
+
+	public License(String code, String name, String brand, Double value, Integer quantity, String status) {
 		this.name = name;
 		this.value = value;
 		this.quantity = quantity;
 		this.status = status;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getName() {
@@ -41,6 +51,14 @@ public class License implements Serializable {
 		this.name = name;
 	}
 
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
 	public Double getValue() {
 		return value;
 	}
@@ -49,16 +67,16 @@ public class License implements Serializable {
 		this.value = value;
 	}
 
-	public String getStatus() {
-		return status;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
-	public Integer getQuantity() {
-		return quantity;
+	public String getStatus() {
+		return status;
 	}
 
 	public void setStatus(String status) {
@@ -84,7 +102,7 @@ public class License implements Serializable {
 	public List<Change> getChanges() {
 		return changes;
 	}
-
+	
 	public void addChange(Change change) {
 		this.changes.add(change);
 	}
@@ -95,7 +113,7 @@ public class License implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(brand, code, name);
 	}
 
 	@Override
@@ -107,11 +125,12 @@ public class License implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		License other = (License) obj;
-		return Objects.equals(name, other.name);
+		return Objects.equals(brand, other.brand) && Objects.equals(code, other.code)
+				&& Objects.equals(name, other.name);
 	}
 
 	@Override
 	public String toString() {
-		return name;
-	}
+		return  brand + " " + name;
+	}	
 }

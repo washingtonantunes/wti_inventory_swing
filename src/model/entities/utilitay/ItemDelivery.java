@@ -1,18 +1,14 @@
-package model.entities;
+package model.entities.utilitay;
 
 import java.util.Objects;
 
 public class ItemDelivery {
 
 	private String type;
+	private String code;
 	private String name;
 	
 	public ItemDelivery() {
-	}
-
-	public ItemDelivery(String type, String name) {
-		this.type = type;
-		this.name = name;
 	}
 
 	public String getType() {
@@ -21,6 +17,14 @@ public class ItemDelivery {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getName() {

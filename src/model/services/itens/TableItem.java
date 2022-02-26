@@ -32,7 +32,7 @@ public class TableItem extends JTable {
 		setRowHeight(30);
 		setFont(new java.awt.Font(null, Font.BOLD, 20));
 		configureHeader();
-		configureSizeColumn();
+		configureSizeColumn1();
 		configureColumnValue();
 	}
 
@@ -42,7 +42,7 @@ public class TableItem extends JTable {
 		setRowHeight(30);
 		setFont(new java.awt.Font(null, Font.BOLD, 20));
 		configureHeader();
-		configureSizeColumn();
+		configureSizeColumn2();
 	}
 
 	private void configureHeader() {
@@ -53,7 +53,7 @@ public class TableItem extends JTable {
 				.setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
-	private void configureSizeColumn() {
+	private void configureSizeColumn1() {
 		TableColumn column = null;
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
@@ -63,17 +63,44 @@ public class TableItem extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(180); // Type
+				column.setPreferredWidth(200); // Type
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
-				column.setPreferredWidth(300); // Name
+				column.setPreferredWidth(300); // Code
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
+				column.setPreferredWidth(250); // Name
+				column.setResizable(false);
+			} 
+			else if (i == 4) {
+				column.setPreferredWidth(200); // Brand
+				column.setResizable(false);
+			}
+			else if (i == 5) {
 				column.setPreferredWidth(150); // Value
 				column.setResizable(false);
 			}
+		}
+	}
+	
+	private void configureSizeColumn2() {
+		TableColumn column = null;
+		for (int i = 0; i < this.getColumnCount(); i++) {
+			column = this.getColumnModel().getColumn(i);
+			if (i == 0) {
+				column.setPreferredWidth(200); // Type
+				column.setResizable(false);
+			} 
+			else if (i == 1) {
+				column.setPreferredWidth(300); // Code
+				column.setResizable(false);
+			} 
+			else if (i == 2) {
+				column.setPreferredWidth(250); // Name
+				column.setResizable(false);
+			} 
 		}
 	}
 
@@ -90,7 +117,7 @@ public class TableItem extends JTable {
 				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			}
 		};
-		this.getColumnModel().getColumn(3).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

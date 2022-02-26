@@ -1,4 +1,4 @@
-package model.entities;
+package model.entities.utilitay;
 
 import java.util.Objects;
 
@@ -6,7 +6,10 @@ public class Item {
 
 	private int index;
 	private String type;
+	private String code;
 	private String name;
+	private String brand;
+	private String patrimonyNumber;
 	private Double value;
 
 	public Item() {
@@ -14,13 +17,6 @@ public class Item {
 	
 	public Item(String name) {
 		this.name = name;
-	}
-
-	public Item(int index, String type, String name, Double value) {
-		this.index = index;
-		this.type = type;
-		this.name = name;
-		this.value = value;
 	}
 
 	public int getIndex() {
@@ -38,6 +34,14 @@ public class Item {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String getName() {
 		return name;
@@ -45,6 +49,22 @@ public class Item {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	
+	public String getPatrimonyNumber() {
+		return patrimonyNumber;
+	}
+
+	public void setPatrimonyNumber(String patrimonyNumber) {
+		this.patrimonyNumber = patrimonyNumber;
 	}
 
 	public Double getValue() {
@@ -57,7 +77,7 @@ public class Item {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, type);
+		return Objects.hash(brand, name, type);
 	}
 
 	@Override
@@ -69,6 +89,7 @@ public class Item {
 		if (getClass() != obj.getClass())
 			return false;
 		Item other = (Item) obj;
-		return Objects.equals(name, other.name) && Objects.equals(type, other.type);
+		return Objects.equals(brand, other.brand) && Objects.equals(name, other.name)
+				&& Objects.equals(type, other.type);
 	}
 }

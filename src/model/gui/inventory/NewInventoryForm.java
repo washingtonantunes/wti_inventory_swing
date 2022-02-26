@@ -674,7 +674,7 @@ public class NewInventoryForm extends JDialog {
 			try {
 				inventory = getFormData();
 				InventoryService service = new InventoryService();
-				service.save(inventory);
+				//service.save(inventory);
 				model.addInventory(inventory);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Inventory successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);

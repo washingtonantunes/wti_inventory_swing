@@ -674,7 +674,7 @@ public class EditInventoryForm extends JDialog {
 			try {
 				final Inventory inventoryNew = getFormData();
 				InventoryService service = new InventoryService();
-				service.update(inventoryOld, inventoryNew);
+				//service.update(inventoryOld, inventoryNew);
 				model.updateInventory(lineSelected, inventoryNew);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Inventory successfully updated", "Success updating object",

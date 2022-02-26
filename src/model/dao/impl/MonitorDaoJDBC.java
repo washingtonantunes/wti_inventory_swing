@@ -106,7 +106,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `monitors` "
-					+ "SET `status` = ? "
+					+ "SET `status` = ?, "
 					+ "`user` = ? "
 					+ "WHERE `serialNumber` = ?");
 

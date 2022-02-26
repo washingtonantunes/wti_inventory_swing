@@ -10,15 +10,18 @@ import db.DBException;
 import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
+import model.dao.InventoryDao;
 import model.dao.LicenseDao;
 import model.entities.Change;
 import model.entities.License;
+import model.entities.User;
 import model.gui.MainWindow;
 
 public class LicenseService {
 
 	private LicenseDao licenseDao = DaoFactory.createLicenseDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
+	private InventoryDao inventoryDao = DaoFactory.createInventoryDao(); 
 
 	public Map<String, License> findAll() {
 		return licenseDao.findAll();
@@ -72,19 +75,23 @@ public class LicenseService {
 		}
 	}
 	
-	public void updateQuantity(License obj) {
+	public void updateQuantity(License obj, User user, int type) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-//			licenseDao.updateQuantity(obj);
+			licenseDao.updateQuantity(obj);
 			
 			Change change = getChange(obj, obj, 3);
-//			changeDao.insert(change);
-//			obj.addChange(change);
-			System.out.println(obj.getName());
-			System.out.println(obj.getQuantity());
-			System.out.println(change);
+			changeDao.insert(change);
+			obj.addChange(change);
+			MainWindow.addChange(change);
+			
+			if (type == 1) {
+				inventoryDao.insertLicenseUser(obj, user);
+			} else if (type == 2) {
+				inventoryDao.deleteLicenseUser(obj, user);
+			}
 
 			conn.commit();
 		} 
@@ -125,7 +132,7 @@ public class LicenseService {
 
 	private Change getChange(License objOld, License objNew, int type) {
 		Change change = new Change();
-		change.setObject(objNew.getName());
+		change.setObject(objNew.getCode());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
@@ -159,7 +166,7 @@ public class LicenseService {
 			changes = getFieldsUpdated(objOld, objNew);
 		} 
 		else if (type == 3) {
-			changes = objNew.getName() + " delivered to the user: " + objNew.getUser();
+			changes = objNew.getName() + " " + objNew.getBrand() + " delivered to the user: " + objNew.getUser();
 		} 
 		else if (type == 4) {
 			changes = "License Disabled for: " + objOld.getReason();

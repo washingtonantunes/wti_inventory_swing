@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import db.DB;
@@ -106,28 +107,13 @@ public class UserDaoJDBC implements UserDao {
 					"UPDATE `users` "
 					+ "SET `equipment` = ?, "
 					+ "`monitor1` = ?, "
-					+ "`monitor2` = ?, "
-					+ "`email` = ?, "
-					+ "`peripheral1` = ?, "
-					+ "`peripheral2` = ?, "
-					+ "`peripheral3` = ?, "
-					+ "`peripheral4` = ?, "
-					+ "`peripheral5` = ?, "
-					+ "`peripheral6` = ?, "
-					+ "`license` = ? "
+					+ "`monitor2` = ? "
 					+ "WHERE `registration` = ?");
 
 			st.setString(1, obj.getEquipment().getSerialNumber());
 			st.setString(2, obj.getMonitor1().getSerialNumber());
 			st.setString(3, obj.getMonitor2().getSerialNumber());
-			st.setString(4, obj.getPeripherals().get(0).getName());
-			st.setString(5, obj.getPeripherals().get(1).getName());
-			st.setString(6, obj.getPeripherals().get(2).getName());
-			st.setString(7, obj.getPeripherals().get(3).getName());
-			st.setString(8, obj.getPeripherals().get(4).getName());
-			st.setString(9, obj.getPeripherals().get(5).getName());
-			st.setString(10, obj.getLicenses().get(0).getName());
-			st.setString(11, obj.getRegistration());
+			st.setString(4, obj.getRegistration());
 
 			st.executeUpdate();
 		} 
@@ -187,8 +173,8 @@ public class UserDaoJDBC implements UserDao {
 				user.setEquipment(instatiateEquipment(rs));
 				user.setMonitor1(instatiateMonitor1(rs));
 				user.setMonitor2(instatiateMonitor2(rs));
-				user.setPeripherals(instatiatePeripherals(rs));
-				user.setLicenses(instatiateLicenses(rs));
+				user.setPeripherals(instatiatePeripherals(user.getRegistration()));
+				user.setLicenses(instatiateLicenses(user.getRegistration()));
 				user.setChanges(instatiateChanges(user.getRegistration()));
 				users.put(user.getRegistration(), user);
 			}
@@ -223,31 +209,26 @@ public class UserDaoJDBC implements UserDao {
 		return monitor;
 	}
 	
-	private List<Peripheral> instatiatePeripherals(ResultSet rs) throws SQLException {
-		List<Peripheral> peripherals = new ArrayList<Peripheral>();
-		String title = "peripheral";
-		
-		for(int i = 1; i <=5; i++) {
-			title = title.substring(0, 10) + String.valueOf(i);
-			Peripheral peripheral = new Peripheral(rs.getString(title));
-			peripherals.add(peripheral);
-			
-		}
-		
-		return peripherals;
+	private List<Peripheral> instatiatePeripherals(String registration) {
+		Set<String> peripherals = MainWindow.getPeripheralByUser(registration);
+		List<Peripheral> listPeripheral = new ArrayList<Peripheral>();
+
+		for (String string : peripherals) {
+			Peripheral peripheral = new Peripheral(string);
+			listPeripheral.add(peripheral);
+		}		
+		return listPeripheral;
 	}
 	
-	private List<License> instatiateLicenses(ResultSet rs) throws SQLException {
-		List<License> licenses = new ArrayList<License>();
-		String title = "license";
-		
-		for(int i = 1; i <=2; i++) {
-			title = title.substring(0, 7) + String.valueOf(i);
-			License license = new License(rs.getString(title));
-			licenses.add(license);			
-		}
-		
-		return licenses;
+	private List<License> instatiateLicenses(String registration) {
+		Set<String> licenses = MainWindow.getLicenseByUser(registration);
+		List<License> listLicense = new ArrayList<License>();
+
+		for (String string : licenses) {
+			License license = new License(string);
+			listLicense.add(license);
+		}		
+		return listLicense;
 	}
 	
 	private List<Change> instatiateChanges(String registration) {

@@ -6,18 +6,19 @@ import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
-import model.entities.ItemDelivery;
+import model.entities.utilitay.ItemDelivery;
 
 public class DeliveryTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final int COL_TYPE = 0;
-	private static final int COL_NAME = 1;
+	private static final int COL_CODE = 1;
+	private static final int COL_NAME = 2;
 
 	private List<ItemDelivery> itens;
 
-	private String[] columns = new String[] { "Type", "Name" };
+	private String[] columns = new String[] { "Type", "Code", "Name" };
 
 	public DeliveryTableModel() {
 		this.itens = new ArrayList<ItemDelivery>();
@@ -51,12 +52,19 @@ public class DeliveryTableModel extends AbstractTableModel {
 		if (column == COL_TYPE) {
 			return i.getType();
 		} 
+		else if (column == COL_CODE) {
+			return i.getCode();
+		}
 		else if (column == COL_NAME) {
 			return i.getName();
 		}
 		return "";
 	}
-
+	
+	public List<ItemDelivery> getItems() {
+		return itens;
+	}
+	
 	public List<ItemDelivery> getItemDelivery(String type) {
 		return itens.stream().filter(i -> i.getType().equals(type)).collect(Collectors.toList());
 	}
@@ -69,10 +77,6 @@ public class DeliveryTableModel extends AbstractTableModel {
 		itens.add(Item);
 		int lastIndex = getRowCount() - 1;
 		fireTableRowsInserted(lastIndex, lastIndex);
-	}
-
-	public List<ItemDelivery> getItems() {
-		return itens;
 	}
 
 	public void updateItem(int indexLine, ItemDelivery Item) {

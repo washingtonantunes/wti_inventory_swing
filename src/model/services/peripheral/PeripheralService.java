@@ -10,15 +10,18 @@ import db.DBException;
 import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
+import model.dao.InventoryDao;
 import model.dao.PeripheralDao;
 import model.entities.Change;
 import model.entities.Peripheral;
+import model.entities.User;
 import model.gui.MainWindow;
 
 public class PeripheralService {
 
 	private PeripheralDao peripheralDao = DaoFactory.createPeripheralDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
+	private InventoryDao inventoryDao = DaoFactory.createInventoryDao(); 
 
 	public Map<String, Peripheral> findAll() {
 		return peripheralDao.findAll();
@@ -72,19 +75,23 @@ public class PeripheralService {
 		}
 	}
 	
-	public void updateQuantity(Peripheral obj) {
+	public void updateQuantity(Peripheral obj, User user, int type) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-//			peripheralDao.updateQuantity(obj);
+			peripheralDao.updateQuantity(obj);
 			
 			Change change = getChange(obj, obj, 3);
-//			changeDao.insert(change);
-//			obj.addChange(change);
-			System.out.println(obj.getName());
-			System.out.println(obj.getQuantity());
-			System.out.println(change);
+			changeDao.insert(change);
+			obj.addChange(change);
+			MainWindow.addChange(change);
+			
+			if (type == 1) {
+				inventoryDao.insertPeripheralUser(obj, user);
+			} else if (type == 2) {
+				inventoryDao.deletePeripheralUser(obj, user);
+			}
 
 			conn.commit();
 		} 
@@ -125,7 +132,7 @@ public class PeripheralService {
 
 	private Change getChange(Peripheral objOld, Peripheral objNew, int type) {
 		Change change = new Change();
-		change.setObject(objNew.getName());
+		change.setObject(objNew.getCode());
 		change.setType(getTypeChange(type));
 		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
@@ -159,7 +166,7 @@ public class PeripheralService {
 			changes = getFieldsUpdated(objOld, objNew);
 		} 
 		else if (type == 3) {
-			changes = objNew.getName() + " delivered to the user: " + objNew.getUser();
+			changes = objNew.getName() + " " + objNew.getBrand() + " delivered to the user: " + objNew.getUser();
 		} 
 		else if (type == 4) {
 			changes = "Peripheral Disabled for: " + objOld.getReason();

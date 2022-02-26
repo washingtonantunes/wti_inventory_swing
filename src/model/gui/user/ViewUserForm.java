@@ -15,11 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.entities.Equipment;
-import model.entities.Item;
 import model.entities.License;
 import model.entities.Monitor;
 import model.entities.Peripheral;
 import model.entities.User;
+import model.entities.utilitay.Item;
 import model.gui.MainWindow;
 import model.gui.change.ChangesPanel;
 import model.gui.item.ItemList;
@@ -42,7 +42,7 @@ public class ViewUserForm extends JDialog {
 
 	private final int COLOR_LABEL = 1;
 	private final int COLOR_LABEL_SHOW = 2;
-	
+
 	private final int FONT = 1;
 
 	private final int WIDTH_INTERNAL_PANEL = (100 + 400) + 20;
@@ -93,7 +93,8 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
-		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
+				FONT);
 		fieldsPanel.add(label_Show_Registration);
 
 		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL, FONT);
@@ -123,13 +124,15 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
-		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
+				FONT);
 		fieldsPanel.add(label_Show_Department);
 
 		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
-		final JLabel label_Show_Project = new MyLabel(user.getProject().getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_Project = new MyLabel(user.getProject().getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
+				FONT);
 		fieldsPanel.add(label_Show_Project);
 
 		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL, FONT);
@@ -141,7 +144,8 @@ public class ViewUserForm extends JDialog {
 		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_DateEntry);
 
-		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW,
+				COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_DateEntry);
 
 		return fieldsPanel;
@@ -205,57 +209,110 @@ public class ViewUserForm extends JDialog {
 			Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
 			user.setMonitor2(monitor);
 		}
-		
-		List<Peripheral> list1 = new ArrayList<Peripheral>();
-		for (Peripheral p : user.getPeripherals()) {
-			if (p.getName() != null) {
-				Peripheral peripheral = MainWindow.getPeripheral(p.getName());
-				list1.add(peripheral);
+
+		{ // SET Peripheral
+			List<Peripheral> listPeripheral = new ArrayList<Peripheral>();
+
+			for (Peripheral peripheralss : user.getPeripherals()) {
+				if (peripheralss.getCode() != null) {
+					Peripheral p = MainWindow.getPeripheral(peripheralss.getCode());
+					listPeripheral.add(p);
+				}
 			}
+
+			if (listPeripheral.size() > 0) {
+				user.setPeripherals(listPeripheral);
+			} 
 		}
-		user.setPeripherals(list1);
-		
-		
-		List<License> list2 = new ArrayList<License>();
-		for (License p : user.getLicenses()) {
-			if (p.getName() != null) {
-				License license = MainWindow.getLicense(p.getName());
-				list2.add(license);
+
+		{ // SET License
+			List<License> listLicense = new ArrayList<License>();
+
+			for (License license : user.getLicenses()) {
+				if (license.getCode() != null) {
+					License l = MainWindow.getLicense(license.getCode());
+					listLicense.add(l);
+				}
 			}
+
+			if (listLicense.size() > 0) {
+				user.setLicenses(listLicense);
+			} 
 		}
-		user.setLicenses(list2);
 	}
 
 	private List<Item> getItens() {
 		final List<Item> itens = new ArrayList<Item>();
 
-		int index = 0;
-
+		//GET Equipment
 		if (user.getEquipment().getSerialNumber() != null) {
 			Equipment equipment = user.getEquipment();
-			itens.add(new Item(++index, "Equipment", equipment.getSerialNumber(), equipment.getValue()));
+
+			final Item item = new Item();
+			item.setIndex(itens.size() + 1);
+			item.setType("Equipamento");
+			item.setCode(equipment.getSerialNumber());
+			item.setName(equipment.getType());
+			item.setBrand(equipment.getBrand());
+			item.setValue(equipment.getValue());
+			itens.add(item);
 		}
+		
+		//GET Monitors
 		if (user.getMonitor1().getSerialNumber() != null) {
 			Monitor monitor = user.getMonitor1();
-			itens.add(new Item(++index, "Monitor", monitor.getSerialNumber(), monitor.getValue()));
+
+			final Item item = new Item();
+			item.setIndex(itens.size() + 1);
+			item.setType("Monitor");
+			item.setCode(monitor.getSerialNumber());
+			item.setName(monitor.getModel());
+			item.setBrand(monitor.getBrand());
+			item.setValue(monitor.getValue());
+			itens.add(item);
 		}
 		if (user.getMonitor2().getSerialNumber() != null) {
 			Monitor monitor = user.getMonitor2();
-			itens.add(new Item(++index, "Monitor", monitor.getSerialNumber(), monitor.getValue()));
+
+			final Item item = new Item();
+			item.setIndex(itens.size() + 1);
+			item.setType("Monitor");
+			item.setCode(monitor.getSerialNumber());
+			item.setName(monitor.getModel());
+			item.setBrand(monitor.getBrand());
+			item.setValue(monitor.getValue());
+			itens.add(item);
 		}
-		
-		if (user.getPeripherals().size() != 0) {
+
+		// GET Peripherals
+		if (user.getPeripherals() != null && user.getPeripherals().size() > 0) {
 			for (Peripheral peripheral : user.getPeripherals()) {
-				itens.add(new Item(++index, "Peripheral", peripheral.getName(), peripheral.getValue()));
-			}
-		}
-		
-		if (user.getLicenses().size() != 0) {
-			for (License license : user.getLicenses()) {
-				itens.add(new Item(++index, "License", license.getName(), license.getValue()));
+
+				final Item item = new Item();
+				item.setIndex(itens.size() + 1);
+				item.setType("Periférico");
+				item.setCode(peripheral.getCode());
+				item.setName(peripheral.getName());
+				item.setBrand(peripheral.getBrand());
+				item.setValue(peripheral.getValue());
+				itens.add(item);
 			}
 		}
 
+		// GET Licenses
+		if (user.getLicenses() != null && user.getLicenses().size() > 0) {
+			for (License license : user.getLicenses()) {
+
+				final Item item = new Item();
+				item.setIndex(itens.size() + 1);
+				item.setType("Licença");
+				item.setCode(license.getCode());
+				item.setName(license.getName());
+				item.setBrand(license.getBrand());
+				item.setValue(license.getValue());
+				itens.add(item);
+			}
+		}
 		return itens;
 	}
 }

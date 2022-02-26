@@ -79,28 +79,6 @@ public class UserService {
 			}
 		}
 	}
-	
-	public void updateItem(User obj) {
-		Connection conn = DB.getConnection();
-		try {
-			conn.setAutoCommit(false);
-
-//			userDao.updateItem(obj);
-
-			System.out.println(obj);
-
-			conn.commit();
-		} 
-		catch (SQLException db1) {
-			try {
-				conn.rollback();
-				throw new DBException("Transaction rolled back! Cause by: " + db1.getMessage());
-			} 
-			catch (SQLException db2) {
-				throw new DBException("Error trying to rollback! Cause by: " + db2.getMessage());
-			}
-		}
-	}
 
 	public void disable(User obj) {
 		Connection conn = DB.getConnection();

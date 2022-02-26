@@ -77,35 +77,4 @@ public class InventoryService {
 			}
 		}
 	}
-	
-//	private void updateStatusObj(Inventory obj, int type) {
-//		// Validation Work Position
-//		if (obj.getWorkPosition() != null && obj.getWorkPosition().getWorkPoint() != "HOME-OFFICE" && obj.getWorkPosition().getWorkPoint() != "HIBRIDO") {
-//			WorkPositionService service = new WorkPositionService();
-//		}
-//
-//		// Validation Project
-//		if (obj.getProject() != null) {
-//			ProjectService service = new ProjectService();
-//		}
-//		// Validation User
-//		if (obj.getProject() != null) {
-//			UserService service = new UserService();
-//		}
-//
-//		// Validation Equipment
-//		if (obj.getEquipment() != null) {
-//			EquipmentService service = new EquipmentService();
-//		}
-//
-//		// Validation Monitor1
-//		if (obj.getMonitor1() != null) {
-//			MonitorService service = new MonitorService();
-//		}
-//
-//		// Validation Monitor2
-//		if (obj.getMonitor2() != null) {
-//			MonitorService service = new MonitorService();
-//		}
-//	}
 }

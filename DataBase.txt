@@ -97,7 +97,7 @@ CREATE TABLE `users` (
   `equipment` varchar(45) DEFAULT NULL,
   `monitor1` varchar(45) DEFAULT NULL,
   `monitor2` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`department`,`registration`),
+  PRIMARY KEY (`registration`,`department`),
   UNIQUE KEY `matricula_UNIQUE` (`registration`),
   UNIQUE KEY `equipment_UNIQUE` (`equipment`),
   UNIQUE KEY `monitor1_UNIQUE` (`monitor1`),
@@ -119,19 +119,53 @@ CREATE TABLE `projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `peripherals` (
+  `code` varchar(45) NOT NULL,
+  `brand` varchar(45) NOT NULL,
   `name` varchar(50) NOT NULL,
   `value` decimal(5,2) DEFAULT NULL,
-  'quantity' int NOT NULL,
+  `quantity` int NOT NULL,
   `status` varchar(30) NOT NULL,
-  PRIMARY KEY (`name`)
+  PRIMARY KEY (`code`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
 CREATE TABLE `licenses` (
+  `code` varchar(45) NOT NULL,
+  `brand` varchar(45) NOT NULL,
   `name` varchar(50) NOT NULL,
   `value` decimal(5,2) DEFAULT NULL,
-  'quantity' int NOT NULL,
+  `quantity` int NOT NULL,
   `status` varchar(30) NOT NULL,
-  PRIMARY KEY (`name`)
+  PRIMARY KEY (`code`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users_monitors` (
+  `registration` varchar(10) NOT NULL,
+  `serialNumber` varchar(45) NOT NULL,
+  PRIMARY KEY (`registration`,`serialNumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users_peripherals` (
+  `registration` varchar(10) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  PRIMARY KEY (`registration`,`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users_peripherals` (
+  `registration_user` varchar(10) NOT NULL,
+  `code_peripheral` varchar(45) NOT NULL,
+  PRIMARY KEY (`registration_user`,`code_peripheral`),
+  KEY `FK_peripheral_idx` (`code_peripheral`),
+  CONSTRAINT `FK_peripheral` FOREIGN KEY (`code_peripheral`) REFERENCES `peripherals` (`code`),
+  CONSTRAINT `FK_user` FOREIGN KEY (`registration_user`) REFERENCES `users` (`registration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `users_licenses` (
+  `registration` varchar(10) NOT NULL,
+  `code` varchar(45) NOT NULL,
+  PRIMARY KEY (`registration`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

@@ -128,7 +128,7 @@ public class EquipmentDaoJDBC implements EquipmentDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `equipments` "
-					+ "SET `status` = ? "
+					+ "SET `status` = ?, "
 					+ "`user` = ? "
 					+ "WHERE `serialNumber` = ?");
 

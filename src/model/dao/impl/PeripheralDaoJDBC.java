@@ -30,17 +30,21 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO `peripherals` "
-					+ "(`name`,"
+					+ "(`code`,"
+					+ "`brand`,"
+					+ "`name`,"
 					+ "`value`,"
 					+ "`quantity`,"
 					+ "`status`) "
 					+ "VALUES " 
 					+ "(?, ?, ?, ?)");
 
-			st.setString(1, obj.getName());
-			st.setDouble(2, obj.getValue());
-			st.setInt(3, obj.getQuantity());
-			st.setString(4, obj.getStatus());
+			st.setString(1, obj.getCode());
+			st.setString(2, obj.getName());
+			st.setString(3, obj.getBrand());
+			st.setDouble(4, obj.getValue());
+			st.setInt(5, obj.getQuantity());
+			st.setString(6, obj.getStatus());
 
 			st.executeUpdate();
 		} 
@@ -59,10 +63,10 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 			st = conn.prepareStatement(
 					"UPDATE `peripherals` "
 					+ "SET `value` = ?"
-					+ "WHERE `name` = ?");
+					+ "WHERE `code` = ?");
 
 			st.setDouble(1, obj.getValue());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -80,11 +84,11 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `peripherals` "
-					+ "SET `quantity` = ?"
-					+ "WHERE `name` = ?");
+					+ "SET `quantity` = ? "
+					+ "WHERE `code` = ?");
 
 			st.setDouble(1, obj.getQuantity());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -103,10 +107,10 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 			st = conn.prepareStatement(
 					"UPDATE `peripherals` " 
 					+ "SET `status` = ? "
-					+ "WHERE `name` = ?");
+					+ "WHERE `code` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -132,12 +136,14 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 			while (rs.next()) {
 				Peripheral peripheral = new Peripheral();
 
+				peripheral.setCode(rs.getString("code"));
+				peripheral.setBrand(rs.getString("brand"));
 				peripheral.setName(rs.getString("name"));
 				peripheral.setValue(rs.getDouble("value"));
 				peripheral.setQuantity(rs.getInt("quantity"));
 				peripheral.setStatus(rs.getString("status"));
-				peripheral.setChanges(instatiateChanges(peripheral.getName()));
-				peripherals.put(peripheral.getName(), peripheral);
+				peripheral.setChanges(instatiateChanges(peripheral.getCode()));
+				peripherals.put(peripheral.getCode(), peripheral);
 			}
 			return peripherals;
 		} 
@@ -150,8 +156,8 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 		}
 	}
 
-	private List<Change> instatiateChanges(String name) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(name)) .collect(Collectors.toList());
+	private List<Change> instatiateChanges(String code) {
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(code)) .collect(Collectors.toList());
 		return changes;
 	}
 }

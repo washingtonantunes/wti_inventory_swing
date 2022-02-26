@@ -30,17 +30,21 @@ public class LicenseDaoJDBC implements LicenseDao {
 		try {
 			st = conn.prepareStatement(
 					"INSERT INTO `licenses` "
-					+ "(`name`,"
+					+ "(`code`,"
+					+ "`brand`,"
+					+ "`name`,"
 					+ "`value`,"
 					+ "`quantity`,"
 					+ "`status`) "
 					+ "VALUES " 
 					+ "(?, ?, ?, ?)");
 
-			st.setString(1, obj.getName());
-			st.setDouble(2, obj.getValue());
-			st.setInt(3, obj.getQuantity());
-			st.setString(4, obj.getStatus());
+					st.setString(1, obj.getCode());
+					st.setString(2, obj.getName());
+					st.setString(3, obj.getBrand());
+					st.setDouble(4, obj.getValue());
+					st.setInt(5, obj.getQuantity());
+					st.setString(6, obj.getStatus());
 
 			st.executeUpdate();
 		} 
@@ -59,10 +63,10 @@ public class LicenseDaoJDBC implements LicenseDao {
 			st = conn.prepareStatement(
 					"UPDATE `licenses` "
 					+ "SET `value` = ?"
-					+ "WHERE `name` = ?");
+					+ "WHERE `code` = ?");
 
 			st.setDouble(1, obj.getValue());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -81,10 +85,10 @@ public class LicenseDaoJDBC implements LicenseDao {
 			st = conn.prepareStatement(
 					"UPDATE `licenses` "
 					+ "SET `quantity` = ?"
-					+ "WHERE `name` = ?");
+					+ "WHERE `code` = ?");
 
 			st.setDouble(1, obj.getQuantity());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -103,10 +107,10 @@ public class LicenseDaoJDBC implements LicenseDao {
 			st = conn.prepareStatement(
 					"UPDATE `licenses` " 
 					+ "SET `status` = ? "
-					+ "WHERE `name` = ?");
+					+ "WHERE `code` = ?");
 
 			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getName());
+			st.setString(2, obj.getCode());
 
 			st.executeUpdate();
 		} 
@@ -132,12 +136,14 @@ public class LicenseDaoJDBC implements LicenseDao {
 			while (rs.next()) {
 				License license = new License();
 
+				license.setCode(rs.getString("code"));
+				license.setBrand(rs.getString("brand"));
 				license.setName(rs.getString("name"));
 				license.setValue(rs.getDouble("value"));
 				license.setQuantity(rs.getInt("quantity"));
 				license.setStatus(rs.getString("status"));
-				license.setChanges(instatiateChanges(license.getName()));
-				licenses.put(license.getName(), license);
+				license.setChanges(instatiateChanges(license.getCode()));
+				licenses.put(license.getCode(), license);
 			}
 			return licenses;
 		} 
@@ -150,8 +156,8 @@ public class LicenseDaoJDBC implements LicenseDao {
 		}
 	}
 
-	private List<Change> instatiateChanges(String name) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(name)) .collect(Collectors.toList());
+	private List<Change> instatiateChanges(String code) {
+		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(code)) .collect(Collectors.toList());
 		return changes;
 	}
 }

@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -22,8 +24,11 @@ import model.entities.Peripheral;
 import model.entities.Project;
 import model.entities.User;
 import model.entities.WorkPosition;
+import model.entities.utilitay.User_License;
+import model.entities.utilitay.User_Peripheral;
 import model.services.change.ChangeService;
 import model.services.equipment.EquipmentService;
+import model.services.inventory.InventoryService;
 import model.services.license.LicenseService;
 import model.services.monitor.MonitorService;
 import model.services.peripheral.PeripheralService;
@@ -42,10 +47,13 @@ public class MainWindow extends JFrame {
 
 	private JDesktopPane main;
 
-	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista",
-			"ACTIVE", null);
+	public static Collaborator collaborator = new Collaborator("Washington Antunes", "853373", "853373", 0, "Analista", "ACTIVE", null);
 
 	private static List<Change> changes;
+	
+	private static List<User_Peripheral> users_peripherals;
+	private static List<User_License> users_licenses;
+	
 	private static Map<String, Project> projects;
 	private static Map<String, User> users;
 	private static Map<String, WorkPosition> workPositions;
@@ -56,6 +64,9 @@ public class MainWindow extends JFrame {
 
 	public MainWindow() {
 		changes = loadDataChanges();
+		users_peripherals = loadUsers_Peripherals();
+		users_licenses = loadUsers_Licenses();
+		
 		projects = loadDataProjects();
 		users = loadDataUsers();
 		workPositions = loadDataWorkPositions();
@@ -117,12 +128,30 @@ public class MainWindow extends JFrame {
 		return main;
 	}
 
+	//Changes
 	public static void addChange(Change change) {
 		changes.add(change);
 	}
 
 	public static List<Change> getChanges() {
 		return changes;
+	}
+	
+	// User_Peripherals
+	public static void addUser_Peripheral(User_Peripheral user_peripheral) {
+		users_peripherals.add(user_peripheral);
+	}
+
+	public static List<User_Peripheral> getUser_Peripherals() {
+		return users_peripherals;
+	}
+	
+	public static Set<String> getPeripheralByUser(String registration) {
+		return users_peripherals.stream().filter(p -> p.getRegistration().equals(registration)).map(User_Peripheral::getCode).collect(Collectors.toSet());
+	}
+	
+	public static Set<String> getLicenseByUser(String registration) {
+		return users_licenses.stream().filter(l -> l.getRegistration().equals(registration)).map(User_License::getCode).collect(Collectors.toSet());
 	}
 
 	// User
@@ -238,15 +267,8 @@ public class MainWindow extends JFrame {
 		return peripherals;
 	}
 
-	public static Peripheral getPeripheral(String peripheral) {
-		Peripheral Peripheral;
-
-		if (peripherals.containsKey(peripheral)) {
-			Peripheral = peripherals.get(peripheral);
-		} else {
-			Peripheral = new Peripheral();
-		}
-		return Peripheral;
+	public static Peripheral getPeripheral(String code) {
+		return peripherals.get(code);
 	}
 		
 	// License
@@ -258,20 +280,25 @@ public class MainWindow extends JFrame {
 		return licenses;
 	}
 
-	public static License getLicense(String license) {
-		License License;
-
-		if (licenses.containsKey(license)) {
-			License = licenses.get(license);
-		} else {
-			License = new License();
-		}
-		return License;
+	public static License getLicense(String code) {
+		return licenses.get(code);
 	}
 
 	private List<Change> loadDataChanges() {
 		final ChangeService service = new ChangeService();
 		List<Change> list = service.findAll();
+		return list;
+	}
+	
+	private List<User_Peripheral> loadUsers_Peripherals() {
+		final InventoryService service = new InventoryService();
+		List<User_Peripheral> list = service.findAllUser_Peripheral();
+		return list;
+	}
+	
+	private List<User_License> loadUsers_Licenses() {
+		final InventoryService service = new InventoryService();
+		List<User_License> list = service.findAllUser_License();
 		return list;
 	}
 

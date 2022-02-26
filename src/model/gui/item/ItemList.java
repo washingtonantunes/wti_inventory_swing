@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import model.entities.Item;
 import model.entities.User;
+import model.entities.utilitay.Item;
 import model.gui.MainWindow;
 import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
@@ -58,7 +58,7 @@ public class ItemList extends JDialog {
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Itens");
-		setPreferredSize(new Dimension(720, 500));
+		setPreferredSize(new Dimension(850, 500));
 		setResizable(false);
 
 		pack();
@@ -67,7 +67,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setPreferredSize(new Dimension(720, 55));
+		panel.setPreferredSize(new Dimension(850, 55));
 
 		panel.add(createPanelButtonWest());
 		panel.add(createPanelButtonEast());
@@ -77,7 +77,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonWest() {
 		final JPanel panelButtonWest = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-		panelButtonWest.setPreferredSize(new Dimension(560, 55));
+		panelButtonWest.setPreferredSize(new Dimension(660, 55));
 		panelButtonWest.setBackground(COLOR1);
 
 		final JButton buttonDelivery = new MyButton("Delivery", 2);
@@ -101,7 +101,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonEast() {
 		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 10));
-		panel.setPreferredSize(new Dimension(140, 55));
+		panel.setPreferredSize(new Dimension(160, 55));
 		panel.setBackground(COLOR1);
 
 		final JLabel label_Quantity = new MyLabel("Quantity:", 1, 4, 2);
@@ -124,14 +124,14 @@ public class ItemList extends JDialog {
 	}
 
 	private JPanel createPanelSouth() {
-		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-		panel.setPreferredSize(new Dimension(720, 50));
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 10));
+		panel.setPreferredSize(new Dimension(850, 50));
 		panel.setBackground(COLOR2);
 
 		final JLabel label_CostTotal = new MyLabel("Cost Total:", 2, 4, 2);
 		panel.add(label_CostTotal);
 
-		label_Show_CostTotal = new MyLabel(String.format("R$ %.2f", getCostTotal()), 2, 4, 2);
+		label_Show_CostTotal = new MyLabel(String.format("R$ %.2f", getCostTotal()), 1, 4, 2);
 		panel.add(label_Show_CostTotal);
 
 		return panel;
