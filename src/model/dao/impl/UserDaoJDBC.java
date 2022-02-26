@@ -4,24 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.UserDao;
 import model.entities.Change;
-import model.entities.Equipment;
-import model.entities.License;
-import model.entities.Monitor;
-import model.entities.Peripheral;
 import model.entities.Project;
 import model.entities.User;
-import model.gui.MainWindow;
 
 public class UserDaoJDBC implements UserDao {
 	
@@ -98,32 +91,6 @@ public class UserDaoJDBC implements UserDao {
 			DB.closeStatement(st);
 		}
 	}
-	
-	@Override
-	public void updateItem(User obj) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"UPDATE `users` "
-					+ "SET `equipment` = ?, "
-					+ "`monitor1` = ?, "
-					+ "`monitor2` = ? "
-					+ "WHERE `registration` = ?");
-
-			st.setString(1, obj.getEquipment().getSerialNumber());
-			st.setString(2, obj.getMonitor1().getSerialNumber());
-			st.setString(3, obj.getMonitor2().getSerialNumber());
-			st.setString(4, obj.getRegistration());
-
-			st.executeUpdate();
-		} 
-		catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} 
-		finally {
-			DB.closeStatement(st);
-		}
-	}
 
 	@Override
 	public void disable(User obj) {
@@ -170,11 +137,6 @@ public class UserDaoJDBC implements UserDao {
 				user.setStatus(rs.getString("status"));
 				user.setDateEntry(rs.getDate("dateEntry"));
 				user.setProject(instatiateProject(rs));
-				user.setEquipment(instatiateEquipment(rs));
-				user.setMonitor1(instatiateMonitor1(rs));
-				user.setMonitor2(instatiateMonitor2(rs));
-				user.setPeripherals(instatiatePeripherals(user.getRegistration()));
-				user.setLicenses(instatiateLicenses(user.getRegistration()));
 				user.setChanges(instatiateChanges(user.getRegistration()));
 				users.put(user.getRegistration(), user);
 			}
@@ -190,49 +152,10 @@ public class UserDaoJDBC implements UserDao {
 	}
 	
 	private Project instatiateProject(ResultSet rs) throws SQLException {
-		Project project = MainWindow.getProject(rs.getString("project"));
-		return project;
+		return LoadData.getProject(rs.getString("project"));
 	}
 	
-	private Equipment instatiateEquipment(ResultSet rs) throws SQLException {
-		Equipment equipment = new Equipment(rs.getString("equipment"));
-		return equipment;
-	}
-	
-	private Monitor instatiateMonitor1(ResultSet rs) throws SQLException {
-		Monitor monitor = new Monitor(rs.getString("monitor1"));
-		return monitor;
-	}
-	
-	private Monitor instatiateMonitor2(ResultSet rs) throws SQLException {
-		Monitor monitor = new Monitor(rs.getString("monitor2"));
-		return monitor;
-	}
-	
-	private List<Peripheral> instatiatePeripherals(String registration) {
-		Set<String> peripherals = MainWindow.getPeripheralByUser(registration);
-		List<Peripheral> listPeripheral = new ArrayList<Peripheral>();
-
-		for (String string : peripherals) {
-			Peripheral peripheral = new Peripheral(string);
-			listPeripheral.add(peripheral);
-		}		
-		return listPeripheral;
-	}
-	
-	private List<License> instatiateLicenses(String registration) {
-		Set<String> licenses = MainWindow.getLicenseByUser(registration);
-		List<License> listLicense = new ArrayList<License>();
-
-		for (String string : licenses) {
-			License license = new License(string);
-			listLicense.add(license);
-		}		
-		return listLicense;
-	}
-	
-	private List<Change> instatiateChanges(String registration) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(registration)).collect(Collectors.toList());
-		return changes;
+	private List<Change> instatiateChanges(String serialNumber) {
+		return LoadData.getChangesByObject(serialNumber);
 	}
 }

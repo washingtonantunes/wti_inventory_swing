@@ -1,4 +1,4 @@
-package model.entities.utilitay;
+package model.entities.utilitary;
 
 import java.util.Objects;
 

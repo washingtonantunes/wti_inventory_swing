@@ -5,20 +5,24 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.dao.EquipmentDao;
+import model.dao.ObjectWithUserDao;
 import model.entities.Change;
 import model.entities.Equipment;
-import model.gui.MainWindow;
+import model.entities.User;
 
 public class EquipmentService {
 
 	private EquipmentDao equipmentDao = DaoFactory.createEquipmentDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
+	private ObjectWithUserDao objectWithUserDao = DaoFactory.createObjectWithUserDao();
 
 	public Map<String, Equipment> findAll() {
 		return equipmentDao.findAll();
@@ -29,11 +33,16 @@ public class EquipmentService {
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.insert(obj);
-			
-			Change change = getChange(obj, obj, 1);
+			equipmentDao.insert(obj); // Insert object into the database
+
+			//Change
+			Change change = getChange(obj, obj, 1); 
 			changeDao.insert(change);
 			obj.addChange(change);
+
+			//Insert into running list
+			LoadData.addChange(change);
+			LoadData.addEquipment(obj);
 
 			conn.commit();
 		} 
@@ -53,11 +62,15 @@ public class EquipmentService {
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.update(objNew);
-			
+			equipmentDao.update(objNew); //Update object into the database
+
+			//Change
 			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -71,18 +84,30 @@ public class EquipmentService {
 			}
 		}
 	}
-	
-	public void updateStatusForUser(Equipment obj) {
+
+	public void updateStatusForUser(Equipment obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
-
-			equipmentDao.updateStatusForUser(obj);
 			
+			obj.setLocation("WITH USER");
+			obj.setStatus("IN USE");
+			obj.setUser(user);
+			obj.setProject(user.getProject());
+			equipmentDao.updateStatusForUser(obj); //Update object into the database
+			
+			user.addEquipment(obj);
+
+			//Change
 			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
-			MainWindow.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			//Insert user/equipment relationship
+			objectWithUserDao.insertEquipmentWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -102,11 +127,15 @@ public class EquipmentService {
 		try {
 			conn.setAutoCommit(false);
 
-			equipmentDao.disable(obj);
-			
+			equipmentDao.disable(obj); //Update object into the database
+
+			//Change
 			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -165,7 +194,7 @@ public class EquipmentService {
 		return changes;
 	}
 
-	//Get the old value of fields that were changed
+	// Get the old value of fields that were changed
 	private String getFieldsUpdated(Equipment objOld, Equipment objNew) {
 		String fieldsUpdated = "Fields Updated: ";
 
@@ -205,13 +234,13 @@ public class EquipmentService {
 			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "'";
 		}
 
-		//Remove the ',' at the end of the String
+		// Remove the ',' at the end of the String
 		int i = fieldsUpdated.lastIndexOf(",");
 		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
 		}
-		
-		//Validation if there was a change
+
+		// Validation if there was a change
 		String validation = fieldsUpdated.substring(16);
 		if (validation.length() == 0) {
 			throw new ObjectException("There is no change");

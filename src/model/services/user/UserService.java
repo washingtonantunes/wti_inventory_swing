@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
@@ -13,7 +15,6 @@ import model.dao.DaoFactory;
 import model.dao.UserDao;
 import model.entities.Change;
 import model.entities.User;
-import model.gui.MainWindow;
 
 public class UserService {
 
@@ -29,16 +30,17 @@ public class UserService {
 		try {
 			conn.setAutoCommit(false);
 
-			userDao.insert(obj);
-			
-			Change change = getChange(obj, 1);
-			
-			change.setChanges("New User Added");
-			
+			userDao.insert(obj); // Insert object into the database
+
+			// Change
+			Change change = getChange(obj, obj, 1);
 			changeDao.insert(change);
 			obj.addChange(change);
-			MainWindow.addChange(change);
-			
+
+			// Insert into running list
+			LoadData.addChange(change);
+			LoadData.addUser(obj);
+
 			conn.commit();
 		} 
 		catch (SQLException e) {
@@ -57,15 +59,15 @@ public class UserService {
 		try {
 			conn.setAutoCommit(false);
 
-			userDao.update(objNew);
-			
-			Change change = getChange(objOld, 2);
-			
-			change.setChanges(getFieldsUpdated(objOld, objNew));
-			
+			userDao.update(objNew); // Update object into the database
+
+			// Change
+			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
-			MainWindow.addChange(change);
+
+			// Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -85,15 +87,15 @@ public class UserService {
 		try {
 			conn.setAutoCommit(false);
 
-			userDao.disable(obj);
-			
-			Change change = getChange(obj, 4);
-			
-			change.setChanges("User Disabled for: " + obj.getReason());
-			
+			userDao.disable(obj); // Update object into the database
+
+			// Change
+			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
-			MainWindow.addChange(change);
+
+			// Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -107,11 +109,12 @@ public class UserService {
 			}
 		}
 	}
-	
-	private Change getChange(User obj, int type) {
+
+	private Change getChange(User objOld, User objNew, int type) {
 		Change change = new Change();
-		change.setObject(obj.getRegistration());
+		change.setObject(objNew.getRegistration());
 		change.setType(getTypeChange(type));
+		change.setChanges(getChanges(objOld, objNew, type));
 		change.setDate(new Date());
 		change.setAuthor(MainWindow.collaborator.getName());
 		return change;
@@ -126,12 +129,23 @@ public class UserService {
 			typeChange = "User Update";
 		} 
 		else if (type == 3) {
-			typeChange = "User Update Status";
-		} 
-		else if (type == 4) {
 			typeChange = "User Deactivation";
 		}
 		return typeChange;
+	}
+
+	private String getChanges(User objOld, User objNew, int type) {
+		String changes = "";
+		if (type == 1) {
+			changes = "New User Added";
+		} 
+		else if (type == 2) {
+			changes = getFieldsUpdated(objOld, objNew);
+		} 
+		else if (type == 3) {
+			changes = "User Disabled for: " + objOld.getReason();
+		}
+		return changes;
 	}
 
 	private String getFieldsUpdated(User objOld, User objNew) {
@@ -160,12 +174,12 @@ public class UserService {
 		if (i + 1 == fieldsUpdated.length()) {
 			fieldsUpdated = fieldsUpdated.substring(0, i).trim();
 		}
-		
+
 		String validation = fieldsUpdated.substring(16);
 		if (validation.length() == 0) {
 			throw new ObjectException("There is no change");
 		}
 
 		return fieldsUpdated;
-	}	
+	}
 }

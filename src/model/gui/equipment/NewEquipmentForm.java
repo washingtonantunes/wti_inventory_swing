@@ -23,13 +23,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 
+import application.LoadData;
 import db.DBException;
 import exception.ValidationException;
 import model.entities.Equipment;
 import model.entities.Option;
-import model.entities.User;
-import model.entities.WorkPosition;
-import model.gui.MainWindow;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
 import model.util.JTextFieldFilter;
@@ -211,9 +209,10 @@ public class NewEquipmentForm extends JDialog {
 					HEIGHT_TEXTFIELD_COMBOBOX);
 			panel.add(textField_AddressMAC);
 
-			comboBox_Type = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("TYPE-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
+			comboBox_Type = new JComboBox<String>(new Vector<>(LoadData.getOptionByType("TYPE-EQUIPMENT")));
+//			comboBox_Type = new JComboBox<>(new Vector<>(
+//					options.stream().filter(o -> o.getType().equals("") && o.getStatus().equals("ACTIVE"))
+//							.map(Option::getOption).collect(Collectors.toList())));
 			comboBox_Type.setSelectedIndex(-1);
 			comboBox_Type.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
 					HEIGHT_TEXTFIELD_COMBOBOX);
@@ -365,10 +364,8 @@ public class NewEquipmentForm extends JDialog {
 				EquipmentService service = new EquipmentService();
 				service.save(equipment);
 				model.addEquipment(equipment);
-				MainWindow.addEquipment(equipment);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Equipment successfully added", "Success saving object",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Equipment successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} catch (ValidationException ve) {
 				setErrorMessages(ve.getErrors());
 			} catch (DBException db) {
@@ -502,12 +499,6 @@ public class NewEquipmentForm extends JDialog {
 
 		// Insert DateEntry
 		equipment.setDateEntry(new Date());
-
-		// Insert User
-		equipment.setUser(new User());
-
-		// Insert WorkPosition
-		equipment.setWorkPosition(new WorkPosition());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

@@ -20,12 +20,9 @@ import javax.swing.JTextField;
 
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Equipment;
-import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
-import model.gui.MainWindow;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
 import model.util.MyButton;
@@ -206,10 +203,12 @@ public class NewUserForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				user = getFormData(); // Colect Fields
+				
 				UserService service = new UserService();
 				service.save(user); // Save Object
+				
 				model.addUser(user); // Adding the table
-				MainWindow.addUser(user); // Adding the change list
+				
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "User successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} 
@@ -314,15 +313,6 @@ public class NewUserForm extends JDialog {
 
 		// Insert DateEntry
 		user.setDateEntry(new Date());
-
-		// Insert Equipment
-		user.setEquipment(new Equipment());
-
-		// Insert Monitor 1
-		user.setMonitor1(new Monitor());
-
-		// Insert Monitor 2
-		user.setMonitor2(new Monitor());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

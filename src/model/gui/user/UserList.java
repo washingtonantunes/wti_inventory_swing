@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -24,10 +23,11 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.LoadData;
+import application.MainWindow;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
-import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.user.CreateExlFileUser;
 import model.services.user.TableUser;
@@ -57,9 +57,8 @@ private static final long serialVersionUID = 1L;
 	private TableRowSorter<UserTableModel> sorter;
 
 	public UserList() {
-		this.users = loadDataUsers();
+		this.users = LoadData.getUsersList();
 		UserList.options = loadDataOptions();
-		UserList.projects = loadDataProjects();
 		initComponents();
 	}
 
@@ -172,34 +171,10 @@ private static final long serialVersionUID = 1L;
 		return scrollPane;
 	}
 
-	private List<User> loadDataUsers() {
-		Map<String, User> users = MainWindow.getUsers();
-		List<User> list = new ArrayList<User>();
-		
-		for (String entry : users.keySet()) {
-			list.add(users.get(entry));
-		}
-		
-		list.sort((e1, e2) -> e1.getRegistration().compareTo(e2.getRegistration()));
-		return list;
-	}
-
 	private List<Option> loadDataOptions() {
 		final OptionService service = new OptionService();
 		List<Option> list = service.findAll();
 		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
-		return list;
-	}
-	
-	private List<Project> loadDataProjects() {
-		Map<String, Project> projects = MainWindow.getProjects();
-		List<Project> list = new ArrayList<Project>();
-
-		for (String entry : projects.keySet()) {
-			list.add(projects.get(entry));
-		}
-
-		list.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
 		return list;
 	}
 

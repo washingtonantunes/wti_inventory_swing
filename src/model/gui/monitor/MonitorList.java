@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -24,9 +23,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.LoadData;
+import application.MainWindow;
 import model.entities.Monitor;
 import model.entities.Option;
-import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.monitor.CreateExlFileMonitor;
 import model.services.monitor.MonitorTableModel;
@@ -54,7 +54,7 @@ public class MonitorList extends JPanel {
 	private TableRowSorter<MonitorTableModel> sorter;
 
 	public MonitorList() {
-		this.monitors = loadDataMonitors();
+		this.monitors = LoadData.getMonitorsList();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -173,18 +173,6 @@ public class MonitorList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	private List<Monitor> loadDataMonitors() {
-		Map<String, Monitor> monitors = MainWindow.getMonitors();
-		List<Monitor> list = new ArrayList<Monitor>();
-
-		for (String entry : monitors.keySet()) {
-			list.add(monitors.get(entry));
-		}
-
-		list.sort((m1, m2) -> m1.getSerialNumber().compareTo(m2.getSerialNumber()));
-		return list;
 	}
 
 	private List<Option> loadDataOptions() {

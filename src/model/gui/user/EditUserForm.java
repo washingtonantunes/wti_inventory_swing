@@ -22,8 +22,6 @@ import javax.swing.JTextField;
 import db.DBException;
 import exception.ObjectException;
 import exception.ValidationException;
-import model.entities.Equipment;
-import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
@@ -322,15 +320,6 @@ public class EditUserForm extends JDialog {
 
 		// Insert DateEntry
 		user.setDateEntry(new Date());
-
-		// Insert Equipment
-		user.setEquipment(new Equipment());
-
-		// Insert Monitor 1
-		user.setMonitor1(new Monitor());
-
-		// Insert Monitor 2
-		user.setMonitor2(new Monitor());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

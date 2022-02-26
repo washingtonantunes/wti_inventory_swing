@@ -5,23 +5,24 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
-import model.dao.InventoryDao;
+import model.dao.ObjectWithUserDao;
 import model.dao.PeripheralDao;
 import model.entities.Change;
 import model.entities.Peripheral;
 import model.entities.User;
-import model.gui.MainWindow;
 
 public class PeripheralService {
 
 	private PeripheralDao peripheralDao = DaoFactory.createPeripheralDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
-	private InventoryDao inventoryDao = DaoFactory.createInventoryDao(); 
+	private ObjectWithUserDao objectWithUserDao = DaoFactory.createObjectWithUserDao();
 
 	public Map<String, Peripheral> findAll() {
 		return peripheralDao.findAll();
@@ -32,11 +33,16 @@ public class PeripheralService {
 		try {
 			conn.setAutoCommit(false);
 
-			peripheralDao.insert(obj);
+			peripheralDao.insert(obj); // Insert object into the database
 			
-			Change change = getChange(obj, obj, 1);
+			//Change
+			Change change = getChange(obj, obj, 1); 
 			changeDao.insert(change);
 			obj.addChange(change);
+
+			//Insert into running list
+			LoadData.addChange(change);
+			LoadData.addPeripheral(obj);
 
 			conn.commit();
 		} 
@@ -56,11 +62,15 @@ public class PeripheralService {
 		try {
 			conn.setAutoCommit(false);
 
-			peripheralDao.update(objNew);
+			peripheralDao.update(objNew); //Update object into the database
 			
+			//Change
 			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -75,23 +85,27 @@ public class PeripheralService {
 		}
 	}
 	
-	public void updateQuantity(Peripheral obj, User user, int type) {
+	public void updateForUser(Peripheral obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
+			obj.setQuantity(obj.getQuantity() - 1);
+			obj.setUser(user.getName());
 			peripheralDao.updateQuantity(obj);
 			
+			user.addPeripheral(obj);
+			
+			//Change
 			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
-			MainWindow.addChange(change);
 			
-			if (type == 1) {
-				inventoryDao.insertPeripheralUser(obj, user);
-			} else if (type == 2) {
-				inventoryDao.deletePeripheralUser(obj, user);
-			}
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			//Insert user/peripheral relationship
+			objectWithUserDao.insertPeripheralWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -111,11 +125,15 @@ public class PeripheralService {
 		try {
 			conn.setAutoCommit(false);
 
-			peripheralDao.disable(obj);
+			peripheralDao.disable(obj); //Update object into the database
 			
+			//Change
 			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 

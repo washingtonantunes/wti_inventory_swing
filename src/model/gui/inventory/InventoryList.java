@@ -25,6 +25,7 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.MainWindow;
 import model.entities.Change;
 import model.entities.Equipment;
 import model.entities.Inventory;
@@ -32,7 +33,6 @@ import model.entities.Monitor;
 import model.entities.Project;
 import model.entities.User;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 import model.services.change.ChangeService;
 import model.services.equipment.EquipmentService;
 import model.services.inventory.CreateExlFileInventory;

@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,9 +22,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.LoadData;
+import application.MainWindow;
 import model.entities.Option;
 import model.entities.Project;
-import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.project.CreateExlFileProject;
 import model.services.project.ProjectTableModel;
@@ -54,7 +53,7 @@ public class ProjectList extends JPanel {
 	private TableRowSorter<ProjectTableModel> sorter;
 
 	public ProjectList() {
-		this.projects = loadDataProjects();
+		this.projects = LoadData.getProjectsList();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -173,18 +172,6 @@ public class ProjectList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-	
-	private List<Project> loadDataProjects() {
-		Map<String, Project> projects = MainWindow.getProjects();
-		List<Project> list = new ArrayList<Project>();
-
-		for (String entry : projects.keySet()) {
-			list.add(projects.get(entry));
-		}
-
-		list.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
-		return list;
 	}
 
 	private List<Option> loadDataOptions() {

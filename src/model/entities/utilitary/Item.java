@@ -1,4 +1,4 @@
-package model.entities.utilitay;
+package model.entities.utilitary;
 
 import java.util.Objects;
 
@@ -8,7 +8,6 @@ public class Item {
 	private String type;
 	private String code;
 	private String name;
-	private String brand;
 	private String patrimonyNumber;
 	private Double value;
 
@@ -51,14 +50,6 @@ public class Item {
 		this.name = name;
 	}
 	
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-	
 	public String getPatrimonyNumber() {
 		return patrimonyNumber;
 	}
@@ -77,7 +68,7 @@ public class Item {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(brand, name, type);
+		return Objects.hash(code, type);
 	}
 
 	@Override
@@ -89,7 +80,6 @@ public class Item {
 		if (getClass() != obj.getClass())
 			return false;
 		Item other = (Item) obj;
-		return Objects.equals(brand, other.brand) && Objects.equals(name, other.name)
-				&& Objects.equals(type, other.type);
+		return Objects.equals(code, other.code) && Objects.equals(type, other.type);
 	}
 }

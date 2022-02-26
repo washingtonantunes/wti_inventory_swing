@@ -21,12 +21,11 @@ public class User implements Serializable, Cloneable {
 	private String reason;
 
 	private Project project;
-	private Equipment equipment;
-	private Monitor monitor1;
-	private Monitor monitor2;
 
-	private List<Peripheral> peripherals = new ArrayList<>();
-	private List<License> licenses = new ArrayList<>();
+	private List<Equipment> equipments = new ArrayList<Equipment>();
+	private List<Monitor> monitors = new ArrayList<Monitor>();
+	private List<Peripheral> peripherals = new ArrayList<Peripheral>();
+	private List<License> licenses = new ArrayList<License>();
 
 	private List<Change> changes = new ArrayList<>();
 
@@ -112,29 +111,29 @@ public class User implements Serializable, Cloneable {
 	public void setProject(Project project) {
 		this.project = project;
 	}
-
-	public Equipment getEquipment() {
-		return equipment;
+	
+	public List<Equipment> getEquipments() {
+		return equipments;
 	}
 
-	public void setEquipment(Equipment equipment) {
-		this.equipment = equipment;
+	public void addEquipment(Equipment equipment) {
+		this.equipments.add(equipment);
+	}
+	
+	public void setEquipments(List<Equipment> equipments) {
+		this.equipments = equipments;
+	}
+	
+	public List<Monitor> getMonitors() {
+		return monitors;
 	}
 
-	public Monitor getMonitor1() {
-		return monitor1;
+	public void addMonitor(Monitor monitor) {
+		this.monitors.add(monitor);
 	}
-
-	public void setMonitor1(Monitor monitor1) {
-		this.monitor1 = monitor1;
-	}
-
-	public Monitor getMonitor2() {
-		return monitor2;
-	}
-
-	public void setMonitor2(Monitor monitor2) {
-		this.monitor2 = monitor2;
+	
+	public void setMonitors(List<Monitor> monitors) {
+		this.monitors = monitors;
 	}
 
 	public List<Peripheral> getPeripherals() {
@@ -176,19 +175,20 @@ public class User implements Serializable, Cloneable {
 	public Double getUserCosts() {
 		double cost = 0.0;
 
-		// get value equipment
-		if (equipment != null) {
-			cost += equipment.getValue();
+		// get value equipments
+		if (equipments != null) {
+
+			for (Equipment equipment : equipments) {
+				cost += equipment.getValue();
+			}
 		}
 
-		// get value monitor1
-		if (monitor1 != null) {
-			cost += monitor1.getValue();
-		}
+		// get value monitors
+		if (monitors != null) {
 
-		// get value monitor2
-		if (monitor2 != null) {
-			cost += monitor1.getValue();
+			for (Monitor monitor : monitors) {
+				cost += monitor.getValue();
+			}
 		}
 
 		// get value peripherals

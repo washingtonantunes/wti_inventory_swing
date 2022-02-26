@@ -7,6 +7,7 @@ import model.dao.impl.EquipmentDaoJDBC;
 import model.dao.impl.InventoryDaoJDBC;
 import model.dao.impl.LicenseDaoJDBC;
 import model.dao.impl.MonitorDaoJDBC;
+import model.dao.impl.ObjectWithUserDaoJDBC;
 import model.dao.impl.OptionDaoJDBC;
 import model.dao.impl.PeripheralDaoJDBC;
 import model.dao.impl.ProjectDaoJDBC;
@@ -57,5 +58,9 @@ public class DaoFactory {
 	
 	public static LicenseDao createLicenseDao() {
 		return new LicenseDaoJDBC(DB.getConnection());
+	}
+	
+	public static ObjectWithUserDao createObjectWithUserDao() {
+		return new ObjectWithUserDaoJDBC(DB.getConnection());
 	}
 }

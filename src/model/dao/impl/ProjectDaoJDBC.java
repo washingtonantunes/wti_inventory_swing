@@ -7,14 +7,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.ProjectDao;
 import model.entities.Change;
 import model.entities.Project;
-import model.gui.MainWindow;
 
 public class ProjectDaoJDBC implements ProjectDao {
 
@@ -134,9 +133,7 @@ public class ProjectDaoJDBC implements ProjectDao {
 		}
 	}
 
-	private List<Change> instatiateChanges(String costCenter) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(costCenter))
-				.collect(Collectors.toList());
-		return changes;
+	private List<Change> instatiateChanges(String serialNumber) {
+		return LoadData.getChangesByObject(serialNumber);
 	}
 }

@@ -7,16 +7,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.MonitorDao;
 import model.entities.Change;
 import model.entities.Monitor;
+import model.entities.Project;
 import model.entities.User;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 
 public class MonitorDaoJDBC implements MonitorDao {
 
@@ -106,13 +106,17 @@ public class MonitorDaoJDBC implements MonitorDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `monitors` "
-					+ "SET `status` = ?, "
+					+ "SET `location` = ?, "
+					+ "`status` = ?, "
+					+ "`project` = ?, "
 					+ "`user` = ? "
 					+ "WHERE `serialNumber` = ?");
 
-			st.setString(1, obj.getStatus());
-			st.setString(2, obj.getUser().getRegistration());
-			st.setString(3, obj.getSerialNumber());
+			st.setString(1, obj.getLocation());
+			st.setString(2, obj.getStatus());
+			st.setString(3, obj.getUser().getProject().getCostCenter());
+			st.setString(4, obj.getUser().getRegistration());
+			st.setString(5, obj.getSerialNumber());
 
 			st.executeUpdate();
 		} 
@@ -194,7 +198,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 				monitor.setLocation(rs.getString("location"));
 				monitor.setNoteEntry(rs.getString("noteEntry"));
 				monitor.setDateEntry(rs.getDate("dateEntry"));
-				monitor.setNote(rs.getString("note"));
+				monitor.setProject(instatiateProject(rs));
 				monitor.setUser(instatiateUser(rs));
 				monitor.setWorkPosition(instatiateWorkPosition(rs));
 				monitor.setChanges(instatiateChanges(monitor.getSerialNumber()));
@@ -211,18 +215,19 @@ public class MonitorDaoJDBC implements MonitorDao {
 		}
 	}
 	
+	private Project instatiateProject(ResultSet rs) throws SQLException {
+		return LoadData.getProject(rs.getString("project"));
+	}
+	
 	private User instatiateUser(ResultSet rs) throws SQLException {
-		User user = MainWindow.getUser(rs.getString("user"));
-		return user;
+		return LoadData.getUser(rs.getString("user"));
 	}
 	
 	private WorkPosition instatiateWorkPosition(ResultSet rs) throws SQLException {
-		WorkPosition workPosition = MainWindow.getWorkPosition(rs.getString("workPosition"));
-		return workPosition;
+		return LoadData.getWorkPosition(rs.getString("workPosition"));
 	}
 	
 	private List<Change> instatiateChanges(String serialNumber) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(serialNumber)).collect(Collectors.toList());
-		return changes;
+		return LoadData.getChangesByObject(serialNumber);
 	}
 }

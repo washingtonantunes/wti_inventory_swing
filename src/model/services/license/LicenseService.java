@@ -5,23 +5,24 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
-import model.dao.InventoryDao;
 import model.dao.LicenseDao;
+import model.dao.ObjectWithUserDao;
 import model.entities.Change;
 import model.entities.License;
 import model.entities.User;
-import model.gui.MainWindow;
 
 public class LicenseService {
 
 	private LicenseDao licenseDao = DaoFactory.createLicenseDao();
 	private ChangeDao changeDao = DaoFactory.createChangeDao();
-	private InventoryDao inventoryDao = DaoFactory.createInventoryDao(); 
+	private ObjectWithUserDao objectWithUserDao = DaoFactory.createObjectWithUserDao();
 
 	public Map<String, License> findAll() {
 		return licenseDao.findAll();
@@ -32,12 +33,17 @@ public class LicenseService {
 		try {
 			conn.setAutoCommit(false);
 
-			licenseDao.insert(obj);
+			licenseDao.insert(obj); // Insert object into the database
 			
-			Change change = getChange(obj, obj, 1);
+			//Change
+			Change change = getChange(obj, obj, 1); 
 			changeDao.insert(change);
 			obj.addChange(change);
 
+			//Insert into running list
+			LoadData.addChange(change);
+			LoadData.addLicense(obj);
+			
 			conn.commit();
 		} 
 		catch (SQLException e) {
@@ -56,11 +62,15 @@ public class LicenseService {
 		try {
 			conn.setAutoCommit(false);
 
-			licenseDao.update(objNew);
+			licenseDao.update(objNew); //Update object into the database
 			
+			//Change
 			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -75,23 +85,27 @@ public class LicenseService {
 		}
 	}
 	
-	public void updateQuantity(License obj, User user, int type) {
+	public void updateForUser(License obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
-			licenseDao.updateQuantity(obj);
+			obj.setQuantity(obj.getQuantity() - 1);
+			obj.setUser(user.getName());
+			licenseDao.updateQuantity(obj); //Update object into the database
 			
+			user.addLicense(obj);
+			
+			//Change
 			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
-			MainWindow.addChange(change);
 			
-			if (type == 1) {
-				inventoryDao.insertLicenseUser(obj, user);
-			} else if (type == 2) {
-				inventoryDao.deleteLicenseUser(obj, user);
-			}
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			//Insert user/License relationship
+			objectWithUserDao.insertLicenseWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -111,11 +125,15 @@ public class LicenseService {
 		try {
 			conn.setAutoCommit(false);
 
-			licenseDao.disable(obj);
+			licenseDao.disable(obj); //Update object into the database
 			
+			//Change
 			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 

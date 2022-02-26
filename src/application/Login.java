@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 
 import exception.ValidationException;
 import model.entities.Collaborator;
-import model.gui.MainWindow;
 import model.services.collaborator.CollaboratorService;
 
 public class Login extends JDialog {

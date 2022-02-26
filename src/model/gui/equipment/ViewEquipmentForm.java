@@ -300,8 +300,7 @@ public class ViewEquipmentForm extends JDialog {
 		@Override
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 1) {
-				String user = equipment.getUser().toString();
-				if (user != null) {
+				if (equipment.getUser() != null) {
 					new ViewUserForm(equipment.getUser()).setVisible(true);
 				}
 			}
@@ -313,8 +312,7 @@ public class ViewEquipmentForm extends JDialog {
 		@Override
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 1) {
-				String workPosition = equipment.getWorkPosition().toString();
-				if (workPosition != null) {
+				if (equipment.getWorkPosition() != null) {
 					new ViewWorkPositionForm(equipment.getWorkPosition()).setVisible(true);
 				}
 			}

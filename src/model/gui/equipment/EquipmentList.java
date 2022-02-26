@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,9 +22,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.LoadData;
+import application.MainWindow;
 import model.entities.Equipment;
 import model.entities.Option;
-import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.equipment.CreateExlFileEquipment;
 import model.services.equipment.EquipmentTableModel;
@@ -54,7 +53,7 @@ public class EquipmentList extends JPanel {
 	private TableRowSorter<EquipmentTableModel> sorter;
 
 	public EquipmentList() {
-		this.equipments = loadDataEquipments();
+		this.equipments = LoadData.getEquipmentsList();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -173,18 +172,6 @@ public class EquipmentList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	private List<Equipment> loadDataEquipments() {
-		Map<String, Equipment> equipments = MainWindow.getEquipments();
-		List<Equipment> list = new ArrayList<Equipment>();
-
-		for (String entry : equipments.keySet()) {
-			list.add(equipments.get(entry));
-		}
-
-		list.sort((e1, p2) -> e1.getSerialNumber().compareTo(p2.getSerialNumber()));
-		return list;
 	}
 
 	private List<Option> loadDataOptions() {
@@ -338,10 +325,13 @@ public class EquipmentList extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 2) {
-				int lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
-				Equipment equipment = model.getEquipment(modelRow);
-				new ViewEquipmentForm(equipment).setVisible(true);
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				if (lineSelected >= 0) {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
+					Equipment equipment = model.getEquipment(modelRow);
+					new ViewEquipmentForm(equipment).setVisible(true);
+				}
 			}
 		}
 	}

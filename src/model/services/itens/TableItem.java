@@ -63,7 +63,7 @@ public class TableItem extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
-				column.setPreferredWidth(200); // Type
+				column.setPreferredWidth(180); // Type
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
@@ -71,14 +71,10 @@ public class TableItem extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 3) {
-				column.setPreferredWidth(250); // Name
+				column.setPreferredWidth(350); // Name
 				column.setResizable(false);
 			} 
 			else if (i == 4) {
-				column.setPreferredWidth(200); // Brand
-				column.setResizable(false);
-			}
-			else if (i == 5) {
 				column.setPreferredWidth(150); // Value
 				column.setResizable(false);
 			}
@@ -90,7 +86,7 @@ public class TableItem extends JTable {
 		for (int i = 0; i < this.getColumnCount(); i++) {
 			column = this.getColumnModel().getColumn(i);
 			if (i == 0) {
-				column.setPreferredWidth(200); // Type
+				column.setPreferredWidth(180); // Type
 				column.setResizable(false);
 			} 
 			else if (i == 1) {
@@ -98,7 +94,7 @@ public class TableItem extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 2) {
-				column.setPreferredWidth(250); // Name
+				column.setPreferredWidth(350); // Name
 				column.setResizable(false);
 			} 
 		}
@@ -117,7 +113,7 @@ public class TableItem extends JTable {
 				return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			}
 		};
-		this.getColumnModel().getColumn(5).setCellRenderer(tableCellRenderer);
+		this.getColumnModel().getColumn(4).setCellRenderer(tableCellRenderer);
 	}
 
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {

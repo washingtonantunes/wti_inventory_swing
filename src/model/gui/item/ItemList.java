@@ -17,9 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import application.MainWindow;
 import model.entities.User;
-import model.entities.utilitay.Item;
-import model.gui.MainWindow;
+import model.entities.utilitary.Item;
 import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
 import model.util.MyButton;
@@ -67,7 +67,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelNorth() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setPreferredSize(new Dimension(850, 55));
+		panel.setPreferredSize(new Dimension(860, 55));
 
 		panel.add(createPanelButtonWest());
 		panel.add(createPanelButtonEast());
@@ -77,7 +77,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonWest() {
 		final JPanel panelButtonWest = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-		panelButtonWest.setPreferredSize(new Dimension(660, 55));
+		panelButtonWest.setPreferredSize(new Dimension(665, 55));
 		panelButtonWest.setBackground(COLOR1);
 
 		final JButton buttonDelivery = new MyButton("Delivery", 2);
@@ -101,7 +101,7 @@ public class ItemList extends JDialog {
 
 	private JPanel createPanelButtonEast() {
 		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 10));
-		panel.setPreferredSize(new Dimension(160, 55));
+		panel.setPreferredSize(new Dimension(165, 55));
 		panel.setBackground(COLOR1);
 
 		final JLabel label_Quantity = new MyLabel("Quantity:", 1, 4, 2);
@@ -154,7 +154,7 @@ public class ItemList extends JDialog {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new AddItemForm(model, user, itens);
+				new AddItemForm(user, itens);
 				label_Show_Quantity.setText(String.valueOf(itens.size()));
 				label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 				repaint();

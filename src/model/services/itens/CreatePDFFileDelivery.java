@@ -11,9 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileSystemView;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -24,10 +21,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import application.MainWindow;
 import exception.ObjectException;
 import model.entities.User;
-import model.entities.utilitay.Item;
-import model.gui.MainWindow;
+import model.entities.utilitary.Item;
 
 public class CreatePDFFileDelivery {
 
@@ -35,7 +32,7 @@ public class CreatePDFFileDelivery {
 	private static final DateFormat dfmt = new SimpleDateFormat("d 'de' MMMM 'de' yyyy");
 	private static final Date hoje = Calendar.getInstance(Locale.getDefault()).getTime();
 	
-	private String fileServer = "\\" + "\\10.209.8.25\\tecnologia$\\";
+	private String fileServer = "\\" + "\\10.209.8.25\\tecnologia$\\04 - FIELD\\05 - TERMOS\\";
 	private String fileLocal = "C:\\Users\\853373\\Documents\\";
 	private String nameFile = "";
 	private String filePath = "";
@@ -95,17 +92,6 @@ public class CreatePDFFileDelivery {
 			}
 		} finally {
 			document.close();
-		}
-	}
-	
-	private void getPath() {
-		JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView());
-
-		int returnValue = jfc.showSaveDialog(null);
-
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = jfc.getSelectedFile();
-			filePath = selectedFile.getAbsolutePath().contains("pdf") ? selectedFile.getAbsolutePath() : selectedFile.getAbsolutePath() + ".pdf";
 		}
 	}
 	

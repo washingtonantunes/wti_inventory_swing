@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import model.entities.utilitay.Item;
+import model.entities.utilitary.Item;
 
 public class ItemTableModel extends AbstractTableModel {
 
@@ -14,12 +14,11 @@ public class ItemTableModel extends AbstractTableModel {
 	private static final int COL_TYPE = 1;
 	private static final int COL_CODE = 2;
 	private static final int COL_NAME = 3;
-	private static final int COL_BRAND = 4;
-	private static final int COL_VALUE = 5;
+	private static final int COL_VALUE = 4;
 
 	private List<Item> itens;
 
-	private String[] columns = new String[] { "Index", "Type", "Code", "Name", "Brand", "Value" };
+	private String[] columns = new String[] { "Index", "Type", "Code", "Name", "Value" };
 
 	public ItemTableModel(List<Item> itens) {
 		this.itens = itens;
@@ -61,9 +60,6 @@ public class ItemTableModel extends AbstractTableModel {
 		} 
 		else if (column == COL_NAME) {
 			return i.getName();
-		} 
-		else if (column == COL_BRAND) {
-			return i.getBrand();
 		} 
 		else if (column == COL_VALUE) {
 			return i.getValue();

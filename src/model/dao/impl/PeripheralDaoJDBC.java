@@ -7,14 +7,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.PeripheralDao;
 import model.entities.Change;
 import model.entities.Peripheral;
-import model.gui.MainWindow;
 
 public class PeripheralDaoJDBC implements PeripheralDao {
 	
@@ -31,13 +30,13 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `peripherals` "
 					+ "(`code`,"
-					+ "`brand`,"
 					+ "`name`,"
+					+ "`brand`,"
 					+ "`value`,"
 					+ "`quantity`,"
 					+ "`status`) "
 					+ "VALUES " 
-					+ "(?, ?, ?, ?)");
+					+ "(?, ?, ?, ?, ?, ?)");
 
 			st.setString(1, obj.getCode());
 			st.setString(2, obj.getName());
@@ -84,7 +83,7 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 		try {
 			st = conn.prepareStatement(
 					"UPDATE `peripherals` "
-					+ "SET `quantity` = ? "
+					+ "SET `quantity` = ?"
 					+ "WHERE `code` = ?");
 
 			st.setDouble(1, obj.getQuantity());
@@ -137,13 +136,13 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 				Peripheral peripheral = new Peripheral();
 
 				peripheral.setCode(rs.getString("code"));
-				peripheral.setBrand(rs.getString("brand"));
 				peripheral.setName(rs.getString("name"));
+				peripheral.setBrand(rs.getString("brand"));
 				peripheral.setValue(rs.getDouble("value"));
 				peripheral.setQuantity(rs.getInt("quantity"));
 				peripheral.setStatus(rs.getString("status"));
 				peripheral.setChanges(instatiateChanges(peripheral.getCode()));
-				peripherals.put(peripheral.getCode(), peripheral);
+				peripherals.put(peripheral.getName(), peripheral);
 			}
 			return peripherals;
 		} 
@@ -155,10 +154,8 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 			DB.closeResultSet(rs);
 		}
 	}
-
+	
 	private List<Change> instatiateChanges(String code) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(code)) .collect(Collectors.toList());
-		return changes;
+		return LoadData.getChangesByObject(code);
 	}
 }
-

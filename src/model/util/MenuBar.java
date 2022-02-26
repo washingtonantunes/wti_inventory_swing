@@ -9,7 +9,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import model.gui.MainWindow;
+import application.MainWindow;
 import model.gui.equipment.EquipmentList;
 import model.gui.inventory.InventoryList;
 import model.gui.monitor.MonitorList;

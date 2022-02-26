@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
@@ -13,7 +15,6 @@ import model.dao.DaoFactory;
 import model.dao.WorkPositionDao;
 import model.entities.Change;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 
 public class WorkPositionService {
 
@@ -29,11 +30,16 @@ public class WorkPositionService {
 		try {
 			conn.setAutoCommit(false);
 
-			workPositionDao.insert(obj);
+			workPositionDao.insert(obj); // Insert object into the database
 
-			Change change = getChange(obj, obj, 0);
+			//Change
+			Change change = getChange(obj, obj, 1); 
 			changeDao.insert(change);
 			obj.addChange(change);
+
+			//Insert into running list
+			LoadData.addChange(change);
+			LoadData.addWorkPosition(obj);
 
 			conn.commit();
 		} catch (SQLException e) {
@@ -51,11 +57,15 @@ public class WorkPositionService {
 		try {
 			conn.setAutoCommit(false);
 
-			workPositionDao.update(objNew);
+			workPositionDao.update(objNew); //Update object into the database
 
-			Change change = getChange(objOld, objNew, 1);
+			//Change
+			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} catch (SQLException e) {
@@ -73,11 +83,15 @@ public class WorkPositionService {
 		try {
 			conn.setAutoCommit(false);
 
-			workPositionDao.disable(obj);
+			workPositionDao.disable(obj); //Update object into the database
 
-			Change change = getChange(obj, obj, 3);
+			//Change
+			Change change = getChange(obj, obj, 4);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} catch (SQLException e) {
@@ -102,13 +116,13 @@ public class WorkPositionService {
 
 	private String getTypeChange(int type) {
 		String typeChange = "";
-		if (type == 0) {
+		if (type == 1) {
 			typeChange = "Work Position Input";
-		} else if (type == 1) {
-			typeChange = "Work Position Update";
 		} else if (type == 2) {
-			typeChange = "Work Position Update Status";
+			typeChange = "Work Position Update";
 		} else if (type == 3) {
+			typeChange = "Work Position Update Status";
+		} else if (type == 4) {
 			typeChange = "Work Position Deactivation";
 		}
 		return typeChange;
@@ -116,13 +130,13 @@ public class WorkPositionService {
 
 	private String getChanges(WorkPosition objOld, WorkPosition objNew, int type) {
 		String changes = "";
-		if (type == 0) {
+		if (type == 1) {
 			changes = "New Work Position Added";
-		} else if (type == 1) {
-			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 2) {
-
+			changes = getFieldsUpdated(objOld, objNew);
 		} else if (type == 3) {
+
+		} else if (type == 4) {
 			changes = "Work Position Disabled for: " + objOld.getReason();
 		}
 		return changes;

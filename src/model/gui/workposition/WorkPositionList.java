@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -24,9 +23,10 @@ import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableRowSorter;
 
+import application.LoadData;
+import application.MainWindow;
 import model.entities.Option;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 import model.services.OptionService;
 import model.services.workposition.CreateExlFileWorkPosition;
 import model.services.workposition.TableWorkPosition;
@@ -54,7 +54,7 @@ public class WorkPositionList extends JPanel {
 	private TableRowSorter<WorkPositionTableModel> sorter;
 
 	public WorkPositionList() {
-		workPositions = loadDataWorkPositions();
+		workPositions = LoadData.getWorkPositionsList();
 		this.options = loadDataOptions();
 		initComponents();
 	}
@@ -173,18 +173,6 @@ public class WorkPositionList extends JPanel {
 
 		scrollPane = new JScrollPane(table);
 		return scrollPane;
-	}
-
-	private List<WorkPosition> loadDataWorkPositions() {
-		Map<String, WorkPosition> workPositions = MainWindow.getWorkPositions();
-		List<WorkPosition> list = new ArrayList<WorkPosition>();
-
-		for (String entry : workPositions.keySet()) {
-			list.add(workPositions.get(entry));
-		}
-
-		list.sort((w1, w2) -> w1.getWorkPoint().compareTo(w2.getWorkPoint()));
-		return list;
 	}
 
 	private List<Option> loadDataOptions() {

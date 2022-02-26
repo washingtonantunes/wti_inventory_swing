@@ -22,9 +22,8 @@ import javax.swing.JTextField;
 
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Project;
-import model.gui.MainWindow;
 import model.entities.Option;
+import model.entities.Project;
 import model.services.project.ProjectService;
 import model.services.project.ProjectTableModel;
 import model.util.JTextFieldFilter;
@@ -175,7 +174,6 @@ public class NewProjectForm extends JDialog {
 				ProjectService service = new ProjectService();
 				service.save(project);
 				model.addProject(project);
-				MainWindow.addProject(project);
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Project successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} 

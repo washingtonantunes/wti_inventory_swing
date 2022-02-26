@@ -7,14 +7,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.LicenseDao;
 import model.entities.Change;
 import model.entities.License;
-import model.gui.MainWindow;
 
 public class LicenseDaoJDBC implements LicenseDao {
 	
@@ -31,20 +30,20 @@ public class LicenseDaoJDBC implements LicenseDao {
 			st = conn.prepareStatement(
 					"INSERT INTO `licenses` "
 					+ "(`code`,"
-					+ "`brand`,"
 					+ "`name`,"
+					+ "`brand`,"
 					+ "`value`,"
 					+ "`quantity`,"
 					+ "`status`) "
 					+ "VALUES " 
-					+ "(?, ?, ?, ?)");
+					+ "(?, ?, ?, ?, ?, ?)");
 
-					st.setString(1, obj.getCode());
-					st.setString(2, obj.getName());
-					st.setString(3, obj.getBrand());
-					st.setDouble(4, obj.getValue());
-					st.setInt(5, obj.getQuantity());
-					st.setString(6, obj.getStatus());
+			st.setString(1, obj.getCode());
+			st.setString(2, obj.getName());
+			st.setString(3, obj.getBrand());
+			st.setDouble(4, obj.getValue());
+			st.setInt(5, obj.getQuantity());
+			st.setString(6, obj.getStatus());
 
 			st.executeUpdate();
 		} 
@@ -137,13 +136,13 @@ public class LicenseDaoJDBC implements LicenseDao {
 				License license = new License();
 
 				license.setCode(rs.getString("code"));
-				license.setBrand(rs.getString("brand"));
 				license.setName(rs.getString("name"));
+				license.setBrand(rs.getString("brand"));
 				license.setValue(rs.getDouble("value"));
 				license.setQuantity(rs.getInt("quantity"));
 				license.setStatus(rs.getString("status"));
 				license.setChanges(instatiateChanges(license.getCode()));
-				licenses.put(license.getCode(), license);
+				licenses.put(license.getName(), license);
 			}
 			return licenses;
 		} 
@@ -155,10 +154,9 @@ public class LicenseDaoJDBC implements LicenseDao {
 			DB.closeResultSet(rs);
 		}
 	}
-
+	
 	private List<Change> instatiateChanges(String code) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(code)) .collect(Collectors.toList());
-		return changes;
+		return LoadData.getChangesByObject(code);
 	}
 }
 

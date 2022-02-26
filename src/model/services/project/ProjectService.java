@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+import application.LoadData;
+import application.MainWindow;
 import db.DB;
 import db.DBException;
 import exception.ObjectException;
@@ -13,7 +15,6 @@ import model.dao.DaoFactory;
 import model.dao.ProjectDao;
 import model.entities.Change;
 import model.entities.Project;
-import model.gui.MainWindow;
 
 public class ProjectService {
 
@@ -29,11 +30,16 @@ public class ProjectService {
 		try {
 			conn.setAutoCommit(false);
 
-			projectDao.insert(obj);
+			projectDao.insert(obj); // Insert object into the database
 
-			Change change = getChange(obj, obj, 0);
+			//Change
+			Change change = getChange(obj, obj, 1);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
+			LoadData.addProject(obj);
 
 			conn.commit();
 		} 
@@ -53,12 +59,16 @@ public class ProjectService {
 		try {
 			conn.setAutoCommit(false);
 
-			projectDao.update(objNew);
+			projectDao.update(objNew); //Update object into the database
 
-			Change change = getChange(objOld, objNew, 1);
+			//Change
+			Change change = getChange(objOld, objNew, 2);
 			changeDao.insert(change);
 			objNew.addChange(change);
 
+			//Insert into running list
+			LoadData.addChange(change);
+			
 			conn.commit();
 		} 
 		catch (SQLException e) {
@@ -77,11 +87,15 @@ public class ProjectService {
 		try {
 			conn.setAutoCommit(false);
 
-			projectDao.disable(obj);
+			projectDao.disable(obj); //Update object into the database
 
+			//Change
 			Change change = getChange(obj, obj, 3);
 			changeDao.insert(change);
 			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
 
 			conn.commit();
 		} 
@@ -108,14 +122,11 @@ public class ProjectService {
 
 	private String getTypeChange(int type) {
 		String typeChange = "";
-		if (type == 0) {
+		if (type == 1) {
 			typeChange = "Project Input";
 		} 
-		else if (type == 1) {
-			typeChange = "Project Update";
-		} 
 		else if (type == 2) {
-			typeChange = "Project Update Status";
+			typeChange = "Project Update";
 		} 
 		else if (type == 3) {
 			typeChange = "Project Deactivation";
@@ -125,14 +136,11 @@ public class ProjectService {
 
 	private String getChanges(Project objOld, Project objNew, int type) {
 		String changes = "";
-		if (type == 0) {
+		if (type == 1) {
 			changes = "New Project Added";
 		} 
-		else if (type == 1) {
-			changes = getFieldsUpdated(objOld, objNew);
-		} 
 		else if (type == 2) {
-
+			changes = getFieldsUpdated(objOld, objNew);
 		} 
 		else if (type == 3) {
 			changes = "Project Disabled for: " + objOld.getReason();

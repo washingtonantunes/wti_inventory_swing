@@ -24,6 +24,7 @@ public class Monitor extends Beans implements Serializable, Cloneable {
 	private String note;
 	private String reason;
 
+	private Project project;
 	private User user;
 	private WorkPosition workPosition;
 
@@ -130,6 +131,14 @@ public class Monitor extends Beans implements Serializable, Cloneable {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public User getUser() {

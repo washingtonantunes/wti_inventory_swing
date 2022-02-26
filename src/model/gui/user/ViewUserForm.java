@@ -19,8 +19,7 @@ import model.entities.License;
 import model.entities.Monitor;
 import model.entities.Peripheral;
 import model.entities.User;
-import model.entities.utilitay.Item;
-import model.gui.MainWindow;
+import model.entities.utilitary.Item;
 import model.gui.change.ChangesPanel;
 import model.gui.item.ItemList;
 import model.util.MyButton;
@@ -58,7 +57,6 @@ public class ViewUserForm extends JDialog {
 
 	public ViewUserForm(User user) {
 		this.user = user;
-		initObjects();
 		initComponents();
 	}
 
@@ -131,8 +129,7 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
-		final JLabel label_Show_Project = new MyLabel(user.getProject().getName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
-				FONT);
+		final JLabel label_Show_Project = new MyLabel(user.getProject() != null ? user.getProject().getName() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Project);
 
 		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL, FONT);
@@ -196,92 +193,37 @@ public class ViewUserForm extends JDialog {
 		}
 	}
 
-	private void initObjects() {
-		if (user.getEquipment().getSerialNumber() != null) {
-			Equipment equipment = MainWindow.getEquipment(user.getEquipment().getSerialNumber());
-			user.setEquipment(equipment);
-		}
-		if (user.getMonitor1().getSerialNumber() != null) {
-			Monitor monitor = MainWindow.getMonitor(user.getMonitor1().getSerialNumber());
-			user.setMonitor1(monitor);
-		}
-		if (user.getMonitor2().getSerialNumber() != null) {
-			Monitor monitor = MainWindow.getMonitor(user.getMonitor2().getSerialNumber());
-			user.setMonitor2(monitor);
-		}
-
-		{ // SET Peripheral
-			List<Peripheral> listPeripheral = new ArrayList<Peripheral>();
-
-			for (Peripheral peripheralss : user.getPeripherals()) {
-				if (peripheralss.getCode() != null) {
-					Peripheral p = MainWindow.getPeripheral(peripheralss.getCode());
-					listPeripheral.add(p);
-				}
-			}
-
-			if (listPeripheral.size() > 0) {
-				user.setPeripherals(listPeripheral);
-			} 
-		}
-
-		{ // SET License
-			List<License> listLicense = new ArrayList<License>();
-
-			for (License license : user.getLicenses()) {
-				if (license.getCode() != null) {
-					License l = MainWindow.getLicense(license.getCode());
-					listLicense.add(l);
-				}
-			}
-
-			if (listLicense.size() > 0) {
-				user.setLicenses(listLicense);
-			} 
-		}
-	}
-
 	private List<Item> getItens() {
 		final List<Item> itens = new ArrayList<Item>();
 
-		//GET Equipment
-		if (user.getEquipment().getSerialNumber() != null) {
-			Equipment equipment = user.getEquipment();
+		// GET Equipments
+		if (user.getEquipments() != null && user.getEquipments().size() > 0) {
+			for (Equipment equipment : user.getEquipments()) {
 
-			final Item item = new Item();
-			item.setIndex(itens.size() + 1);
-			item.setType("Equipamento");
-			item.setCode(equipment.getSerialNumber());
-			item.setName(equipment.getType());
-			item.setBrand(equipment.getBrand());
-			item.setValue(equipment.getValue());
-			itens.add(item);
+				final Item item = new Item();
+				item.setIndex(itens.size() + 1);
+				item.setType("Equipment");
+				item.setCode(equipment.getSerialNumber());
+				item.setName(equipment.getType() + " " + equipment.getBrand());
+				item.setPatrimonyNumber(equipment.getPatrimonyNumber());
+				item.setValue(equipment.getValue());
+				itens.add(item);
+			}
 		}
 		
-		//GET Monitors
-		if (user.getMonitor1().getSerialNumber() != null) {
-			Monitor monitor = user.getMonitor1();
+		// GET Monitors
+		if (user.getMonitors() != null && user.getMonitors().size() > 0) {
+			for (Monitor monitor : user.getMonitors()) {
 
-			final Item item = new Item();
-			item.setIndex(itens.size() + 1);
-			item.setType("Monitor");
-			item.setCode(monitor.getSerialNumber());
-			item.setName(monitor.getModel());
-			item.setBrand(monitor.getBrand());
-			item.setValue(monitor.getValue());
-			itens.add(item);
-		}
-		if (user.getMonitor2().getSerialNumber() != null) {
-			Monitor monitor = user.getMonitor2();
-
-			final Item item = new Item();
-			item.setIndex(itens.size() + 1);
-			item.setType("Monitor");
-			item.setCode(monitor.getSerialNumber());
-			item.setName(monitor.getModel());
-			item.setBrand(monitor.getBrand());
-			item.setValue(monitor.getValue());
-			itens.add(item);
+				final Item item = new Item();
+				item.setIndex(itens.size() + 1);
+				item.setType("Monitor");
+				item.setCode(monitor.getSerialNumber());
+				item.setName(monitor.getModel());
+				item.setPatrimonyNumber(monitor.getPatrimonyNumber());
+				item.setValue(monitor.getValue());
+				itens.add(item);
+			}
 		}
 
 		// GET Peripherals
@@ -290,10 +232,9 @@ public class ViewUserForm extends JDialog {
 
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
-				item.setType("Periférico");
+				item.setType("Peripheral");
 				item.setCode(peripheral.getCode());
-				item.setName(peripheral.getName());
-				item.setBrand(peripheral.getBrand());
+				item.setName(peripheral.getName() + "" + peripheral.getBrand());
 				item.setValue(peripheral.getValue());
 				itens.add(item);
 			}
@@ -305,10 +246,9 @@ public class ViewUserForm extends JDialog {
 
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
-				item.setType("Licença");
+				item.setType("License");
 				item.setCode(license.getCode());
-				item.setName(license.getName());
-				item.setBrand(license.getBrand());
+				item.setName(license.getName() + "" + license.getBrand());
 				item.setValue(license.getValue());
 				itens.add(item);
 			}

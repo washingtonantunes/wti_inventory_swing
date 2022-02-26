@@ -22,11 +22,8 @@ import javax.swing.JTextField;
 
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Equipment;
-import model.entities.Monitor;
 import model.entities.Option;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 import model.services.workposition.WorkPositionService;
 import model.services.workposition.WorkPositionTableModel;
 import model.util.JTextFieldFilter;
@@ -190,10 +187,12 @@ public class NewWorkPositionForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				workPosition = getFormData();
+				
 				WorkPositionService service = new WorkPositionService();
 				service.save(workPosition);
+				
 				model.addWorkPosition(workPosition);
-				MainWindow.addWorkPosition(workPosition);
+				
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "Work Position successfully added", "Success saving object",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -248,15 +247,6 @@ public class NewWorkPositionForm extends JDialog {
 
 		// Insert DateEntry
 		workPosition.setDateEntry(new Date());
-
-		// Insert Equipment
-		workPosition.setEquipment(new Equipment());
-
-		// Insert Monitor 1
-		workPosition.setMonitor1(new Monitor());
-
-		// Insert Monitor 2
-		workPosition.setMonitor2(new Monitor());
 
 		if (exception.getErrors().size() > 0) {
 			throw exception;

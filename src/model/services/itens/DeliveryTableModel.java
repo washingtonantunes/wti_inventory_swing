@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
-import model.entities.utilitay.ItemDelivery;
+import model.entities.utilitary.ItemDelivery;
 
 public class DeliveryTableModel extends AbstractTableModel {
 

@@ -1,14 +1,14 @@
-package model.entities.utilitay;
+package model.entities.utilitary;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User_Peripheral {
+public class LicenseWithUser implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private String registration;
 	private String code;
-	
-	public User_Peripheral() {
-	}
 	
 	public String getRegistration() {
 		return registration;
@@ -22,12 +22,10 @@ public class User_Peripheral {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(code, registration);
+		return Objects.hash(registration, code);
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -36,7 +34,7 @@ public class User_Peripheral {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User_Peripheral other = (User_Peripheral) obj;
-		return Objects.equals(code, other.code) && Objects.equals(registration, other.registration);
+		LicenseWithUser other = (LicenseWithUser) obj;
+		return Objects.equals(registration, other.registration) && Objects.equals(code, other.code);
 	}
 }

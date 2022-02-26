@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import application.LoadData;
 import db.DB;
 import db.DBException;
 import model.dao.WorkPositionDao;
@@ -16,7 +16,6 @@ import model.entities.Change;
 import model.entities.Equipment;
 import model.entities.Monitor;
 import model.entities.WorkPosition;
-import model.gui.MainWindow;
 
 public class WorkPositionDaoJDBC implements WorkPositionDao {
 	
@@ -178,8 +177,7 @@ public class WorkPositionDaoJDBC implements WorkPositionDao {
 		return monitor;
 	}
 	
-	private List<Change> instatiateChanges(String registration) {
-		List<Change> changes = MainWindow.getChanges().stream().filter(c -> c.getObject().equals(registration)).collect(Collectors.toList());
-		return changes;
+	private List<Change> instatiateChanges(String serialNumber) {
+		return LoadData.getChangesByObject(serialNumber);
 	}
 }

@@ -8,9 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
@@ -23,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import application.LoadData;
 import db.DBException;
 import exception.ObjectException;
 import model.entities.Equipment;
@@ -30,18 +29,15 @@ import model.entities.License;
 import model.entities.Monitor;
 import model.entities.Peripheral;
 import model.entities.User;
-import model.entities.utilitay.Item;
-import model.entities.utilitay.ItemDelivery;
-import model.gui.MainWindow;
+import model.entities.utilitary.Item;
+import model.entities.utilitary.ItemDelivery;
 import model.services.equipment.EquipmentService;
 import model.services.itens.CreatePDFFileDelivery;
 import model.services.itens.DeliveryTableModel;
-import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
 import model.services.license.LicenseService;
 import model.services.monitor.MonitorService;
 import model.services.peripheral.PeripheralService;
-import model.services.user.UserService;
 import model.util.MyButton;
 import model.util.MyComboBox;
 
@@ -79,12 +75,12 @@ public class AddItemForm extends JDialog {
 	private Peripheral selectedPeripheral;
 	private License selectedLicense;
 
-	public AddItemForm(ItemTableModel modelOld, User user, List<Item> itens) {
+	public AddItemForm(User user, List<Item> itens) {
 		this.user = user;
-		this.equipments = loadDataEquipments();
-		this.monitors = loadDataMonitors();
-		this.peripherals = loadDataPeripherals();
-		this.licenses = loadDataLicenses();
+		this.equipments = LoadData.getEquipmentsList();
+		this.monitors = LoadData.getMonitorsList();
+		this.peripherals = LoadData.getPeripheralsList();
+		this.licenses = LoadData.getLicensesList();
 		this.itens = itens;
 		initComponents();
 	}
@@ -92,7 +88,7 @@ public class AddItemForm extends JDialog {
 	private void initComponents() {
 		setTitle("Add Item");
 		setModal(true);
-		setPreferredSize(new Dimension(900, 600));
+		setPreferredSize(new Dimension(950, 600));
 		setResizable(false);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);	
 		
@@ -163,8 +159,7 @@ public class AddItemForm extends JDialog {
 		TitledBorder title = BorderFactory.createTitledBorder(lineBorder, "Equipment");
 		panel.setBorder(title);
 
-		comboBox_Equipment = new MyComboBox(
-				equipments.stream().filter(p -> p.getStatus().equals("STAND BY")).collect(Collectors.toList()), 3);
+		comboBox_Equipment = new MyComboBox(equipments.stream().filter(p -> p.getStatus().equals("STAND BY")).collect(Collectors.toList()), 3);
 		comboBox_Equipment.addItemListener(new ItemChangeEquipmentListener());
 		panel.add(comboBox_Equipment);
 		
@@ -256,81 +251,26 @@ public class AddItemForm extends JDialog {
 
 		return panel;
 	}
-
-	private List<Equipment> loadDataEquipments() {
-		Map<String, Equipment> equipments = MainWindow.getEquipments();
-		List<Equipment> list = new ArrayList<Equipment>();
-
-		for (String entry : equipments.keySet()) {
-			list.add(equipments.get(entry));
-		}
-
-		list.sort((e1, p2) -> e1.getSerialNumber().compareTo(p2.getSerialNumber()));
-		return list;
-	}
-
-	private List<Monitor> loadDataMonitors() {
-		Map<String, Monitor> monitors = MainWindow.getMonitors();
-		List<Monitor> list = new ArrayList<Monitor>();
-
-		for (String entry : monitors.keySet()) {
-			list.add(monitors.get(entry));
-		}
-
-		list.sort((m1, m2) -> m1.getSerialNumber().compareTo(m2.getSerialNumber()));
-		return list;
-	}
-
-	private List<Peripheral> loadDataPeripherals() {
-		Map<String, Peripheral> peripherals = MainWindow.getPeripherals();
-		List<Peripheral> list = new ArrayList<Peripheral>();
-
-		for (String entry : peripherals.keySet()) {
-			list.add(peripherals.get(entry));
-		}
-
-		list.sort((p1, p2) -> p1.getName().compareTo(p2.getName()));
-		return list;
-	}
-
-	private List<License> loadDataLicenses() {
-		Map<String, License> licenses = MainWindow.getLicenses();
-		List<License> list = new ArrayList<License>();
-
-		for (String entry : licenses.keySet()) {
-			list.add(licenses.get(entry));
-		}
-
-		list.sort((l1, l2) -> l1.getName().compareTo(l2.getName()));
-		return list;
-	}
-	
-	public List<Item> getItens() {
-		return itens;
-	}
 	
 	private void addItem() {		
 		if (checkContains(1, false, true)) {
-			EquipmentService service = new EquipmentService();
-			List<ItemDelivery> list = modelDelivery.getItemDelivery("Equipment");
+			final EquipmentService service = new EquipmentService();
+			final List<ItemDelivery> list = modelDelivery.getItemDelivery("Equipment");
 			
 			for (ItemDelivery itemDelivery : list) {
-				Equipment equipment = MainWindow.getEquipment(itemDelivery.getName());
+				Equipment equipment = LoadData.getEquipment(itemDelivery.getCode());
 				
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
 				item.setType("Equipment");
 				item.setCode(equipment.getSerialNumber());
-				item.setName(equipment.getSerialNumber());
-				item.setBrand(equipment.getBrand());
+				item.setName(equipment.getType() + " " + equipment.getBrand());
+				item.setPatrimonyNumber(equipment.getPatrimonyNumber());
 				item.setValue(equipment.getValue());
 				itens.add(item);
 				
-				equipment.setStatus("IN USE");
-				equipment.setUser(user);
-				service.updateStatusForUser(equipment);
+				service.updateStatusForUser(equipment, user);
 				
-				user.setEquipment(equipment);
 			}
 		}
 		
@@ -339,22 +279,18 @@ public class AddItemForm extends JDialog {
 			List<ItemDelivery> list = modelDelivery.getItemDelivery("Monitor");
 			
 			for (ItemDelivery itemDelivery : list) {
-				Monitor monitor = MainWindow.getMonitor(itemDelivery.getName());
+				Monitor monitor = LoadData.getMonitor(itemDelivery.getCode());
 				
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
 				item.setType("Monitor");
 				item.setCode(monitor.getSerialNumber());
-				item.setName(monitor.getSerialNumber());
-				item.setBrand(monitor.getBrand());
+				item.setName(monitor.getModel());
+				item.setPatrimonyNumber(monitor.getPatrimonyNumber());
 				item.setValue(monitor.getValue());
 				itens.add(item);
 				
-				monitor.setStatus("IN USE");
-				monitor.setUser(user);
-				service.updateStatusForUser(monitor);
-				
-				user.setMonitor1(monitor);
+				service.updateStatusForUser(monitor, user);
 			}
 		}
 		
@@ -363,22 +299,17 @@ public class AddItemForm extends JDialog {
 			List<ItemDelivery> listItemDelivery = modelDelivery.getItemDelivery("Peripheral");
 			
 			for (ItemDelivery itemDelivery : listItemDelivery) {
-				Peripheral peripheral = MainWindow.getPeripheral(itemDelivery.getCode());
+				Peripheral peripheral = LoadData.getPeripheral(itemDelivery.getCode());
 				
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
 				item.setType("Peripheral");
 				item.setCode(peripheral.getCode());
-				item.setName(peripheral.getName());
-				item.setBrand(peripheral.getBrand());
+				item.setName(peripheral.getName() + "" + peripheral.getBrand());
 				item.setValue(peripheral.getValue());
 				itens.add(item);
 				
-				peripheral.setQuantity(peripheral.getQuantity() - 1);
-				peripheral.setUser(user.getName());
-				service.updateQuantity(peripheral, user, 1);
-				
-				user.addPeripheral(peripheral);
+				service.updateForUser(peripheral, user);
 			}
 			
 		}
@@ -388,20 +319,17 @@ public class AddItemForm extends JDialog {
 			List<ItemDelivery> list = modelDelivery.getItemDelivery("License");
 			
 			for (ItemDelivery itemDelivery : list) {
-				License license = MainWindow.getLicense(itemDelivery.getCode());
+				License license = LoadData.getLicense(itemDelivery.getCode());
 				
 				final Item item = new Item();
 				item.setIndex(itens.size() + 1);
 				item.setType("License");
 				item.setCode(license.getCode());
-				item.setName(license.getName());
-				item.setBrand(license.getBrand());
+				item.setName(license.getName() + "" + license.getBrand());
 				item.setValue(license.getValue());
 				itens.add(item);
 				
-				license.setQuantity(license.getQuantity() - 1);
-				license.setUser(user.getName());
-				service.updateQuantity(license, user, 1);
+				service.updateForUser(license, user);
 			}
 		}
 		
@@ -418,7 +346,7 @@ public class AddItemForm extends JDialog {
 		final String type = item.getType();
 
 		if (type.equals("Equipment")) {			
-			Equipment equipment = MainWindow.getEquipment(code);
+			Equipment equipment = LoadData.getEquipment(code);
 
 			comboBox_Equipment.addItem(equipment);
 			
@@ -428,7 +356,7 @@ public class AddItemForm extends JDialog {
 			}
 		} 
 		else if (type.equals("Monitor")) {
-			Monitor monitor = MainWindow.getMonitor(code);
+			Monitor monitor = LoadData.getMonitor(code);
 
 			comboBox_Monitor.addItem(monitor);
 			
@@ -438,7 +366,7 @@ public class AddItemForm extends JDialog {
 			}
 		}
 		else if (type.equals("Peripheral")) {
-			Peripheral peripheral = MainWindow.getPeripheral(code);
+			Peripheral peripheral = LoadData.getPeripheral(code);
 
 			comboBox_Peripheral.addItem(peripheral);
 			
@@ -448,7 +376,7 @@ public class AddItemForm extends JDialog {
 			}
 		}
 		else if (type.equals("License")) {
-			License license = MainWindow.getLicense(code);
+			License license = LoadData.getLicense(code);
 
 			comboBox_License.addItem(license);
 			
@@ -463,6 +391,7 @@ public class AddItemForm extends JDialog {
 	private void removeItemComboBox(int type) {
 		if (type == 1) {
 			
+			// create Item
 			final ItemDelivery itemDelivery = new ItemDelivery();
 			itemDelivery.setType("Equipment");
 			itemDelivery.setCode(selectedEquipment.getSerialNumber());
@@ -481,6 +410,7 @@ public class AddItemForm extends JDialog {
 		} 
 		else if (type == 2) {
 		
+			// create Item
 			final ItemDelivery itemDelivery = new ItemDelivery();
 			itemDelivery.setType("Monitor");
 			itemDelivery.setCode(selectedMonitor.getSerialNumber());
@@ -499,6 +429,7 @@ public class AddItemForm extends JDialog {
 		} 
 		else if (type == 3) {
 			
+			// create Item
 			final ItemDelivery itemDelivery = new ItemDelivery();
 			itemDelivery.setType("Peripheral");
 			itemDelivery.setCode(selectedPeripheral.getCode());
@@ -640,8 +571,9 @@ public class AddItemForm extends JDialog {
 					addItem();
 					createTerm();
 					dispose();
+					JOptionPane.showMessageDialog(rootPane, "Item successfully added", "Success saving item", JOptionPane.INFORMATION_MESSAGE);
 				} catch (DBException db) {
-					JOptionPane.showMessageDialog(rootPane, db.getMessage(), "Error saving object", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(rootPane, db.getMessage(), "Error saving item", JOptionPane.ERROR_MESSAGE);
 				} catch (ObjectException oe) {
 					JOptionPane.showMessageDialog(rootPane, oe.getMessage(), "Error saving document", JOptionPane.ERROR_MESSAGE);
 				}
