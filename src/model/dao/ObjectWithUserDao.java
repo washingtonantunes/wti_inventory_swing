@@ -14,19 +14,31 @@ import model.entities.utilitary.PeripheralWithUser;
 
 public interface ObjectWithUserDao {
 
+	// Equipment
+	public void insertEquipmentWithUser(User user, Equipment equipment);
+
+	public void removeEquipmentWithUser(User user, Equipment equipment);
+
 	List<EquipmentWithUser> findAllEquipmentWithUser();
+
+	// Monitor
+	public void insertMonitorWithUser(User user, Monitor monitor);
 
 	List<MonitorWithUser> findAllMonitorWithUser();
 
+	public void removeMonitorWithUser(User user, Monitor monitor);
+
+	// Peripheral
+	public void insertPeripheralWithUser(User user, Peripheral peripheral);
+
 	List<PeripheralWithUser> findAllPeripheralWithUser();
 
-	List<LicenseWithUser> findAllLicenseWithUser();
-	
-	public void insertEquipmentWithUser(User user, Equipment equipment);
-	
-	public void insertMonitorWithUser(User user, Monitor monitor);
-	
-	public void insertPeripheralWithUser(User user, Peripheral peripheral);
-	
+	public void removePeripheralWithUser(User user, Peripheral peripheral);
+
+	// License
 	public void insertLicenseWithUser(User user, License license);
+
+	public void removeLicenseWithUser(User user, License license);
+
+	List<LicenseWithUser> findAllLicenseWithUser();
 }

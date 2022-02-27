@@ -74,14 +74,15 @@ public class ViewUserForm extends JDialog {
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	private JPanel createTopPanel() {
-		final JPanel buttonPanel = new JPanel();
-		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
-		buttonPanel.setBackground(COLOR1);
+		final JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		panel.setBackground(COLOR1);
 
-		return buttonPanel;
+		return panel;
 	}
 
 	private JPanel createFieldsPanel() {
@@ -91,8 +92,7 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
-		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
-				FONT);
+		final JLabel label_Show_Registration = new MyLabel(user.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Registration);
 
 		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL, FONT);
@@ -234,7 +234,7 @@ public class ViewUserForm extends JDialog {
 				item.setIndex(itens.size() + 1);
 				item.setType("Peripheral");
 				item.setCode(peripheral.getCode());
-				item.setName(peripheral.getName() + "" + peripheral.getBrand());
+				item.setName(peripheral.getName() + " " + peripheral.getBrand());
 				item.setValue(peripheral.getValue());
 				itens.add(item);
 			}
@@ -248,7 +248,7 @@ public class ViewUserForm extends JDialog {
 				item.setIndex(itens.size() + 1);
 				item.setType("License");
 				item.setCode(license.getCode());
-				item.setName(license.getName() + "" + license.getBrand());
+				item.setName(license.getName() + " " + license.getBrand());
 				item.setValue(license.getValue());
 				itens.add(item);
 			}

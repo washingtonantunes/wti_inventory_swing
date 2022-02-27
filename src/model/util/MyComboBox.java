@@ -42,6 +42,12 @@ public class MyComboBox extends JComboBox<Object> {
 		addObjects();
 		initObject();
 	}
+	
+	public MyComboBox(int size) {
+		this.size = size;
+		addObjects();
+		initObject();
+	}
 
 	private void initObject() {
 
@@ -85,5 +91,12 @@ public class MyComboBox extends JComboBox<Object> {
 	
 	private void selectObject() {
 		setSelectedItem(selectedObject);
+	}
+	
+	public void setObjects(List<Object> objects_) {
+		
+		for (Object object : objects_) {
+			addItem(object);
+		}
 	}
 }

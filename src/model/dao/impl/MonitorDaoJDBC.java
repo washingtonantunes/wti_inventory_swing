@@ -114,8 +114,8 @@ public class MonitorDaoJDBC implements MonitorDao {
 
 			st.setString(1, obj.getLocation());
 			st.setString(2, obj.getStatus());
-			st.setString(3, obj.getUser().getProject().getCostCenter());
-			st.setString(4, obj.getUser().getRegistration());
+			st.setString(3, obj.getProject() != null ? obj.getUser().getProject().getCostCenter() : "NULL");
+			st.setString(4, obj.getUser() != null ? obj.getUser().getRegistration() : "NULL");
 			st.setString(5, obj.getSerialNumber());
 
 			st.executeUpdate();

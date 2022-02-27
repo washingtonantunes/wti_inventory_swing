@@ -120,6 +120,10 @@ public class User implements Serializable, Cloneable {
 		this.equipments.add(equipment);
 	}
 	
+	public void removeEquipment(Equipment equipment) {
+		this.equipments.remove(equipment);
+	}
+	
 	public void setEquipments(List<Equipment> equipments) {
 		this.equipments = equipments;
 	}
@@ -130,6 +134,10 @@ public class User implements Serializable, Cloneable {
 
 	public void addMonitor(Monitor monitor) {
 		this.monitors.add(monitor);
+	}
+	
+	public void removeMonitor(Monitor monitor) {
+		this.monitors.remove(monitor);
 	}
 	
 	public void setMonitors(List<Monitor> monitors) {
@@ -144,6 +152,10 @@ public class User implements Serializable, Cloneable {
 		this.peripherals.add(peripheral);
 	}
 	
+	public void removePeripheral(Peripheral peripheral) {
+		this.peripherals.remove(peripheral);
+	}
+	
 	public void setPeripherals(List<Peripheral> peripherals) {
 		this.peripherals = peripherals;
 	}
@@ -154,6 +166,10 @@ public class User implements Serializable, Cloneable {
 
 	public void addLicense(License license) {
 		this.licenses.add(license);
+	}
+	
+	public void removeLicense(License license) {
+		this.licenses.remove(license);
 	}
 	
 	public void setLicenses(List<License> licenses) {

@@ -17,6 +17,7 @@ import model.dao.ObjectWithUserDao;
 import model.entities.Change;
 import model.entities.Monitor;
 import model.entities.User;
+import model.util.Utils;
 
 public class MonitorService {
 
@@ -85,7 +86,7 @@ public class MonitorService {
 		}
 	}
 
-	public void updateStatusForUser(Monitor obj, User user) {
+	public void addForUser(Monitor obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -105,9 +106,66 @@ public class MonitorService {
 
 			// Insert into running list
 			LoadData.addChange(change);
+			
+			//Change User
+			Change changeUser = getChange(obj, obj, 3);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 1));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
 
 			// Insert user/monitor relationship
 			objectWithUserDao.insertMonitorWithUser(user, obj);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void removeForUser(Monitor obj, User user) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			
+			//Change
+			Change change = getChange(obj, obj, 4);
+			changeDao.insert(change);
+			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			//Change User
+			Change changeUser = getChange(obj, obj, 4);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 2));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
+			
+			obj.setLocation(Utils.getLocationEquipment());
+			obj.setStatus("STAND BY");
+			obj.setUser(null);
+			obj.setProject(null);
+			monitorDao.updateStatusForUser(obj); //Update object into the database
+			
+			user.removeMonitor(obj);
+			
+			//Insert user/equipment relationship
+			objectWithUserDao.removeMonitorWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -130,7 +188,7 @@ public class MonitorService {
 			monitorDao.disable(obj); // Update object into the database
 
 			// Change
-			Change change = getChange(obj, obj, 4);
+			Change change = getChange(obj, obj, 5);
 			changeDao.insert(change);
 			obj.addChange(change);
 
@@ -169,9 +227,12 @@ public class MonitorService {
 			typeChange = "Monitor Update";
 		} 
 		else if (type == 3) {
-			typeChange = "Monitor Update Status";
+			typeChange = "Monitor Exit";
 		} 
 		else if (type == 4) {
+			typeChange = "Monitor Return";
+		} 
+		else if (type == 5) {
 			typeChange = "Monitor Deactivation";
 		}
 		return typeChange;
@@ -189,8 +250,23 @@ public class MonitorService {
 			changes = "Monitor delivered to the user: " + objNew.getUser().getName();
 		} 
 		else if (type == 4) {
+			changes = "Monitor returned by the user: " + objNew.getUser().getName();
+		} 
+		else if (type == 5) {
 			changes = "Monitor Disabled for: " + objOld.getReason();
 		}
+		return changes;
+	}
+	
+	private String getChangeUser(Monitor monitor, int type) {
+		String changes = "";
+		
+		if (type == 1) {
+			changes = "Monitor "+ monitor.getSerialNumber() + " delivered to the user";
+		} 
+		else if (type == 2) {
+			changes = "Monitor "+ monitor.getSerialNumber() + " returned by the user";
+		} 
 		return changes;
 	}
 

@@ -26,7 +26,6 @@ import javax.swing.table.TableRowSorter;
 import application.LoadData;
 import application.MainWindow;
 import model.entities.Option;
-import model.entities.Project;
 import model.entities.User;
 import model.services.OptionService;
 import model.services.user.CreateExlFileUser;
@@ -49,7 +48,6 @@ private static final long serialVersionUID = 1L;
 
 	private List<User> users;
 	protected static List<Option> options;
-	protected static List<Project> projects;
 
 	private JLabel label_Show_Quantity;
 
@@ -186,7 +184,7 @@ private static final long serialVersionUID = 1L;
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewUserForm(model).setVisible(true);
+				new NewUserForm(model);
 				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
@@ -212,7 +210,7 @@ private static final long serialVersionUID = 1L;
 						JOptionPane.showMessageDialog(null, "This user is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditUserForm(model, user, modelRow).setVisible(true);
+						new EditUserForm(model, user, modelRow);
 					}
 				}
 			}
@@ -231,7 +229,7 @@ private static final long serialVersionUID = 1L;
 			else {
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				User user = model.getUser(modelRow);
-				new ViewUserForm(user).setVisible(true);
+				new ViewUserForm(user);
 			}
 		}
 	}
@@ -256,7 +254,7 @@ private static final long serialVersionUID = 1L;
 						JOptionPane.showMessageDialog(null, "This user is in possession of a device", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
 					*/else {
-						new DisableUserForm(model, user, modelRow).setVisible(true);
+						new DisableUserForm(model, user, modelRow);
 					}
 				}
 			}
@@ -321,7 +319,7 @@ private static final long serialVersionUID = 1L;
 				int lineSelected = table.getSelectedRow();
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				User user = model.getUser(modelRow);
-				new ViewUserForm(user).setVisible(true);
+				new ViewUserForm(user);
 			}
 		}
 	}

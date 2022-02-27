@@ -27,7 +27,54 @@ public class ObjectWithUserDaoJDBC implements ObjectWithUserDao {
 	public ObjectWithUserDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
+	
+	// Equipment
+	@Override
+	public void insertEquipmentWithUser(User user, Equipment equipment) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO `equipmentsWithUsers` "
+					+ "(`registration`,"
+					+ "`serialNumber`) "
+					+ "VALUES " 
+					+ "(?, ?)");
 
+			st.setString(1, user.getRegistration());
+			st.setString(2, equipment.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void removeEquipmentWithUser(User user, Equipment equipment) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM `equipmentsWithUsers` "
+					+ "WHERE (`registration`=? "
+					+ "and `serialNumber`=?) ");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, equipment.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
 	@Override
 	public List<EquipmentWithUser> findAllEquipmentWithUser() {
 		PreparedStatement st = null;
@@ -56,7 +103,54 @@ public class ObjectWithUserDaoJDBC implements ObjectWithUserDao {
 			DB.closeResultSet(rs);
 		}
 	}
+	
+	// Monitor
+	@Override
+	public void insertMonitorWithUser(User user, Monitor monitor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO `monitorsWithUsers` "
+					+ "(`registration`,"
+					+ "`serialNumber`) "
+					+ "VALUES " 
+					+ "(?, ?)");
 
+			st.setString(1, user.getRegistration());
+			st.setString(2, monitor.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void removeMonitorWithUser(User user, Monitor monitor) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM `monitorsWithUsers` "
+					+ "WHERE (`registration`=? "
+					+ "and `serialNumber`=?) ");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, monitor.getSerialNumber());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
 	@Override
 	public List<MonitorWithUser> findAllMonitorWithUser() {
 		PreparedStatement st = null;
@@ -83,6 +177,53 @@ public class ObjectWithUserDaoJDBC implements ObjectWithUserDao {
 		finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
+		}
+	}
+	
+	//Peripheral
+	@Override
+	public void insertPeripheralWithUser(User user, Peripheral peripheral) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO `peripheralsWithUsers` "
+					+ "(`registration`,"
+					+ "`code`) "
+					+ "VALUES " 
+					+ "(?, ?)");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, peripheral.getCode());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void removePeripheralWithUser(User user, Peripheral peripheral) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM `peripheralsWithUsers` "
+					+ "WHERE (`registration`=? "
+					+ "and `code`=?) ");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, peripheral.getCode());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
 		}
 	}
 	
@@ -115,6 +256,53 @@ public class ObjectWithUserDaoJDBC implements ObjectWithUserDao {
 		}
 	}
 	
+	// License
+	@Override
+	public void insertLicenseWithUser(User user, License license) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO `licensesWithUsers` "
+					+ "(`registration`,"
+					+ "`code`) "
+					+ "VALUES " 
+					+ "(?, ?)");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, license.getCode());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void removeLicenseWithUser(User user, License license) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM `licensesWithUsers` "
+					+ "WHERE (`registration`=? "
+					+ "and `code`=?) ");
+
+			st.setString(1, user.getRegistration());
+			st.setString(2, license.getCode());
+
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
 	@Override
 	public List<LicenseWithUser> findAllLicenseWithUser() {
 		PreparedStatement st = null;
@@ -141,102 +329,6 @@ public class ObjectWithUserDaoJDBC implements ObjectWithUserDao {
 		finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
-		}
-	}
-	
-	@Override
-	public void insertEquipmentWithUser(User user, Equipment equipment) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"INSERT INTO `equipmentsWithUsers` "
-					+ "(`registration`,"
-					+ "`serialNumber`) "
-					+ "VALUES " 
-					+ "(?, ?)");
-
-			st.setString(1, user.getRegistration());
-			st.setString(2, equipment.getSerialNumber());
-
-			st.executeUpdate();
-		} 
-		catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} 
-		finally {
-			DB.closeStatement(st);
-		}
-	}
-	
-	@Override
-	public void insertMonitorWithUser(User user, Monitor monitor) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"INSERT INTO `monitorsWithUsers` "
-					+ "(`registration`,"
-					+ "`serialNumber`) "
-					+ "VALUES " 
-					+ "(?, ?)");
-
-			st.setString(1, user.getRegistration());
-			st.setString(2, monitor.getSerialNumber());
-
-			st.executeUpdate();
-		} 
-		catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} 
-		finally {
-			DB.closeStatement(st);
-		}
-	}
-	
-	@Override
-	public void insertPeripheralWithUser(User user, Peripheral peripheral) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"INSERT INTO `peripheralsWithUsers` "
-					+ "(`registration`,"
-					+ "`code`) "
-					+ "VALUES " 
-					+ "(?, ?)");
-
-			st.setString(1, user.getRegistration());
-			st.setString(2, peripheral.getCode());
-
-			st.executeUpdate();
-		} 
-		catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} 
-		finally {
-			DB.closeStatement(st);
-		}
-	}
-	
-	@Override
-	public void insertLicenseWithUser(User user, License license) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"INSERT INTO `licensesWithUsers` "
-					+ "(`registration`,"
-					+ "`code`) "
-					+ "VALUES " 
-					+ "(?, ?)");
-
-			st.setString(1, user.getRegistration());
-			st.setString(2, license.getCode());
-
-			st.executeUpdate();
-		} 
-		catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} 
-		finally {
-			DB.closeStatement(st);
 		}
 	}
 }

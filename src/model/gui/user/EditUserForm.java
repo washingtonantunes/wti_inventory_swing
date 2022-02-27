@@ -62,7 +62,7 @@ public class EditUserForm extends JDialog {
 	private final int HEIGHT_BUTTON_PANEL = 50;
 
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
-	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 64 + 20;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
 
 	private UserTableModel model;
 	private final User userOld;
@@ -103,14 +103,15 @@ public class EditUserForm extends JDialog {
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
 	private JPanel createTopPanel() {
-		final JPanel buttonPanel = new JPanel();
-		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
-		buttonPanel.setBackground(COLOR1);
+		final JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		panel.setBackground(COLOR1);
 
-		return buttonPanel;
+		return panel;
 	}
 
 	private JPanel createFieldsPanel() {

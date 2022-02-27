@@ -17,6 +17,7 @@ import model.dao.ObjectWithUserDao;
 import model.entities.Change;
 import model.entities.Equipment;
 import model.entities.User;
+import model.util.Utils;
 
 public class EquipmentService {
 
@@ -85,7 +86,7 @@ public class EquipmentService {
 		}
 	}
 
-	public void updateStatusForUser(Equipment obj, User user) {
+	public void addForUser(Equipment obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -106,8 +107,65 @@ public class EquipmentService {
 			//Insert into running list
 			LoadData.addChange(change);
 			
+			//Change User
+			Change changeUser = getChange(obj, obj, 3);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 1));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
+			
 			//Insert user/equipment relationship
 			objectWithUserDao.insertEquipmentWithUser(user, obj);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void removeForUser(Equipment obj, User user) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			
+			//Change Equipment
+			Change change = getChange(obj, obj, 4);
+			changeDao.insert(change);
+			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			//Change User
+			Change changeUser = getChange(obj, obj, 4);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 2));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
+			
+			obj.setLocation(Utils.getLocationEquipment());
+			obj.setStatus("STAND BY");
+			obj.setUser(null);
+			obj.setProject(null);
+			equipmentDao.updateStatusForUser(obj); //Update object into the database
+			
+			user.removeEquipment(obj);
+
+			//Insert user/equipment relationship
+			objectWithUserDao.removeEquipmentWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -130,7 +188,7 @@ public class EquipmentService {
 			equipmentDao.disable(obj); //Update object into the database
 
 			//Change
-			Change change = getChange(obj, obj, 4);
+			Change change = getChange(obj, obj, 5);
 			changeDao.insert(change);
 			obj.addChange(change);
 			
@@ -169,9 +227,12 @@ public class EquipmentService {
 			typeChange = "Equipment Update";
 		} 
 		else if (type == 3) {
-			typeChange = "Equipment Update Status";
+			typeChange = "Equipment Exit";
 		} 
 		else if (type == 4) {
+			typeChange = "Equipment Return";
+		} 
+		else if (type == 5) {
 			typeChange = "Equipment Deactivation";
 		}
 		return typeChange;
@@ -179,6 +240,7 @@ public class EquipmentService {
 
 	private String getChanges(Equipment objOld, Equipment objNew, int type) {
 		String changes = "";
+		
 		if (type == 1) {
 			changes = "New Equipment Added";
 		} 
@@ -189,8 +251,23 @@ public class EquipmentService {
 			changes = "Equipment delivered to the user: " + objNew.getUser().getName();
 		} 
 		else if (type == 4) {
+			changes = "Equipment returned by the user: " + objNew.getUser().getName();
+		} 
+		else if (type == 5) {
 			changes = "Equipment Disabled for: " + objOld.getReason();
 		}
+		return changes;
+	}
+	
+	private String getChangeUser(Equipment equipment, int type) {
+		String changes = "";
+		
+		if (type == 1) {
+			changes = "Equipment "+ equipment.getSerialNumber() + " delivered to the user";
+		} 
+		else if (type == 2) {
+			changes = "Equipment "+ equipment.getSerialNumber() + " returned by the user";
+		} 
 		return changes;
 	}
 

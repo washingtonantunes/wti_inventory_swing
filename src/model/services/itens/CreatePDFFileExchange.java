@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import com.itextpdf.text.Document;
@@ -26,24 +25,26 @@ import exception.ObjectException;
 import model.entities.User;
 import model.entities.utilitary.Item;
 
-public class CreatePDFFileDelivery {
+public class CreatePDFFileExchange {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	private static final DateFormat dfmt = new SimpleDateFormat("d 'de' MMMM 'de' yyyy");
 	private static final Date hoje = Calendar.getInstance(Locale.getDefault()).getTime();
 	
-	private String fileServer = "\\" + "\\10.209.8.25\\tecnologia$\\04 - FIELD\\05 - TERMOS\\";
-	private String fileLocal = "C:\\Users\\853373\\Documents\\";
+	private final String fileServer = "\\" + "\\10.209.8.25\\tecnologia$\\04 - FIELD\\05 - TERMOS\\";
+	private final String fileLocal = "C:\\Users\\853373\\Documents\\";
 	private String nameFile = "";
 	private String filePath = "";
 	
-	private User user;
-	private List<Item> itens;
+	private final User user;
+	private final Item itemOld;
+	private final Item itemNew;
 	
-	public CreatePDFFileDelivery(User user, List<Item> itens) {
+	public CreatePDFFileExchange(User user, Item itemOld, Item itemNew) {
 		this.user = user;
-		this.itens = itens;
-		nameFile = user.getRegistration() + " - Delivery - " + sdf.format(hoje) + ".pdf";
+		this.itemOld = itemOld;
+		this.itemNew = itemNew;
+		nameFile = user.getRegistration() + " - Exchange - " + sdf.format(hoje) + ".pdf";
 		filePath = fileServer + nameFile;
 		createPDF();
 	}
@@ -64,8 +65,13 @@ public class CreatePDFFileDelivery {
 			document.add(emptyLine);
 			document.add(getUser()); // User
 			document.add(emptyLine);
-			document.add(getItens()); // Itens
+			document.add(getOld());
 			document.add(emptyLine);
+			document.add(getItensOld()); // Item Old
+			document.add(emptyLine);
+			document.add(getNew());
+			document.add(emptyLine);
+			document.add(getItensNew()); // Item New
 			document.add(emptyLine);
 			document.add(emptyLine);
 			document.add(getThird());
@@ -94,7 +100,7 @@ public class CreatePDFFileDelivery {
 	}
 	
 	private Paragraph getHeader() {
-		Paragraph header = new Paragraph("TERMO DE ENTREGA");
+		Paragraph header = new Paragraph("TERMO DE ALTERAÇÃO");
 		header.setAlignment(1);
 		return header;
 	}
@@ -104,17 +110,23 @@ public class CreatePDFFileDelivery {
 		date.setAlignment(0);
 		return date;
 	}
-
+	
 	private Paragraph getUser() {
 		Paragraph first = new Paragraph("Eu, " + user.getName() + ", portador(a) do CPF: "
 				+ user.getCpf() + ", matrícula: " + user.getRegistration()
 				+ ", alocado(a) no projeto: " + user.getProject().getName()
-				+ ", recebi nesta data, da empresa INDRA, os equipamentos e periféricos listados abaixo: \n");
+				+ ", realizei nesta data, na empresa INDRA, a troca dos equipamentos e periféricos listados abaixo: \n");
 		first.setAlignment(0);
 		return first;
 	}
 	
-	private PdfPTable getItens() {
+	private Paragraph getOld() {
+		Paragraph old_ = new Paragraph("DEVOLVIDOS>");
+		old_.setAlignment(0);
+		return old_;
+	}
+	
+	private PdfPTable getItensOld() {
 		PdfPTable table = new PdfPTable(4);
 		
 		PdfPCell type = new PdfPCell(new Phrase("Tipo"));
@@ -133,13 +145,45 @@ public class CreatePDFFileDelivery {
 		patrimonyNumber.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(patrimonyNumber);		
 		table.setHeaderRows(1);
+
+		table.addCell(itemOld.getType()); // Type
+		table.addCell(itemOld.getCode()); // Code
+		table.addCell(itemOld.getName()); // Brand
+		table.addCell(itemOld.getPatrimonyNumber()); // Patrimony Number
 		
-		for (Item item : itens) {
-			table.addCell(item.getType()); //Type
-			table.addCell(item.getCode()); //Code
-			table.addCell(item.getName()); //Brand
-			table.addCell(item.getPatrimonyNumber()); //Patrimony Number
-		}
+		return table;
+	}
+	
+	private Paragraph getNew() {
+		Paragraph new_ = new Paragraph("RETIRADOS>");
+		new_.setAlignment(0);
+		return new_;
+	}
+	
+	private PdfPTable getItensNew() {
+		PdfPTable table = new PdfPTable(4);
+		
+		PdfPCell type = new PdfPCell(new Phrase("Tipo"));
+		type.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(type);
+		
+		PdfPCell code = new PdfPCell(new Phrase("Codigo"));
+		code.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(code);
+		
+		PdfPCell model = new PdfPCell(new Phrase("Nome"));
+		model.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(model);
+		
+		PdfPCell patrimonyNumber = new PdfPCell(new Phrase("Número de Patrimônio"));
+		patrimonyNumber.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table.addCell(patrimonyNumber);		
+		table.setHeaderRows(1);
+
+		table.addCell(itemNew.getType()); // Type
+		table.addCell(itemNew.getCode()); // Code
+		table.addCell(itemNew.getName()); // Brand
+		table.addCell(itemNew.getPatrimonyNumber()); // Patrimony Number
 		
 		return table;
 	}

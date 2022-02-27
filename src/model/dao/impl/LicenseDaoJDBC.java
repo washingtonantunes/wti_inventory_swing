@@ -142,7 +142,7 @@ public class LicenseDaoJDBC implements LicenseDao {
 				license.setQuantity(rs.getInt("quantity"));
 				license.setStatus(rs.getString("status"));
 				license.setChanges(instatiateChanges(license.getCode()));
-				licenses.put(license.getName(), license);
+				licenses.put(license.getCode(), license);
 			}
 			return licenses;
 		} 

@@ -252,7 +252,7 @@ public class ViewMonitorForm extends JDialog {
 			if (evt.getClickCount() == 1) {
 				String user = monitor.getUser().toString();
 				if (user != null) {
-					new ViewUserForm(monitor.getUser()).setVisible(true);
+					new ViewUserForm(monitor.getUser());
 				}
 			}
 		}

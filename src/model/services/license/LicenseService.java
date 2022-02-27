@@ -85,7 +85,7 @@ public class LicenseService {
 		}
 	}
 	
-	public void updateForUser(License obj, User user) {
+	public void addForUser(License obj, User user) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
@@ -104,8 +104,63 @@ public class LicenseService {
 			//Insert into running list
 			LoadData.addChange(change);
 			
+			//Change User
+			Change changeUser = getChange(obj, obj, 3);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 1));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
+			
 			//Insert user/License relationship
 			objectWithUserDao.insertLicenseWithUser(user, obj);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void removeForUser(License obj, User user) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			
+			//Change
+			Change change = getChange(obj, obj, 4);
+			changeDao.insert(change);
+			obj.addChange(change);
+			
+			//Insert into running list
+			LoadData.addChange(change);
+			
+			obj.setQuantity(obj.getQuantity() + 1);
+			obj.setUser(user.getName());
+			licenseDao.updateQuantity(obj); //Update object into the database
+			
+			user.removeLicense(obj);
+			
+			//Change User
+			Change changeUser = getChange(obj, obj, 4);
+			changeUser.setObject(user.getRegistration());
+			changeUser.setChanges(getChangeUser(obj, 2));
+			changeDao.insert(changeUser);
+			user.addChange(changeUser);
+			
+			//Insert into running list
+			LoadData.addChange(changeUser);
+			
+			//Insert user/equipment relationship
+			objectWithUserDao.removeLicenseWithUser(user, obj);
 
 			conn.commit();
 		} 
@@ -167,9 +222,12 @@ public class LicenseService {
 			typeChange = "License Update";
 		} 
 		else if (type == 3) {
-			typeChange = "License Update Quantity";
+			typeChange = "License Exit";
 		} 
 		else if (type == 4) {
+			typeChange = "License Return";
+		} 
+		else if (type == 5) {
 			typeChange = "License Deactivation";
 		}
 		return typeChange;
@@ -187,8 +245,23 @@ public class LicenseService {
 			changes = objNew.getName() + " " + objNew.getBrand() + " delivered to the user: " + objNew.getUser();
 		} 
 		else if (type == 4) {
+			changes = objNew.getName() + " " + objNew.getBrand() + " returned by the user: " + objNew.getUser();
+		} 
+		else if (type == 5) {
 			changes = "License Disabled for: " + objOld.getReason();
 		}
+		return changes;
+	}
+	
+	private String getChangeUser(License license, int type) {
+		String changes = "";
+		
+		if (type == 1) {
+			changes = "License "+ license.getCode() + " delivered to the user";
+		} 
+		else if (type == 2) {
+			changes = "License "+ license.getCode() + " returned by the user";
+		} 
 		return changes;
 	}
 

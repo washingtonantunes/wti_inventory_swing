@@ -142,7 +142,7 @@ public class PeripheralDaoJDBC implements PeripheralDao {
 				peripheral.setQuantity(rs.getInt("quantity"));
 				peripheral.setStatus(rs.getString("status"));
 				peripheral.setChanges(instatiateChanges(peripheral.getCode()));
-				peripherals.put(peripheral.getName(), peripheral);
+				peripherals.put(peripheral.getCode(), peripheral);
 			}
 			return peripherals;
 		} 

@@ -17,9 +17,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import application.LoadData;
 import application.MainWindow;
+import model.entities.Equipment;
+import model.entities.Monitor;
 import model.entities.User;
 import model.entities.utilitary.Item;
+import model.gui.equipment.ViewEquipmentForm;
+import model.gui.monitor.ViewMonitorForm;
 import model.services.itens.ItemTableModel;
 import model.services.itens.TableItem;
 import model.util.MyButton;
@@ -50,17 +55,16 @@ public class ItemList extends JDialog {
 	}
 
 	private void initComponents() {
+		setTitle("Itens");
 		setModal(true);
-
+		setPreferredSize(new Dimension(850, 500));
+		setResizable(false);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		
 		add(createPanelNorth(), BorderLayout.NORTH);
 		add(createTable(), BorderLayout.CENTER);
 		add(createPanelSouth(), BorderLayout.SOUTH);
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Itens");
-		setPreferredSize(new Dimension(850, 500));
-		setResizable(false);
-
+		
 		pack();
 		setLocationRelativeTo(null);
 	}
@@ -176,6 +180,8 @@ public class ItemList extends JDialog {
 					JOptionPane.showMessageDialog(null, "It is necessary to select a line", "No lines selected",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
+					Item item = model.getItem(lineSelected);
+					new ExchangeItemForm(model, lineSelected, item, user, getType(item));
 					label_Show_Quantity.setText(String.valueOf(itens.size()));
 					label_Show_CostTotal.setText(String.format("R$ %.2f", getCostTotal()));
 					repaint();
@@ -245,8 +251,41 @@ public class ItemList extends JDialog {
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 2) {
 				int lineSelected = table.getSelectedRow();
-				System.out.println(lineSelected);
+				Item item = model.getItem(lineSelected);
+
+				String type = item.getType();
+				String code = item.getCode();
+				
+				if (type.equals("Equipment")) {
+					Equipment equipment = LoadData.getEquipment(code);
+					new ViewEquipmentForm(equipment).setVisible(true);;
+				} else if (type.equals("Monitor")) {
+					Monitor monitor = LoadData.getMonitor(code);
+					new ViewMonitorForm(monitor).setVisible(true);;
+				} else if (type.equals("Peripheral")) {
+					//Peripheral peripheral = LoadData.getPeripheral(code);
+					
+				} else if (type.equals("License")) {
+					//License license = LoadData.getLicense(code);
+				}
 			}
 		}
+	}
+	
+	private Integer getType (Item item) {
+		String type = item.getType();
+		if (type.equals("Equipment")) {
+			return 1;
+		} 
+		else if (type.equals("Monitor")) {
+			return 2;
+		}
+		else if (type.equals("Peripheral")) {
+			return 3;
+		} 
+		else if (type.equals("License")) {
+			return 4;
+		}
+		return null;
 	}
 }

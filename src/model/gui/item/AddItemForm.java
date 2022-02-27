@@ -48,11 +48,19 @@ public class AddItemForm extends JDialog {
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
 
+	private final int WIDTH_INTERNAL_PANEL = 320;
+
+	private final int HEIGHT_COMBOBOX_PANEL = 420;
+	private final int HEIGHT_BUTTON_PANEL = 170;
+
+	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 630;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_COMBOBOX_PANEL + HEIGHT_BUTTON_PANEL;
+
 	private JScrollPane scrollPane;
 	private TableItem table;
 	private DeliveryTableModel modelDelivery;
 	
-	private User user;
+	private final User user;
 
 	private JComboBox<Object> comboBox_Equipment;
 	private JComboBox<Object> comboBox_Monitor;
@@ -88,7 +96,7 @@ public class AddItemForm extends JDialog {
 	private void initComponents() {
 		setTitle("Add Item");
 		setModal(true);
-		setPreferredSize(new Dimension(950, 600));
+		setPreferredSize(new Dimension(WIDTH_MAIN_PANEL, HEIGHT_MAIN_PANEL));
 		setResizable(false);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);	
 		
@@ -102,7 +110,7 @@ public class AddItemForm extends JDialog {
 
 	private JPanel createPanelWest() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setPreferredSize(new Dimension(320, 600));
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_MAIN_PANEL));
 
 		panel.add(createPanelComboBox());
 		panel.add(createPanelButton());
@@ -112,7 +120,7 @@ public class AddItemForm extends JDialog {
 
 	private JPanel createPanelComboBox() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 30));
-		panel.setPreferredSize(new Dimension(320, 430));
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_COMBOBOX_PANEL));
 		panel.setBackground(COLOR1);
 
 		panel.add(createPanelEquipment());
@@ -125,7 +133,7 @@ public class AddItemForm extends JDialog {
 
 	private JPanel createPanelButton() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 10));
-		panel.setPreferredSize(new Dimension(320, 150));
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_BUTTON_PANEL));
 		panel.setBackground(COLOR2);
 
 		final JButton buttonSave = new MyButton("Save", 3);
@@ -252,7 +260,7 @@ public class AddItemForm extends JDialog {
 		return panel;
 	}
 	
-	private void addItem() {		
+	private void addItem() {
 		if (checkContains(1, false, true)) {
 			final EquipmentService service = new EquipmentService();
 			final List<ItemDelivery> list = modelDelivery.getItemDelivery("Equipment");
@@ -269,7 +277,7 @@ public class AddItemForm extends JDialog {
 				item.setValue(equipment.getValue());
 				itens.add(item);
 				
-				service.updateStatusForUser(equipment, user);
+				service.addForUser(equipment, user);
 				
 			}
 		}
@@ -290,7 +298,7 @@ public class AddItemForm extends JDialog {
 				item.setValue(monitor.getValue());
 				itens.add(item);
 				
-				service.updateStatusForUser(monitor, user);
+				service.addForUser(monitor, user);
 			}
 		}
 		
@@ -305,11 +313,11 @@ public class AddItemForm extends JDialog {
 				item.setIndex(itens.size() + 1);
 				item.setType("Peripheral");
 				item.setCode(peripheral.getCode());
-				item.setName(peripheral.getName() + "" + peripheral.getBrand());
+				item.setName(peripheral.getName() + " " + peripheral.getBrand());
 				item.setValue(peripheral.getValue());
 				itens.add(item);
 				
-				service.updateForUser(peripheral, user);
+				service.addForUser(peripheral, user);
 			}
 			
 		}
@@ -325,11 +333,11 @@ public class AddItemForm extends JDialog {
 				item.setIndex(itens.size() + 1);
 				item.setType("License");
 				item.setCode(license.getCode());
-				item.setName(license.getName() + "" + license.getBrand());
+				item.setName(license.getName() + " " + license.getBrand());
 				item.setValue(license.getValue());
 				itens.add(item);
 				
-				service.updateForUser(license, user);
+				service.addForUser(license, user);
 			}
 		}
 		
@@ -337,7 +345,6 @@ public class AddItemForm extends JDialog {
 	
 	private void createTerm() {
 		new CreatePDFFileDelivery(user, itens);
-		
 	}
 
 	//Returns the Item of the comboBox according to the maximum amount allowed.
@@ -395,7 +402,7 @@ public class AddItemForm extends JDialog {
 			final ItemDelivery itemDelivery = new ItemDelivery();
 			itemDelivery.setType("Equipment");
 			itemDelivery.setCode(selectedEquipment.getSerialNumber());
-			itemDelivery.setName(selectedEquipment.getType());
+			itemDelivery.setName(selectedEquipment.getType() + " " + selectedEquipment.getBrand());
 			
 			comboBox_Equipment.setSelectedIndex(-1);
 			comboBox_Equipment.removeItem(selectedEquipment);
@@ -569,12 +576,17 @@ public class AddItemForm extends JDialog {
 			if (modelDelivery.getRowCount() != 0) {
 				try {
 					addItem();
+					
 					createTerm();
+					
 					dispose();
+					
 					JOptionPane.showMessageDialog(rootPane, "Item successfully added", "Success saving item", JOptionPane.INFORMATION_MESSAGE);
-				} catch (DBException db) {
+				} 
+				catch (DBException db) {
 					JOptionPane.showMessageDialog(rootPane, db.getMessage(), "Error saving item", JOptionPane.ERROR_MESSAGE);
-				} catch (ObjectException oe) {
+				} 
+				catch (ObjectException oe) {
 					JOptionPane.showMessageDialog(rootPane, oe.getMessage(), "Error saving document", JOptionPane.ERROR_MESSAGE);
 				}
 			} 
@@ -661,7 +673,6 @@ public class AddItemForm extends JDialog {
 				Equipment equipment = (Equipment) event.getItem();
 				if (selectedEquipment == null || !equipment.equals(selectedEquipment)) {
 					selectedEquipment = equipment;
-//					type = 1;
 				}
 			}
 		}
@@ -674,7 +685,6 @@ public class AddItemForm extends JDialog {
 				Monitor monitor = (Monitor) event.getItem();
 				if (selectedMonitor == null || !monitor.equals(selectedMonitor)) {
 					selectedMonitor = monitor;
-//					type = 2;
 				}
 			}
 		}
@@ -687,7 +697,6 @@ public class AddItemForm extends JDialog {
 				Peripheral peripheral = (Peripheral) event.getItem();
 				if (selectedPeripheral == null || !peripheral.equals(selectedPeripheral)) {
 					selectedPeripheral = peripheral;
-//					type = 3;
 				}
 			}
 		}

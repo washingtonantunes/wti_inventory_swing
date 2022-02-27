@@ -301,7 +301,7 @@ public class ViewEquipmentForm extends JDialog {
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 1) {
 				if (equipment.getUser() != null) {
-					new ViewUserForm(equipment.getUser()).setVisible(true);
+					new ViewUserForm(equipment.getUser());
 				}
 			}
 		}
