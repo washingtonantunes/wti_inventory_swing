@@ -92,10 +92,6 @@ public class UserTableModel extends AbstractTableModel {
 		int lastIndex = getRowCount() - 1;
 		fireTableRowsInserted(lastIndex, lastIndex);
 	}
-	
-	public List<User> getUsers() {
-		return users;
-	}
 
 	public void updateUser(int indexLine, User user) {
 		users.set(indexLine, user);

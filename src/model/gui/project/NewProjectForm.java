@@ -120,12 +120,12 @@ public class NewProjectForm extends JDialog {
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 		textField_CostCenter = new JTextField();
-		textField_CostCenter.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 15));
+		textField_CostCenter.setDocument(new JTextFieldFilter(JTextFieldFilter.COST_CENTER, 15));
 		textField_CostCenter.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_CostCenter);
 
 		textField_Name = new JTextField();
-		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.PROJECT, 50));
+		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMBERS_AND_LETTERS_WITH_SPACE, 50));
 		textField_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_Name);
 

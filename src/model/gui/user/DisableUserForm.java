@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -16,9 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import application.LoadData;
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Option;
 import model.entities.User;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
@@ -51,9 +49,9 @@ public class DisableUserForm extends JDialog {
 	private final int HEIGHT_BUTTON_PANEL = 50; 
 
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50; 
-	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 64 + 20; 
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84; 
 
-	private UserTableModel model;
+	private final UserTableModel model;
 	private User user;
 	private final int lineSelected;
 	
@@ -100,8 +98,7 @@ public class DisableUserForm extends JDialog {
 		final JLabel label_Registration = new MyLabel("Reason:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
-		comboBox_Reason = new MyComboBox(UserList.options.stream().filter(o -> o.getType().equals("REASON-USER") && o.getStatus().equals("ACTIVE"))
-				.map(Option::getOption).collect(Collectors.toList()), SIZE_FIELDS_COMBOX);
+		comboBox_Reason = new MyComboBox(LoadData.getOptionByType("REASON-USER"), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Reason);
 
 		labelError_Reason = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);

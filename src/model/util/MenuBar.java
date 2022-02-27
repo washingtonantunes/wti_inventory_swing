@@ -88,6 +88,10 @@ public class MenuBar extends JMenuBar {
 		final JMenuItem menuItemOptions = new JMenuItem("Options");
 		menuItemOptions.addActionListener(new MenuItemOptionsListener());
 		menuTools.add(menuItemOptions);
+		
+		final JMenuItem menuItemSortOptions = new JMenuItem("Sort Options");
+		menuItemSortOptions.addActionListener(new menuItemSortOptionsListener());
+		menuTools.add(menuItemSortOptions);
 
 		return menuTools;
 	}
@@ -210,6 +214,13 @@ public class MenuBar extends JMenuBar {
 
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemOptionsListener");
+		}
+	}
+	
+	private class menuItemSortOptionsListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			new SortListDefault();
 		}
 	}
 	

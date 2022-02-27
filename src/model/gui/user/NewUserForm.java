@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -18,13 +16,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import application.LoadData;
 import db.DBException;
 import exception.ValidationException;
-import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
+import model.util.JTextFieldFilter;
 import model.util.MyButton;
 import model.util.MyComboBox;
 import model.util.MyLabel;
@@ -58,8 +57,7 @@ public class NewUserForm extends JDialog {
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
 	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
 
-	private UserTableModel model;
-	private User user;
+	private final UserTableModel model;
 
 	private JTextField textField_Registration;
 	private JTextField textField_Name;
@@ -115,6 +113,7 @@ public class NewUserForm extends JDialog {
 		fieldsPanel.add(label_Registration);
 
 		textField_Registration = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Registration.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
 		fieldsPanel.add(textField_Registration);
 
 		labelError_Registration = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -124,6 +123,7 @@ public class NewUserForm extends JDialog {
 		fieldsPanel.add(label_Name);
 
 		textField_Name = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.LETTERS_ONLY_WITH_SPACE, 60));
 		fieldsPanel.add(textField_Name);
 
 		labelError_Name = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -133,6 +133,7 @@ public class NewUserForm extends JDialog {
 		fieldsPanel.add(label_CPF);
 
 		textField_CPF = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_CPF.setDocument(new JTextFieldFilter(JTextFieldFilter.CPF, 14));
 		fieldsPanel.add(textField_CPF);
 
 		labelError_CPF = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -142,6 +143,7 @@ public class NewUserForm extends JDialog {
 		fieldsPanel.add(label_Phone);
 
 		textField_Phone = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Phone.setDocument(new JTextFieldFilter(JTextFieldFilter.PHONE, 15));
 		fieldsPanel.add(textField_Phone);
 
 		labelError_Phone = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -151,6 +153,7 @@ public class NewUserForm extends JDialog {
 		fieldsPanel.add(label_Email);
 
 		textField_Email = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Email.setDocument(new JTextFieldFilter(JTextFieldFilter.MY_EMAIL, 30));
 		fieldsPanel.add(textField_Email);
 
 		labelError_Email = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -159,10 +162,7 @@ public class NewUserForm extends JDialog {
 		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
-		comboBox_Department = new MyComboBox(
-				UserList.options.stream().filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList()),
-				SIZE_FIELDS_COMBOX);
+		comboBox_Department = new MyComboBox(LoadData.getOptionByType("DEPARTMENT"), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Department);
 
 		labelError_Department = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -171,9 +171,7 @@ public class NewUserForm extends JDialog {
 		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
-		comboBox_Project = new MyComboBox(
-				UserList.projects.stream().filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList()),
-				SIZE_FIELDS_COMBOX);
+		comboBox_Project = new MyComboBox(LoadData.getProjectsListByStatus("ACTIVE"), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Project);
 
 		labelError_Project = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -203,7 +201,7 @@ public class NewUserForm extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
-				user = getFormData(); // Colect Fields
+				final User user = getFormData(); // Colect Fields
 				
 				UserService service = new UserService();
 				service.save(user); // Save Object
@@ -213,11 +211,11 @@ public class NewUserForm extends JDialog {
 				dispose();
 				JOptionPane.showMessageDialog(rootPane, "User successfully added", "Success saving object", JOptionPane.INFORMATION_MESSAGE);
 			} 
-			catch (ValidationException e) {
-				setErrorMessages(e.getErrors());
+			catch (ValidationException ve) {
+				setErrorMessages(ve.getErrors());
 			} 
-			catch (DBException e) {
-				setErrorMessagesDBException(e);
+			catch (DBException de) {
+				setErrorMessagesDBException(de);
 			}
 		}
 	}
@@ -258,22 +256,28 @@ public class NewUserForm extends JDialog {
 		}
 
 		// Validation CPF
-		if (Utils.ToCheckCPFNull(textField_CPF.getText())) {
+		if (textField_CPF.getText() == null || textField_CPF.getText().trim().equals("")) {
 			exception.addError("CPF", "Field can't be empty");
 		} 
 		else if (textField_CPF.getText().length() < 14) {
 			exception.addError("CPF", "Invalid CPF - Ex: > 14");
+		} 
+		else if (Utils.ToCheckCPF(textField_CPF.getText())) {
+			exception.addError("CPF", "Invalid format - Ex: ###.###.###-##");
 		} 
 		else {
 			user.setCpf(textField_CPF.getText().trim().toUpperCase());
 		}
 
 		// Validation Phone
-		if (Utils.ToCheckPhoneNull(textField_Phone.getText())) {
+		if (textField_Phone.getText() == null || textField_Phone.getText().trim().equals("")) {
 			exception.addError("phone", "Field can't be empty");
 		} 
 		else if (textField_Phone.getText().length() < 14) {
 			exception.addError("phone", "Invalid phone - Ex: > 14");
+		} 
+		else if (Utils.ToCheckPhone(textField_Phone.getText())) {
+			exception.addError("phone", "Invalid format - Ex: (##) #####-####");
 		} 
 		else {
 			user.setPhone(textField_Phone.getText().trim().toUpperCase());
@@ -284,9 +288,9 @@ public class NewUserForm extends JDialog {
 			exception.addError("email", "Field can't be empty");
 		} 
 		else if (textField_Email.getText().length() < 11) {
-			exception.addError("email", "Invalid Email - Ex: > 11");
+			exception.addError("email", "Invalid Email - Ex: > 12");
 		} 
-		else if (Utils.ToCheckEmailNull(textField_Email.getText())) {
+		else if (Utils.ToCheckEmailContain(textField_Email.getText())) {
 			exception.addError("email", "Invalid Domain - Ex: @MINSAIT.COM");
 		} 
 		else {

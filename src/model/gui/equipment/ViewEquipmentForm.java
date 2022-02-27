@@ -19,6 +19,8 @@ import model.entities.Equipment;
 import model.gui.change.ChangesPanel;
 import model.gui.user.ViewUserForm;
 import model.gui.workposition.ViewWorkPositionForm;
+import model.util.MyButton;
+import model.util.MyLabel;
 
 public class ViewEquipmentForm extends JDialog {
 
@@ -26,27 +28,27 @@ public class ViewEquipmentForm extends JDialog {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private final int COLUMN1 = 20;
-	private final int COLUMN2 = 160;
-
-	private int line = 0;
-	private int line_multiplier = 30;
-
-	private final int WIDTH_LABEL = 110;
-	private final int HEIGHT_LABEL = 30;
-
-	private final int WIDTH_LABEL_SHOW = 300;
-	private final int HEIGHT_LABEL_SHOW = 30;
-
-	private final int widthPanel = WIDTH_LABEL + WIDTH_LABEL_SHOW + 50; // largura
-	private final int heightPanel = (30 * 18) + 140; // altura
-
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
-
-	private final int positionButton = (widthPanel / 2) - 140;
-
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
+
+	private final int SIZE_LABELS = 2;
+	private final int SIZE_LABELS_SHOW = 6;
+
+	private final int SIZEBUTTONS = 1;
+
+	private final int COLOR_LABEL = 1;
+	private final int COLOR_LABEL_SHOW = 2;
+
+	private final int FONT = 1;
+
+	private final int WIDTH_INTERNAL_PANEL = (150 + 300) + 20;
+
+	private final int HEIGHT_TOP_PANEL = 10;
+	private final int HEIGHT_FIELD_PANEL = 36 * 18;
+	private final int HEIGHT_BUTTON_PANEL = 50;
+
+	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
 
 	private Equipment equipment;
 
@@ -54,235 +56,170 @@ public class ViewEquipmentForm extends JDialog {
 		this.equipment = equipment;
 		initComponents();
 	}
-
+	
 	private void initComponents() {
-		setModal(true);
-
-		add(createPanelMain());
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("View Equipment");
-		setPreferredSize(DIMENSIONMAINPANEL);
+		setModal(true);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 40, 10));
+		setPreferredSize(new Dimension(WIDTH_MAIN_PANEL, HEIGHT_MAIN_PANEL));
 		setResizable(false);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+		add(createTopPanel());
+		add(createFieldsPanel());
+		add(createButtonPanel());
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
-	private JPanel createPanelMain() {
-		final JPanel panel = new JPanel(new FlowLayout());
-		panel.setLayout(null);
-
-		addLabels(panel);
-		addLabelsShow(panel);
-		addButtons(panel);
+	private JPanel createTopPanel() {
+		final JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		panel.setBackground(COLOR1);
 
 		return panel;
 	}
+	
+	private JPanel createFieldsPanel() {
+		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-	private void addLabels(JPanel panel) {
-		final JLabel label_SerialNumber = new JLabel("Serial Number:");
-		label_SerialNumber.setForeground(COLOR1);
-		label_SerialNumber.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_SerialNumber);
+		final JLabel label_SerialNumber = new MyLabel("Serial Number:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_SerialNumber);
 
-		final JLabel label_HostName = new JLabel("Host Name:");
-		label_HostName.setForeground(COLOR1);
-		label_HostName.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_HostName);
+		final JLabel label_Show_SerialNumber = new MyLabel(equipment.getSerialNumber(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_SerialNumber);
 
-		final JLabel label_AddressMAC = new JLabel("Address MAC:");
-		label_AddressMAC.setForeground(COLOR1);
-		label_AddressMAC.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_AddressMAC);
+		final JLabel label_HostName = new MyLabel("Host Name:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_HostName);
 
-		final JLabel label_Type = new JLabel("Type:");
-		label_Type.setForeground(COLOR1);
-		label_Type.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Type);
+		final JLabel label_Show_HostName = new MyLabel(equipment.getHostName(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_HostName);
 
-		final JLabel label_PatrimonyNumber = new JLabel("Patrimony Number:");
-		label_PatrimonyNumber.setForeground(COLOR1);
-		label_PatrimonyNumber.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_PatrimonyNumber);
+		final JLabel label_AddressMAC = new MyLabel("Address MAC:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_AddressMAC);
 
-		final JLabel label_Brand = new JLabel("Brand:");
-		label_Brand.setForeground(COLOR1);
-		label_Brand.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Brand);
+		final JLabel label_Show_AddressMAC = new MyLabel(equipment.getAddressMAC(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_AddressMAC);
 
-		final JLabel label_Model = new JLabel("Model:");
-		label_Model.setForeground(COLOR1);
-		label_Model.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Model);
+		final JLabel label_Type = new MyLabel("Type:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Type);
 
-		final JLabel label_MemoryRam = new JLabel("Memory Ram:");
-		label_MemoryRam.setForeground(COLOR1);
-		label_MemoryRam.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_MemoryRam);
+		final JLabel label_Show_Type = new MyLabel(equipment.getType(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Type);
 
-		final JLabel label_HardDisk = new JLabel("Hard Disk:");
-		label_HardDisk.setForeground(COLOR1);
-		label_HardDisk.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_HardDisk);
+		final JLabel label_PatrimonyNumber = new MyLabel("Patrimony Number:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_PatrimonyNumber);
 
-		final JLabel label_CostType = new JLabel("Cost Type:");
-		label_CostType.setForeground(COLOR1);
-		label_CostType.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_CostType);
+		final JLabel label_Show_PatrimonyNumber = new MyLabel(equipment.getPatrimonyNumber(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_PatrimonyNumber);
 
-		final JLabel label_Value = new JLabel("Value:");
-		label_Value.setForeground(COLOR1);
-		label_Value.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Value);
+		final JLabel label_Brand = new MyLabel("Brand:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Brand);
 
-		final JLabel label_NoteEntry = new JLabel("Note Entry:");
-		label_NoteEntry.setForeground(COLOR1);
-		label_NoteEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_NoteEntry);
+		final JLabel label_Show_Brand = new MyLabel(equipment.getBrand(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Brand);
 
-		final JLabel label_Note = new JLabel("Note:");
-		label_Note.setForeground(COLOR1);
-		label_Note.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Note);
+		final JLabel label_Model = new MyLabel("Model:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Model);
 
-		final JLabel label_Location = new JLabel("Location:");
-		label_Location.setForeground(COLOR1);
-		label_Location.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Location);
+		final JLabel label_Show_Model = new MyLabel(equipment.getModel(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Model);
+		
+		final JLabel label_MemoryRam = new MyLabel("Memory Ram:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_MemoryRam);
 
-		final JLabel label_Status = new JLabel("Status:");
-		label_Status.setForeground(COLOR1);
-		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Status);
+		final JLabel label_Show_MemoryRam = new MyLabel(equipment.getMemoryRam(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_MemoryRam);
+		
+		final JLabel label_HardDisk = new MyLabel("Hard Disk:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_HardDisk);
 
-		final JLabel label_DateEntry = new JLabel("Date Entry:");
-		label_DateEntry.setForeground(COLOR1);
-		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_DateEntry);
+		final JLabel label_Show_HardDisk = new MyLabel(equipment.getHardDisk(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_HardDisk);
+		
+		final JLabel label_CostType = new MyLabel("Cost Type:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_CostType);
 
-		final JLabel label_User = new JLabel("User:");
-		label_User.setForeground(COLOR1);
-		label_User.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_User);
+		final JLabel label_Show_CostType = new MyLabel(equipment.getCostType(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_CostType);
+		
+		final JLabel label_Value = new MyLabel("Value:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Value);
 
-		final JLabel label_WorkPosition = new JLabel("Work Position:");
-		label_WorkPosition.setForeground(COLOR1);
-		label_WorkPosition.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_WorkPosition);
-	}
+		final JLabel label_Show_Value = new MyLabel(String.valueOf(equipment.getValue()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Value);
+		
+		final JLabel label_NoteEntry = new MyLabel("Note Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_NoteEntry);
 
-	private void addLabelsShow(JPanel panel) {
-		final JLabel label_Show_SerialNumber = new JLabel(equipment.getSerialNumber());
-		label_Show_SerialNumber.setForeground(COLOR2);
-		label_Show_SerialNumber.setBounds(COLUMN2, line = 30, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_SerialNumber);
+		final JLabel label_Show_NoteEntry = new MyLabel(equipment.getNoteEntry(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_NoteEntry);
+		
+		final JLabel label_Note = new MyLabel("Note:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Note);
 
-		final JLabel label_Show_HostName = new JLabel(equipment.getHostName());
-		label_Show_HostName.setForeground(COLOR2);
-		label_Show_HostName.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_HostName);
+		final JLabel label_Show_Note = new MyLabel(equipment.getNote(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Note);
+		
+		final JLabel label_Location = new MyLabel("Location:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Location);
 
-		final JLabel label_Show_AddressMAC = new JLabel(equipment.getAddressMAC());
-		label_Show_AddressMAC.setForeground(COLOR2);
-		label_Show_AddressMAC.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_AddressMAC);
+		final JLabel label_Show_Location = new MyLabel(equipment.getLocation(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Location);
 
-		final JLabel label_Show_Type = new JLabel(equipment.getType());
-		label_Show_Type.setForeground(COLOR2);
-		label_Show_Type.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Type);
+		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Status);
 
-		final JLabel label_Show_PatrimonyNumber = new JLabel(equipment.getPatrimonyNumber());
-		label_Show_PatrimonyNumber.setForeground(COLOR2);
-		label_Show_PatrimonyNumber.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_PatrimonyNumber);
+		final JLabel label_Show_Status = new MyLabel(equipment.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Status);
 
-		final JLabel label_Show_Brand = new JLabel(equipment.getBrand());
-		label_Show_Brand.setForeground(COLOR2);
-		label_Show_Brand.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Brand);
+		JLabel label_DateEntry = new MyLabel("Date Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_DateEntry);
 
-		final JLabel label_Show_Model = new JLabel(equipment.getModel());
-		label_Show_Model.setForeground(COLOR2);
-		label_Show_Model.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Model);
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(equipment.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_DateEntry);
+		
+		final JLabel label_User = new MyLabel("User:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_User);
 
-		final JLabel label_Show_MemoryRam = new JLabel(equipment.getMemoryRam());
-		label_Show_MemoryRam.setForeground(COLOR2);
-		label_Show_MemoryRam.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_MemoryRam);
-
-		final JLabel label_Show_HardDisk = new JLabel(equipment.getHardDisk());
-		label_Show_HardDisk.setForeground(COLOR2);
-		label_Show_HardDisk.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_HardDisk);
-
-		final JLabel label_Show_CostType = new JLabel(equipment.getCostType());
-		label_Show_CostType.setForeground(COLOR2);
-		label_Show_CostType.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_CostType);
-
-		final JLabel label_Show_Value = new JLabel(String.format("R$ %.2f", equipment.getValue()));
-		label_Show_Value.setForeground(COLOR2);
-		label_Show_Value.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Value);
-
-		final JLabel label_Show_NoteEntry = new JLabel(equipment.getNoteEntry());
-		label_Show_NoteEntry.setForeground(COLOR2);
-		label_Show_NoteEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_NoteEntry);
-
-		final JLabel label_Show_Note = new JLabel(equipment.getNote());
-		label_Show_Note.setForeground(COLOR2);
-		label_Show_Note.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Note);
-
-		final JLabel label_Show_Location = new JLabel(equipment.getLocation());
-		label_Show_Location.setForeground(COLOR2);
-		label_Show_Location.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Location);
-
-		final JLabel label_Show_Status = new JLabel(equipment.getStatus());
-		label_Show_Status.setForeground(COLOR2);
-		label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_Status);
-
-		final JLabel label_Show_DateEntry = new JLabel(sdf.format(equipment.getDateEntry()));
-		label_Show_DateEntry.setForeground(COLOR2);
-		label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_DateEntry);
-
-		final JLabel label_Show_User = new JLabel(equipment.getUser() != null ? equipment.getUser().getName() : "");
+		final JLabel label_Show_User = new MyLabel(equipment.getUser() != null ? equipment.getUser().getName() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		label_Show_User.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		label_Show_User.setForeground(COLOR2);
 		label_Show_User.addMouseListener(new MouseListenerUser());
-		label_Show_User.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_User);
+		fieldsPanel.add(label_Show_User);
+		
+		final JLabel label_WorkPosition = new MyLabel("Work Position:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_WorkPosition);
 
-		final JLabel label_Show_WorkPosition = new JLabel(
-				equipment.getWorkPosition() != null ? equipment.getWorkPosition().getWorkPoint() : "");
+		final JLabel label_Show_WorkPosition = new MyLabel(equipment.getWorkPosition() != null ? equipment.getWorkPosition().getWorkPoint() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		label_Show_WorkPosition.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		label_Show_WorkPosition.setForeground(COLOR2);
 		label_Show_WorkPosition.addMouseListener(new MouseListenerWorkPosition());
-		label_Show_WorkPosition.setBounds(COLUMN2, line += line_multiplier, WIDTH_LABEL_SHOW, HEIGHT_LABEL_SHOW);
-		panel.add(label_Show_WorkPosition);
+		fieldsPanel.add(label_Show_WorkPosition);
+
+		return fieldsPanel;
 	}
+	
+	private JPanel createButtonPanel() {
+		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_BUTTON_PANEL));
+		buttonPanel.setBackground(COLOR2);
 
-	private void addButtons(JPanel panel) {
-		final JButton buttonChanges = new JButton("Changes");
-		buttonChanges.setBounds(positionButton, 600, 120, 30);
+		final JButton buttonChanges = new MyButton("Changes", SIZEBUTTONS);
 		buttonChanges.addActionListener(new buttonChangesListener());
-		panel.add(buttonChanges);
+		buttonPanel.add(buttonChanges);
 
-		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(positionButton + 160, 600, 120, 30);
+		final JButton buttonClose = new MyButton("Close", SIZEBUTTONS);
 		buttonClose.addActionListener(new buttonCloseListener());
-		panel.add(buttonClose);
+		buttonPanel.add(buttonClose);
+
+		return buttonPanel;
 	}
 
 	private class buttonChangesListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			new ChangesPanel(equipment.getChanges());
 		}
@@ -290,6 +227,7 @@ public class ViewEquipmentForm extends JDialog {
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}

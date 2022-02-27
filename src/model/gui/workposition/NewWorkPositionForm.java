@@ -127,7 +127,7 @@ public class NewWorkPositionForm extends JDialog {
 
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 		textField_WorkPoint = new JTextField();
-		textField_WorkPoint.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 20));
+		textField_WorkPoint.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIAL_NUMBER, 20));
 		textField_WorkPoint.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_WorkPoint);
 

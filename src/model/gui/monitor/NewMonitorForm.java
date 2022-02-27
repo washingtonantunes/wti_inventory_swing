@@ -155,7 +155,7 @@ public class NewMonitorForm extends JDialog {
 	private void addTextFieldsAndComboBoxes(JPanel panel) {
 
 		textField_SerialNumber = new JTextField();
-		textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 20));
+		textField_SerialNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIAL_NUMBER, 20));
 		textField_SerialNumber.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_SerialNumber);
 
@@ -194,7 +194,7 @@ public class NewMonitorForm extends JDialog {
 		panel.add(textField_Value);
 
 		textField_NoteEntry = new JTextField();
-		textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
+		textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.ALPHA_NUMERIC, 12));
 		textField_NoteEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
 				HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_NoteEntry);

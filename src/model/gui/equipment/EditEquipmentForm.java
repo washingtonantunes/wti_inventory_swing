@@ -5,32 +5,30 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 
+import application.LoadData;
 import db.DBException;
 import exception.ObjectException;
 import exception.ValidationException;
 import model.entities.Equipment;
-import model.entities.Option;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
 import model.util.JTextFieldFilter;
+import model.util.MyButton;
+import model.util.MyComboBox;
+import model.util.MyLabel;
+import model.util.MyTextField;
 import model.util.Utils;
 
 public class EditEquipmentForm extends JDialog {
@@ -39,41 +37,44 @@ public class EditEquipmentForm extends JDialog {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private final int COLUMN1 = 20;
-	private final int COLUMN2 = 160;
-	private final int COLUMN3 = 370;
-
-	private int line = 0;
-	private int line_multiplier = 30;
-
-	private final int WIDTH_LABEL = 110;
-	private final int HEIGHT_LABEL = 25;
-
-	private final int WIDTH_TEXTFIELD_COMBOBOX = 200;
-	private final int HEIGHT_TEXTFIELD_COMBOBOX = 25;
-
-	private final int WIDTH_LABEL_ERROR = 270;
-	private final int HEIGHT_LABEL_ERROR = 25;
-
-	private final int widthPanel = WIDTH_LABEL + WIDTH_TEXTFIELD_COMBOBOX + WIDTH_LABEL_ERROR + 50; //largura
-	private final int heightPanel = (30 * 18) + 140; //altura
-
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
-	
-	private final int positionButton = (widthPanel / 2) - 140;
-
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
 
+	private final int SIZE_LABELS = 2;
+	private final int SIZE_LABELS_SHOW = 3;
+	private final int SIZE_FIELDS_COMBOX = 3;
+	private final int SIZE_LABELS_ERROR = 6;
+
+	private final int SIZEBUTTONS = 1;
+
+	private final int COLOR_LABEL = 1;
+	private final int COLOR_LABEL_SHOW = 2;
+	private final int COLOR_LABEL_ERROR = 3;
+	
+	private final int FONT = 1;
+
+	private final int WIDTH_INTERNAL_PANEL = (150 + 200 + 300) + 40;
+
+	private final int HEIGHT_TOP_PANEL = 10;
+	private final int HEIGHT_FIELD_PANEL = 36 * 18;
+	private final int HEIGHT_BUTTON_PANEL = 50;
+
+	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
+	
+	private final EquipmentTableModel model;
+	private final Equipment equipmentOld;
+	private final int lineSelected;
+
 	private JTextField textField_HostName;
 	private JTextField textField_AddressMAC;
-	private JComboBox<String> comboBox_Type;
+	private JComboBox<Object> comboBox_Type;
 	private JTextField textField_PatrimonyNumber;
-	private JComboBox<String> comboBox_Brand;
-	private JComboBox<String> comboBox_Model;
-	private JComboBox<String> comboBox_MemoryRam;
-	private JComboBox<String> comboBox_HardDisk;
-	private JComboBox<String> comboBox_CostType;
+	private JComboBox<Object> comboBox_Brand;
+	private JComboBox<Object> comboBox_Model;
+	private JComboBox<Object> comboBox_MemoryRam;
+	private JComboBox<Object> comboBox_HardDisk;
+	private JComboBox<Object> comboBox_CostType;
 	private JTextField textField_Value;
 	private JTextField textField_NoteEntry;
 	private JTextField textField_Note;
@@ -89,330 +90,233 @@ public class EditEquipmentForm extends JDialog {
 	private JLabel labelError_CostType;
 	private JLabel labelError_NoteEntry;
 
-	private EquipmentTableModel model;
-	private final Equipment equipmentOld;
-	private List<Option> options;
-	private int lineSelected;
-
-	public EditEquipmentForm(EquipmentTableModel model, Equipment equipmentOld, List<Option> options,
-			int lineSelected) {
+	public EditEquipmentForm(EquipmentTableModel model, Equipment equipmentOld, int lineSelected) {
 		this.model = model;
 		this.equipmentOld = equipmentOld;
-		this.options = options;
 		this.lineSelected = lineSelected;
 		initComponents();
 	}
 
 	private void initComponents() {
-		setModal(true);
-
-		add(createPanelMain());
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Edit Equipment");
-		setPreferredSize(DIMENSIONMAINPANEL);
+		setModal(true);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 40, 10));
+		setPreferredSize(new Dimension(WIDTH_MAIN_PANEL, HEIGHT_MAIN_PANEL));
 		setResizable(false);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+		add(createTopPanel());
+		add(createFieldsPanel());
+		add(createButtonPanel());
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
-	private JPanel createPanelMain() {
-		final JPanel panel = new JPanel(new FlowLayout());
-		panel.setLayout(null);
-
-		addLabels(panel);
-		addTextFieldsAndComboBoxes(panel);
-		addLabelsError(panel);
-		addButtons(panel);
+	private JPanel createTopPanel() {
+		final JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		panel.setBackground(COLOR1);
 
 		return panel;
 	}
+	
+	private JPanel createFieldsPanel() {
+		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
+		
+		final JLabel label_SerialNumber = new MyLabel("Serial Number:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_SerialNumber);
 
-	private void addLabels(JPanel panel) {
-		final JLabel label_SerialNumber = new JLabel("Serial Number:");
-		label_SerialNumber.setForeground(COLOR1);
-		label_SerialNumber.setBounds(COLUMN1, line = 30, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_SerialNumber);
+		final JLabel label_Show_SerialNumber = new MyLabel(equipmentOld.getSerialNumber(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_SerialNumber);
 
-		final JLabel label_HostName = new JLabel("Host Name:");
-		label_HostName.setForeground(COLOR1);
-		label_HostName.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_HostName);
+		final JLabel labelError_SerialNumber_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_SerialNumber_Empty);
+		
+		final JLabel label_HostName = new MyLabel("Host Name:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_HostName);
 
-		final JLabel label_AddressMAC = new JLabel("Address MAC:");
-		label_AddressMAC.setForeground(COLOR1);
-		label_AddressMAC.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_AddressMAC);
+		textField_HostName = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMBERS_AND_LETTERS_NO_SPACE, 11));
+		textField_HostName.setText(equipmentOld.getHostName());
+		fieldsPanel.add(textField_HostName);
 
-		final JLabel label_Type = new JLabel("Type:");
-		label_Type.setForeground(COLOR1);
-		label_Type.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Type);
+		labelError_HostName = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_HostName);
+		
+		final JLabel label_AddressMAC = new MyLabel("Address MAC:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_AddressMAC);
 
-		final JLabel label_PatrimonyNumber = new JLabel("Patrimony Number:");
-		label_PatrimonyNumber.setForeground(COLOR1);
-		label_PatrimonyNumber.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_PatrimonyNumber);
+		textField_AddressMAC = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_AddressMAC.setDocument(new JTextFieldFilter(JTextFieldFilter.ADDRESS_MAC, 17));
+		textField_AddressMAC.setText(equipmentOld.getAddressMAC());
+		fieldsPanel.add(textField_AddressMAC);
 
-		final JLabel label_Brand = new JLabel("Brand:");
-		label_Brand.setForeground(COLOR1);
-		label_Brand.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Brand);
+		labelError_AddressMAC = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_AddressMAC);
+		
+		final JLabel label_Type = new MyLabel("Type:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Type);
 
-		final JLabel label_Model = new JLabel("Model:");
-		label_Model.setForeground(COLOR1);
-		label_Model.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Model);
+		comboBox_Type = new MyComboBox(LoadData.getOptionByType("TYPE-EQUIPMENT"), equipmentOld.getType(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Type);
 
-		final JLabel label_MemoryRam = new JLabel("Memory Ram:");
-		label_MemoryRam.setForeground(COLOR1);
-		label_MemoryRam.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_MemoryRam);
+		labelError_Type = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Type);
+		
+		final JLabel label_PatrimonyNumber = new MyLabel("Patrimony Number:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_PatrimonyNumber);
 
-		final JLabel label_HardDisk = new JLabel("Hard Disk:");
-		label_HardDisk.setForeground(COLOR1);
-		label_HardDisk.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_HardDisk);
+		textField_PatrimonyNumber = new MyTextField(equipmentOld.getPatrimonyNumber(), SIZE_FIELDS_COMBOX);
+		textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
+		textField_PatrimonyNumber.setText(equipmentOld.getPatrimonyNumber());
+		fieldsPanel.add(textField_PatrimonyNumber);
 
-		final JLabel label_CostType = new JLabel("Cost Type:");
-		label_CostType.setForeground(COLOR1);
-		label_CostType.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_CostType);
+		labelError_PatrimonyNumber = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_PatrimonyNumber);
+		
+		final JLabel label_Brand = new MyLabel("Brand:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Brand);
 
-		final JLabel label_Value = new JLabel("Value:");
-		label_Value.setForeground(COLOR1);
-		label_Value.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Value);
+		comboBox_Brand = new MyComboBox(LoadData.getOptionByType("BRAND-EQUIPMENT"), equipmentOld.getBrand(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Brand);
 
-		final JLabel label_NoteEntry = new JLabel("Note Entry:");
-		label_NoteEntry.setForeground(COLOR1);
-		label_NoteEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_NoteEntry);
+		labelError_Brand = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Brand);
+		
+		final JLabel label_Model = new MyLabel("Model:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Model);
 
-		final JLabel label_Note = new JLabel("Note:");
-		label_Note.setForeground(COLOR1);
-		label_Note.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Note);
+		comboBox_Model = new MyComboBox(LoadData.getOptionByType("MODEL-EQUIPMENT") , equipmentOld.getModel(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Model);
 
-		final JLabel label_Location = new JLabel("Location:");
-		label_Location.setForeground(COLOR1);
-		label_Location.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Location);
+		labelError_Model = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Model);
+		
+		final JLabel label_MemoryRam = new MyLabel("MemoryRam:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_MemoryRam);
 
-		final JLabel label_Status = new JLabel("Status:");
-		label_Status.setForeground(COLOR1);
-		label_Status.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_Status);
+		comboBox_MemoryRam = new MyComboBox(LoadData.getOptionByType("MEMORY-RAM"), equipmentOld.getMemoryRam(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_MemoryRam);
 
-		final JLabel label_DateEntry = new JLabel("Date Entry:");
-		label_DateEntry.setForeground(COLOR1);
-		label_DateEntry.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_DateEntry);
+		labelError_MemoryRam = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_MemoryRam);
+		
+		final JLabel label_HardDisk = new MyLabel("HardDisk:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_HardDisk);
 
-		final JLabel label_User = new JLabel("User:");
-		label_User.setForeground(COLOR1);
-		label_User.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_User);
+		comboBox_HardDisk = new MyComboBox(LoadData.getOptionByType("HARD-DISK"), equipmentOld.getHardDisk(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_HardDisk);
 
-		final JLabel label_WorkPosition = new JLabel("Work Position:");
-		label_WorkPosition.setForeground(COLOR1);
-		label_WorkPosition.setBounds(COLUMN1, line += line_multiplier, WIDTH_LABEL, HEIGHT_LABEL);
-		panel.add(label_WorkPosition);
+		labelError_HardDisk = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_HardDisk);
+		
+		final JLabel label_CostType = new MyLabel("CostType:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_CostType);
+
+		comboBox_CostType = new MyComboBox(LoadData.getOptionByType("COST-TYPE"), equipmentOld.getCostType(), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_CostType);
+
+		labelError_CostType = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_CostType);
+		
+		final JLabel label_Value = new MyLabel("Value:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Value);
+
+		textField_Value = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 5));
+		textField_Value.setText(String.valueOf(equipmentOld.getValue()));
+		fieldsPanel.add(textField_Value);
+
+		final JLabel labelError_Value_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Value_Empty);
+		
+		final JLabel label_NoteEntry = new MyLabel("Note Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_NoteEntry);
+
+		textField_NoteEntry = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.ALPHA_NUMERIC, 20));
+		textField_NoteEntry.setText(equipmentOld.getNoteEntry());
+		fieldsPanel.add(textField_NoteEntry);
+
+		labelError_NoteEntry = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_NoteEntry);
+		
+		final JLabel label_Note = new MyLabel("Note:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Note);
+
+		textField_Note = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Note.setDocument(new JTextFieldFilter());
+		textField_Note.setText(equipmentOld.getNote());
+		fieldsPanel.add(textField_Note);
+
+		final JLabel labelError_Note_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Note_Empty);
+		
+		JLabel label_Location = new MyLabel("Location:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Location);
+
+		final JLabel label_Show_Location = new MyLabel(equipmentOld.getLocation(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Location);
+
+		final JLabel labelError_Location_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Location_Empty);
+		
+		JLabel label_Status = new MyLabel("Status:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Status);
+
+		final JLabel label_Show_Status = new MyLabel(equipmentOld.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Status);
+
+		final JLabel labelError_Status_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Status_Empty);
+
+		JLabel label_DateEntry = new MyLabel("Date Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_DateEntry);
+
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(equipmentOld.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_DateEntry);
+
+		final JLabel labelError_DateEntry_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_DateEntry_Empty);
+		
+		JLabel label_User = new MyLabel("User:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_User);
+
+		final JLabel label_Show_User = new MyLabel(equipmentOld.getUser() != null ? equipmentOld.getUser().getName() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_User);
+
+		final JLabel labelError_User_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_User_Empty);
+		
+		JLabel label_WorkPosition = new MyLabel("Work Position:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_WorkPosition);
+
+		final JLabel label_Show_WorkPosition = new MyLabel(equipmentOld.getWorkPosition() != null ? equipmentOld.getWorkPosition().getWorkPoint() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_WorkPosition);
+
+		final JLabel labelError_WorkPosition_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_WorkPosition_Empty);
+		
+		return fieldsPanel;
 	}
+	
+	private JPanel createButtonPanel() {
+		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_BUTTON_PANEL));
+		buttonPanel.setBackground(COLOR2);
 
-	private void addTextFieldsAndComboBoxes(JPanel panel) {
-		try {
-			final JLabel label_Show_SerialNumber = new JLabel(equipmentOld.getSerialNumber());
-			label_Show_SerialNumber.setForeground(COLOR2);
-			label_Show_SerialNumber.setBounds(COLUMN2, line = 30, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_SerialNumber);
-
-			textField_HostName = new JTextField();
-			textField_HostName.setDocument(new JTextFieldFilter(JTextFieldFilter.UPPERCASE_NUMERIC_NO_SPACE, 11));
-			textField_HostName.setText(equipmentOld.getHostName());
-			textField_HostName.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_HostName);
-
-			textField_AddressMAC = new JFormattedTextField(new MaskFormatter("AA-AA-AA-AA-AA-AA"));
-			textField_AddressMAC.setText(equipmentOld.getAddressMAC());
-			textField_AddressMAC.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_AddressMAC);
-
-			comboBox_Type = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("TYPE-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_Type.setSelectedItem(equipmentOld.getType());
-			comboBox_Type.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_Type);
-
-			textField_PatrimonyNumber = new JTextField();
-			textField_PatrimonyNumber.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMERIC, 6));
-			textField_PatrimonyNumber.setText(equipmentOld.getPatrimonyNumber());
-			textField_PatrimonyNumber.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_PatrimonyNumber);
-
-			comboBox_Brand = new JComboBox<>(new Vector<>(options.stream()
-					.filter(o -> o.getType().equals("BRAND-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-					.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_Brand.setSelectedItem(equipmentOld.getBrand());
-			comboBox_Brand.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_Brand);
-
-			comboBox_Model = new JComboBox<>(new Vector<>(options.stream()
-					.filter(o -> o.getType().equals("MODEL-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-					.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_Model.setSelectedItem(equipmentOld.getModel());
-			comboBox_Model.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_Model);
-
-			comboBox_MemoryRam = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("MEMORY-RAM") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_MemoryRam.setSelectedItem(equipmentOld.getMemoryRam());
-			comboBox_MemoryRam.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_MemoryRam);
-
-			comboBox_HardDisk = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("HARD-DISK") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_HardDisk.setSelectedItem(equipmentOld.getHardDisk());
-			comboBox_HardDisk.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_HardDisk);
-
-			comboBox_CostType = new JComboBox<>(new Vector<>(
-					options.stream().filter(o -> o.getType().equals("COST-TYPE") && o.getStatus().equals("ACTIVE"))
-							.map(Option::getOption).collect(Collectors.toList())));
-			comboBox_CostType.setSelectedItem(equipmentOld.getCostType());
-			comboBox_CostType.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(comboBox_CostType);
-
-			textField_Value = new JTextField();
-			textField_Value.setDocument(new JTextFieldFilter(JTextFieldFilter.DECIMAL, 5));
-			textField_Value.setText(String.valueOf(equipmentOld.getValue()));
-			textField_Value.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_Value);
-
-			textField_NoteEntry = new JTextField();
-			textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
-			textField_NoteEntry.setText(equipmentOld.getNoteEntry());
-			textField_NoteEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_NoteEntry);
-
-			textField_Note = new JTextField();
-			textField_Note.setText(equipmentOld.getNote());
-			textField_Note.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(textField_Note);
-
-			final JLabel label_Show_Location = new JLabel(equipmentOld.getLocation());
-			label_Show_Location.setForeground(COLOR2);
-			label_Show_Location.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_Location);
-
-			final JLabel label_Show_Status = new JLabel(equipmentOld.getStatus());
-			label_Show_Status.setForeground(COLOR2);
-			label_Show_Status.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_Status);
-
-			final JLabel label_Show_DateEntry = new JLabel(sdf.format(equipmentOld.getDateEntry()));
-			label_Show_DateEntry.setForeground(COLOR2);
-			label_Show_DateEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_DateEntry);
-
-			final JLabel label_Show_User = new JLabel(equipmentOld.getUser().getName());
-			label_Show_User.setForeground(COLOR2);
-			label_Show_User.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX + 100,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_User);
-
-			final JLabel label_Show_WorkPosition = new JLabel(equipmentOld.getWorkPosition().getWorkPoint());
-			label_Show_WorkPosition.setForeground(COLOR2);
-			label_Show_WorkPosition.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
-					HEIGHT_TEXTFIELD_COMBOBOX);
-			panel.add(label_Show_WorkPosition);
-		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error input data",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-
-	private void addLabelsError(JPanel panel) {
-		labelError_HostName = new JLabel();
-		labelError_HostName.setForeground(Color.RED);
-		labelError_HostName.setBounds(COLUMN3, line = 60, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_HostName);
-
-		labelError_AddressMAC = new JLabel();
-		labelError_AddressMAC.setForeground(Color.RED);
-		labelError_AddressMAC.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_AddressMAC);
-
-		labelError_Type = new JLabel();
-		labelError_Type.setForeground(Color.RED);
-		labelError_Type.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Type);
-
-		labelError_PatrimonyNumber = new JLabel();
-		labelError_PatrimonyNumber.setForeground(Color.RED);
-		labelError_PatrimonyNumber.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_PatrimonyNumber);
-
-		labelError_Brand = new JLabel();
-		labelError_Brand.setForeground(Color.RED);
-		labelError_Brand.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Brand);
-
-		labelError_Model = new JLabel();
-		labelError_Model.setForeground(Color.RED);
-		labelError_Model.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_Model);
-
-		labelError_MemoryRam = new JLabel();
-		labelError_MemoryRam.setForeground(Color.RED);
-		labelError_MemoryRam.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_MemoryRam);
-
-		labelError_HardDisk = new JLabel();
-		labelError_HardDisk.setForeground(Color.RED);
-		labelError_HardDisk.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_HardDisk);
-
-		labelError_CostType = new JLabel();
-		labelError_CostType.setForeground(Color.RED);
-		labelError_CostType.setBounds(COLUMN3, line += line_multiplier, WIDTH_LABEL_ERROR, HEIGHT_LABEL_ERROR);
-		panel.add(labelError_CostType);
-
-		labelError_NoteEntry = new JLabel();
-		labelError_NoteEntry.setForeground(Color.RED);
-		labelError_NoteEntry.setBounds(COLUMN3, line += (line_multiplier + line_multiplier), WIDTH_LABEL_ERROR,
-				HEIGHT_LABEL_ERROR);
-		panel.add(labelError_NoteEntry);
-	}
-
-	private void addButtons(JPanel panel) {
-		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(positionButton, 600, 120, 25);
+		final JButton buttonSave = new MyButton("Save", SIZEBUTTONS);
 		buttonSave.addActionListener(new buttonSaveListener());
-		panel.add(buttonSave);
+		buttonPanel.add(buttonSave);
 
-		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(positionButton + 160, 600, 125, 25);
+		final JButton buttonClose = new MyButton("Close", SIZEBUTTONS);
 		buttonClose.addActionListener(new buttonCloseListener());
-		panel.add(buttonClose);
+		buttonPanel.add(buttonClose);
+
+		return buttonPanel;
 	}
 
 	private class buttonSaveListener implements ActionListener {
@@ -420,20 +324,24 @@ public class EditEquipmentForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				final Equipment equipmentNew = getFormData();
+				
 				EquipmentService service = new EquipmentService();
 				service.update(equipmentOld, equipmentNew);
+				
 				model.updateEquipment(lineSelected, equipmentNew);
+				
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Equipment successfully updated", "Success updating object",
-						JOptionPane.INFORMATION_MESSAGE);
-			} catch (ValidationException e) {
-				setErrorMessages(e.getErrors());
-			} catch (DBException e) {
-				setErroMessagesDBException(e);
-			} catch (ObjectException e) {
-				if (e.getMessage().contains("There is no change")) {
-					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object",
-							JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Equipment successfully updated", "Success updating object", JOptionPane.INFORMATION_MESSAGE);
+			} 
+			catch (ValidationException ve) {
+				setErrorMessages(ve.getErrors());
+			} 
+			catch (DBException de) {
+				setErrorMessagesDBException(de);
+			} 
+			catch (ObjectException oe) {
+				if (oe.getMessage().contains("There is no change")) {
+					JOptionPane.showMessageDialog(rootPane, "There is no change", "Error updating object", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		}
@@ -457,19 +365,29 @@ public class EditEquipmentForm extends JDialog {
 		// Validation Host Name
 		if (textField_HostName.getText() == null || textField_HostName.getText().trim().equals("")) {
 			exception.addError("hostName", "Field can't be empty");
-		} else if (textField_HostName.getText().length() < 10) {
+		} 
+		else if (textField_HostName.getText().length() < 10) {
 			exception.addError("hostName", "Invalid HostName - Ex: > 10");
-		} else if (Utils.ToCheckHostName(textField_HostName.getText())) {
+		} 
+		else if (Utils.ToCheckHostName(textField_HostName.getText())) {
 			exception.addError("hostName", "Invalid format - Ex: 'SPODSK' or 'SPONTB'");
-		} else {
+		} 
+		else {
 			equipment.setHostName(textField_HostName.getText().trim().toUpperCase());
 			hostNameToCheck = true;
 		}
 
 		// Validation Address Mac
-		if (Utils.ToCheckAddressMACNull(textField_AddressMAC.getText())) {
+		if (textField_AddressMAC.getText() == null || textField_AddressMAC.getText().trim().equals("")) {
 			exception.addError("addressMAC", "Field can't be empty");
-		} else {
+		} 
+		else if (textField_AddressMAC.getText().length() < 16) {
+			exception.addError("addressMAC", "Invalid Address MAC - Ex: > 16");
+		} 
+		else if (Utils.ToCheckAddressMAC(textField_AddressMAC.getText())) {
+			exception.addError("addressMAC", "Invalid format - Ex: '0A-00-27-00-00-0B'");
+		}
+		else {
 			equipment.setAddressMAC(textField_AddressMAC.getText().trim().toUpperCase());
 		}
 
@@ -484,44 +402,51 @@ public class EditEquipmentForm extends JDialog {
 		// Validation Patrimony Number
 		if (textField_PatrimonyNumber.getText() == null || textField_PatrimonyNumber.getText().trim().equals("")) {
 			exception.addError("patrimonyNumber", "Field can't be empty");
-		} else if (textField_PatrimonyNumber.getText().length() < 4) {
+		} 
+		else if (textField_PatrimonyNumber.getText().length() < 4) {
 			exception.addError("patrimonyNumber", "Invalid Patrimony Number - Ex: > 4");
-		} else {
+		} 
+		else {
 			equipment.setPatrimonyNumber(textField_PatrimonyNumber.getText().trim().toUpperCase());
 		}
 
 		// Validation Brand
 		if (comboBox_Brand.getSelectedIndex() < 0 || comboBox_Brand.getSelectedItem() == null) {
 			exception.addError("brand", "Field can't be empty");
-		} else {
+		} 
+		else {
 			equipment.setBrand(comboBox_Brand.getSelectedItem().toString());
 		}
 
 		// Validation Model
 		if (comboBox_Model.getSelectedIndex() < 0 || comboBox_Model.getSelectedItem() == null) {
 			exception.addError("model", "Field can't be empty");
-		} else {
+		} 
+		else {
 			equipment.setModel(comboBox_Model.getSelectedItem().toString());
 		}
 
 		// Validation Memory Ram
 		if (comboBox_MemoryRam.getSelectedIndex() < 0 || comboBox_MemoryRam.getSelectedItem() == null) {
 			exception.addError("memoryRam", "Field can't be empty");
-		} else {
+		} 
+		else {
 			equipment.setMemoryRam(comboBox_MemoryRam.getSelectedItem().toString());
 		}
 
 		// Validation Hard Disk
 		if (comboBox_HardDisk.getSelectedIndex() < 0 || comboBox_HardDisk.getSelectedItem() == null) {
 			exception.addError("hardDisk", "Field can't be empty");
-		} else {
+		} 
+		else {
 			equipment.setHardDisk(comboBox_HardDisk.getSelectedItem().toString());
 		}
 
 		// Validation CostType
 		if (comboBox_CostType.getSelectedIndex() < 0 || comboBox_CostType.getSelectedItem() == null) {
 			exception.addError("costType", "Field can't be empty");
-		} else {
+		} 
+		else {
 			equipment.setCostType(comboBox_CostType.getSelectedItem().toString());
 		}
 
@@ -531,9 +456,11 @@ public class EditEquipmentForm extends JDialog {
 		// Validation Note Entry
 		if (textField_NoteEntry.getText() == null || textField_NoteEntry.getText().trim().equals("")) {
 			exception.addError("noteEntry", "Field can't be empty");
-		} else if (textField_NoteEntry.getText().length() < 4) {
+		} 
+		else if (textField_NoteEntry.getText().length() < 4) {
 			exception.addError("noteEntry", "Invalid Note Entry - Ex: > 4");
-		} else {
+		} 
+		else {
 			equipment.setNoteEntry(textField_NoteEntry.getText().trim().toUpperCase());
 		}
 
@@ -571,22 +498,26 @@ public class EditEquipmentForm extends JDialog {
 		labelError_NoteEntry.setText(fields.contains("noteEntry") ? errors.get("noteEntry") : "");
 	}
 
-	private void setErroMessagesDBException(DBException e) {
+	private void setErrorMessagesDBException(DBException e) {
 		if (e.getMessage().contains("Duplicate entry")) {
 			if (e.getMessage().contains("equipments.hostname_UNIQUE")) {
 				JOptionPane.showMessageDialog(rootPane, "This host name already exists", "Error update object",
 						JOptionPane.ERROR_MESSAGE);
-			} else if (e.getMessage().contains("equipments.addressMAC_UNIQUE")) {
+			} 
+			else if (e.getMessage().contains("equipments.addressMAC_UNIQUE")) {
 				JOptionPane.showMessageDialog(rootPane, "This address MAC already exists", "Error update object",
 						JOptionPane.ERROR_MESSAGE);
-			} else if (e.getMessage().contains("equipments.patrimonyNumberEquipment_UNIQUE")) {
+			} 
+			else if (e.getMessage().contains("equipments.patrimonyNumberEquipment_UNIQUE")) {
 				JOptionPane.showMessageDialog(rootPane, "This patrimony number already exists", "Error update object",
 						JOptionPane.ERROR_MESSAGE);
-			} else {
+			} 
+			else {
 				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error update object",
 						JOptionPane.ERROR_MESSAGE);
 			}
-		} else {
+		} 
+		else {
 			JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error update object", JOptionPane.ERROR_MESSAGE);
 		}
 	}

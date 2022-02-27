@@ -25,13 +25,12 @@ import javax.swing.table.TableRowSorter;
 
 import application.LoadData;
 import application.MainWindow;
-import model.entities.Option;
 import model.entities.User;
-import model.services.OptionService;
 import model.services.user.CreateExlFileUser;
 import model.services.user.TableUser;
 import model.services.user.UserTableModel;
 import model.util.MyButton;
+import model.util.MyLabel;
 
 public class UserList extends JPanel {
 
@@ -47,7 +46,6 @@ private static final long serialVersionUID = 1L;
 	private UserTableModel model;
 
 	private List<User> users;
-	protected static List<Option> options;
 
 	private JLabel label_Show_Quantity;
 
@@ -56,7 +54,6 @@ private static final long serialVersionUID = 1L;
 
 	public UserList() {
 		this.users = LoadData.getUsersList();
-		UserList.options = loadDataOptions();
 		initComponents();
 	}
 
@@ -77,16 +74,12 @@ private static final long serialVersionUID = 1L;
 	}
 
 	private JPanel createPanelTitle() {
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		panel.setPreferredSize(new Dimension(0, 25));
 		panel.setBackground(COLOR1);
 
-		JLabel label_Title = new JLabel("Users");
-		label_Title.setPreferredSize(new Dimension(130, 35));
-		label_Title.setBounds(20, 2, 100, 20);
-		label_Title.setForeground(Color.WHITE);
-		panel.add(label_Title);
+		final JLabel label_Registration = new MyLabel("Users", 1, 4, 1);
+		panel.add(label_Registration);
 
 		return panel;
 	}
@@ -169,13 +162,6 @@ private static final long serialVersionUID = 1L;
 		return scrollPane;
 	}
 
-	private List<Option> loadDataOptions() {
-		final OptionService service = new OptionService();
-		List<Option> list = service.findAll();
-		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
-		return list;
-	}
-
 	private class buttonNewListener implements ActionListener {
 
 		@Override
@@ -250,10 +236,10 @@ private static final long serialVersionUID = 1L;
 					User user = model.getUser(modelRow);
 					if (user.getStatus().equals("DISABLED")) {
 						JOptionPane.showMessageDialog(null, "This user already is disabled", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
-					} /*else if () {
-						JOptionPane.showMessageDialog(null, "This user is in possession of a device", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
+					} else if (user.getEquipments().size() > 0 || user.getMonitors().size() > 0 || user.getPeripherals().size() > 0 || user.getLicenses().size() > 0) {
+						JOptionPane.showMessageDialog(null, "This user has equipment or peripherals under his/her responsibility.", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					}
-					*/else {
+					else {
 						new DisableUserForm(model, user, modelRow);
 					}
 				}
@@ -288,8 +274,7 @@ private static final long serialVersionUID = 1L;
 		public void actionPerformed(ActionEvent e) {
 			int i = table.getRowCount();
 			if (i <= 0) {
-				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "There is no data to export", "Unable to Export", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
 				List<User> Users = new ArrayList<User>();
@@ -316,10 +301,14 @@ private static final long serialVersionUID = 1L;
 		@Override
 		public void mouseClicked(MouseEvent evt) {
 			if (evt.getClickCount() == 2) {
-				int lineSelected = table.getSelectedRow();
-				int modelRow = table.convertRowIndexToModel(lineSelected);
-				User user = model.getUser(modelRow);
-				new ViewUserForm(user);
+				int lineSelected = -1;
+				lineSelected = table.getSelectedRow();
+				if (lineSelected >= 0) {
+					int modelRow = table.convertRowIndexToModel(lineSelected);
+					User user = model.getUser(modelRow);
+					new ViewUserForm(user);
+
+				}
 			}
 		}
 	}

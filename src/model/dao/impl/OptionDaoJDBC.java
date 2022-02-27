@@ -59,6 +59,27 @@ public class OptionDaoJDBC implements OptionDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public void updateSort(int idOld, int idNew) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `options` "
+					+ "SET `id` = ? "
+					+ "WHERE `id` = ?");
+			
+			st.setInt(1, idNew);
+			st.setInt(2, idOld);
+			
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public void update(Option obj) {

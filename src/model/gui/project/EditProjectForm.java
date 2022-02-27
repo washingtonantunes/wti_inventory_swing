@@ -140,7 +140,7 @@ public class EditProjectForm extends JDialog {
 		panel.add(label_Show__CostCenter);
 
 		textField_Name = new JTextField();
-		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.PROJECT, 50));
+		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.NUMBERS_AND_LETTERS_WITH_SPACE, 50));
 		textField_Name.setText(projectOld.getName());
 		textField_Name.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX, HEIGHT_TEXTFIELD_COMBOBOX);
 		panel.add(textField_Name);

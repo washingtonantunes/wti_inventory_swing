@@ -92,11 +92,4 @@ public class MyComboBox extends JComboBox<Object> {
 	private void selectObject() {
 		setSelectedItem(selectedObject);
 	}
-	
-	public void setObjects(List<Object> objects_) {
-		
-		for (Object object : objects_) {
-			addItem(object);
-		}
-	}
 }

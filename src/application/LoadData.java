@@ -498,6 +498,18 @@ public class LoadData {
 		list.sort((e1, p2) -> e1.getName().compareTo(p2.getName()));
 		return list;
 	}
+	
+	// Used to get project in List By Status
+	public static List<Object> getProjectsListByStatus(String status) {
+		List<Project> list = new ArrayList<Project>();
+
+		for (String entry : MainWindow.projects.keySet()) {
+			list.add(MainWindow.projects.get(entry));
+		}
+
+		list.sort((e1, p2) -> e1.getName().compareTo(p2.getName()));
+		return list.stream().filter(p -> p.getStatus().equalsIgnoreCase("ACTIVE")).collect(Collectors.toList());
+	}
 
 	// User Methods
 
@@ -535,8 +547,13 @@ public class LoadData {
 	
 	// Option Methods
 	
+	//
+	public static List<Option> getOptionList() {
+		return MainWindow.options;
+	}
+	
 	//	
-	public static List<String> getOptionByType(String type) {
+	public static List<Object> getOptionByType(String type) {
 		return MainWindow.options.stream().filter(o -> o.getType().equals(type) && o.getStatus().equals("ACTIVE")).map(Option::getOption).distinct().collect(Collectors.toList());
 	}
 }

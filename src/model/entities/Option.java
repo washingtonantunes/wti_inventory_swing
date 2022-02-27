@@ -91,6 +91,7 @@ public class Option implements Serializable {
 
 	@Override
 	public String toString() {
-		return option;
+		return "Option [id=" + id + ", option=" + option + ", type=" + type + ", status=" + status + ", dateEntry=" + dateEntry + "]";
 	}
+		
 }

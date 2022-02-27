@@ -2,13 +2,11 @@ package model.gui.equipment;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,104 +15,118 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import application.LoadData;
 import db.DBException;
 import exception.ValidationException;
 import model.entities.Equipment;
-import model.entities.Option;
 import model.services.equipment.EquipmentService;
 import model.services.equipment.EquipmentTableModel;
+import model.util.MyButton;
+import model.util.MyComboBox;
+import model.util.MyLabel;
 
 public class DisableEquipmentForm extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final int widthPanel = 400; // largura
-	private final int heightPanel = 150; // altura
-
-	private final Dimension DIMENSIONMAINPANEL = new Dimension(widthPanel, heightPanel);
-
-	private final int positionButton = (widthPanel / 2) - 140;
-
 	private final Color COLOR1 = new Color(0, 65, 83);
+	private final Color COLOR2 = new Color(2, 101, 124);
 
-	private JComboBox<String> comboBox_Reason;
+	private final int SIZE_LABELS = 1; 
+	private final int SIZE_FIELDS_COMBOX = 2; 
+	private final int SIZE_LABELS_ERROR = 4; 
+
+	private final int SIZEBUTTONS = 1; 
+
+	private final int COLOR_LABEL = 1; 
+	private final int COLOR_LABEL_ERROR = 3; 
+	
+	private final int FONT = 1;
+
+	private final int WIDTH_INTERNAL_PANEL = (100 + 150 + 250) + 40; 
+
+	private final int HEIGHT_TOP_PANEL = 10; 
+	private final int HEIGHT_FIELD_PANEL = 42 * 1; 
+	private final int HEIGHT_BUTTON_PANEL = 50; 
+
+	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50; 
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84; 
+
+	private final EquipmentTableModel model;
+	private Equipment equipment;
+	private final int lineSelected;
+
+	private JComboBox<Object> comboBox_Reason;
 
 	private JLabel labelError_Reason;
 
-	private EquipmentTableModel model;
-	private Equipment equipment;
-	private List<Option> options;
-	private int lineSelected;
-
-	public DisableEquipmentForm(EquipmentTableModel model, Equipment equipment, List<Option> options,
-			int lineSelected) {
+	public DisableEquipmentForm(EquipmentTableModel model, Equipment equipment, int lineSelected) {
 		this.model = model;
 		this.equipment = equipment;
-		this.options = options;
 		this.lineSelected = lineSelected;
 		initComponents();
 	}
 
 	private void initComponents() {
+		setTitle("Disable Equipment");
 		setModal(true);
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Reason");
-		setPreferredSize(DIMENSIONMAINPANEL);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 40, 10));
+		setPreferredSize(new Dimension(WIDTH_MAIN_PANEL, HEIGHT_MAIN_PANEL));
 		setResizable(false);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-		add(createPanelMain());
+		add(createTopPanel());
+		add(createFieldsPanel());
+		add(createButtonPanel());
 
 		pack();
 		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
-	private JPanel createPanelMain() {
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-
-		addLabelsAndComboBoxes(panel);
-		addLabelsError(panel);
-		addButtons(panel);
+	private JPanel createTopPanel() {
+		final JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_TOP_PANEL));
+		panel.setBackground(COLOR1);
 
 		return panel;
 	}
 
-	private void addLabelsAndComboBoxes(JPanel panel) {
-		final JLabel label_Reason = new JLabel("Reason:");
-		label_Reason.setForeground(COLOR1);
-		label_Reason.setBounds(20, 20, 50, 25);
-		panel.add(label_Reason);
+	private JPanel createFieldsPanel() {
+		final JPanel fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		fieldsPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_FIELD_PANEL));
 
-		comboBox_Reason = new JComboBox<>(new Vector<>(
-				options.stream().filter(o -> o.getType().equals("REASON-EQUIPMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList())));
-		comboBox_Reason.setSelectedIndex(-1);
-		comboBox_Reason.setBounds(80, 20, 90, 25);
-		panel.add(comboBox_Reason);
+		final JLabel label_Registration = new MyLabel("Reason:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Registration);
+
+		comboBox_Reason = new MyComboBox(LoadData.getOptionByType("REASON-EQUIPMENT"), SIZE_FIELDS_COMBOX);
+		fieldsPanel.add(comboBox_Reason);
+
+		labelError_Reason = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Reason);	
+
+		return fieldsPanel;
 	}
 
-	private void addLabelsError(JPanel panel) {
-		labelError_Reason = new JLabel("");
-		labelError_Reason.setForeground(Color.RED);
-		labelError_Reason.setBounds(180, 20, 240, 25);
-		panel.add(labelError_Reason);
-	}
+	private JPanel createButtonPanel() {
+		final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+		buttonPanel.setPreferredSize(new Dimension(WIDTH_INTERNAL_PANEL, HEIGHT_BUTTON_PANEL));
+		buttonPanel.setBackground(COLOR2);
 
-	private void addButtons(JPanel panel) {
-		final JButton buttonSave = new JButton("Save");
-		buttonSave.setBounds(positionButton, 70, 100, 25);
+		final JButton buttonSave = new MyButton("Save", SIZEBUTTONS);
 		buttonSave.addActionListener(new buttonSaveListener());
-		panel.add(buttonSave);
+		buttonPanel.add(buttonSave);
 
-		final JButton buttonClose = new JButton("Close");
-		buttonClose.setBounds(positionButton + 160, 70, 100, 25);
+		final JButton buttonClose = new MyButton("Close", SIZEBUTTONS);
 		buttonClose.addActionListener(new buttonCloseListener());
-		panel.add(buttonClose);
+		buttonPanel.add(buttonClose);
+
+		return buttonPanel;
 	}
 
 	private class buttonSaveListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			try {
 				equipment = getFormData();
@@ -122,21 +134,18 @@ public class DisableEquipmentForm extends JDialog {
 				service.disable(equipment);
 				model.updateEquipment(lineSelected, equipment);
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Equipment successfully disabled", "Success disabling object",
-						JOptionPane.INFORMATION_MESSAGE);
-			} 
-			catch (ValidationException e) {
+				JOptionPane.showMessageDialog(rootPane, "Equipment successfully disabled", "Success disabling object", JOptionPane.INFORMATION_MESSAGE);
+			} catch (ValidationException e) {
 				setErrorMessages(e.getErrors());
-			} 
-			catch (DBException e) {
-				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error disabling object",
-						JOptionPane.ERROR_MESSAGE);
+			} catch (DBException e) {
+				JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Error disabling object", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
 
 	private class buttonCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
 		}

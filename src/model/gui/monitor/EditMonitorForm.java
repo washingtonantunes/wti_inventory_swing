@@ -224,7 +224,7 @@ public class EditMonitorForm extends JDialog {
 		panel.add(textField_Value);
 
 		textField_NoteEntry = new JTextField();
-		textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.SERIALNUMBER, 12));
+		textField_NoteEntry.setDocument(new JTextFieldFilter(JTextFieldFilter.ALPHA_NUMERIC, 12));
 		textField_NoteEntry.setText(monitorOld.getNoteEntry());
 		textField_NoteEntry.setBounds(COLUMN2, line += line_multiplier, WIDTH_TEXTFIELD_COMBOBOX,
 				HEIGHT_TEXTFIELD_COMBOBOX);

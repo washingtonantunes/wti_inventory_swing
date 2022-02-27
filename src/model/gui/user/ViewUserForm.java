@@ -51,7 +51,7 @@ public class ViewUserForm extends JDialog {
 	private final int HEIGHT_BUTTON_PANEL = 50;
 
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
-	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 64 + 20;
+	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
 
 	private User user;
 
@@ -122,8 +122,7 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
-		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW,
-				FONT);
+		final JLabel label_Show_Department = new MyLabel(user.getDepartment(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Department);
 
 		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
@@ -138,11 +137,10 @@ public class ViewUserForm extends JDialog {
 		final JLabel label_Show_Status = new MyLabel(user.getStatus(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Status);
 
-		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		JLabel label_DateEntry = new MyLabel("Date Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_DateEntry);
 
-		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW,
-				COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(user.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_DateEntry);
 
 		return fieldsPanel;

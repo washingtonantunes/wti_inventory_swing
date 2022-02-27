@@ -307,8 +307,17 @@ public class EquipmentService {
 		if (!objOld.getValue().equals(objNew.getValue())) {
 			fieldsUpdated += " 'Value Old: " + objOld.getValue() + "',";
 		}
-		if (!objOld.getNoteEntry().equalsIgnoreCase(objNew.getNoteEntry())) {
-			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "'";
+		if (objOld.getNoteEntry() == null && objNew.getNoteEntry() != null) {
+			fieldsUpdated += " 'NoteEntry Old: NULL " + "',";
+		} else if (!objOld.getNoteEntry().equals(objNew.getNoteEntry())) {
+			fieldsUpdated += " 'NoteEntry Old: " + objOld.getNoteEntry() + "',";
+		}
+		if (objOld.getNote() == null && objNew.getNote() != null) {
+			fieldsUpdated += " 'Note Old: NULL " + "',";
+		} else if (objOld.getNote() != null && objNew.getNote() == null) {
+			fieldsUpdated += " 'Note Old: " + objOld.getNote() + "',";
+		} else if (!objOld.getNote().equals(objNew.getNote())) {
+			fieldsUpdated += " 'Note Old: " + objOld.getNote() + "'";
 		}
 
 		// Remove the ',' at the end of the String

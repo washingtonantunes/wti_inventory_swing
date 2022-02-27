@@ -13,6 +13,7 @@ public class JTextFieldFilter extends PlainDocument {
 	/* TIPOS GEN…RICOS */
 	public static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz ";
 	public static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+	
 	public static final String UPPERCASE_NO_SPACE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public static final String LOWERCASE_SPECIAL = "·‚ÈÌı˙Á„‡ÍÛÙ¸";
@@ -44,12 +45,18 @@ public class JTextFieldFilter extends PlainDocument {
 	public static final String EMAIL = "abcdefghijklmnopqrstuvwxyz" + NUMERIC + "_@-.+";
 
 	/* MEUS TIPOS */
-	public static final String SERIALNUMBER = LOWERCASE.trim() + UPPERCASE.trim() + NUMERIC;
-	public static final String ADDRESS_MAC = SERIALNUMBER + NUMERIC + "-";
+	public static final String LETTERS_ONLY_WITH_SPACE = LOWERCASE + UPPERCASE;
+	public static final String LETTERS_ONLY_NO_SPACE = LOWERCASE.trim() + UPPERCASE.trim();
+	
+	public static final String NUMBERS_AND_LETTERS_WITH_SPACE = LETTERS_ONLY_WITH_SPACE + NUMERIC;
+	public static final String NUMBERS_AND_LETTERS_NO_SPACE = LETTERS_ONLY_NO_SPACE + NUMERIC;
+	
+	public static final String SERIAL_NUMBER = LETTERS_ONLY_NO_SPACE + NUMERIC;
+	public static final String ADDRESS_MAC = SERIAL_NUMBER + NUMERIC + "-";
 	public static final String CPF = DECIMAL + "-";
-	public static final String MYEMAIL = LOWERCASE.trim() + UPPERCASE.trim() + "@.";
-	public static final String NAME = LOWERCASE + UPPERCASE;
-	public static final String PROJECT = LOWERCASE + UPPERCASE + NUMERIC;
+	public static final String MY_EMAIL = LETTERS_ONLY_NO_SPACE + "@.";
+	public static final String COST_CENTER = LETTERS_ONLY_NO_SPACE + DATE;
+	public static final String PHONE = NUMERIC + " ()-";
 
 	protected String acceptedChars = null;
 	protected boolean negativeAccepted = false;

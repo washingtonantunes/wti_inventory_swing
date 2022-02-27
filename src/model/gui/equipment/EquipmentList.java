@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -25,27 +26,26 @@ import javax.swing.table.TableRowSorter;
 import application.LoadData;
 import application.MainWindow;
 import model.entities.Equipment;
-import model.entities.Option;
-import model.services.OptionService;
 import model.services.equipment.CreateExlFileEquipment;
 import model.services.equipment.EquipmentTableModel;
 import model.services.equipment.TableEquipment;
+import model.util.MyButton;
+import model.util.MyLabel;
 
 public class EquipmentList extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension DIMENSIONBUTTON = new Dimension(130, 35);
-
 	private final Color COLOR1 = new Color(0, 65, 83);
 	private final Color COLOR2 = new Color(2, 101, 124);
+	
+	private final int SIZEBUTTONS = 2;
 
 	private JScrollPane scrollPane;
 	private TableEquipment table;
 	private EquipmentTableModel model;
 
 	private List<Equipment> equipments;
-	private List<Option> options;
 
 	private JLabel label_Show_Quantity;
 
@@ -54,7 +54,6 @@ public class EquipmentList extends JPanel {
 
 	public EquipmentList() {
 		this.equipments = LoadData.getEquipmentsList();
-		this.options = loadDataOptions();
 		initComponents();
 	}
 
@@ -75,16 +74,12 @@ public class EquipmentList extends JPanel {
 	}
 
 	private JPanel createPanelTitle() {
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
+		final JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
 		panel.setPreferredSize(new Dimension(0, 25));
 		panel.setBackground(COLOR1);
 
-		JLabel label_Title = new JLabel("Equipments");
-		label_Title.setPreferredSize(new Dimension(130, 35));
-		label_Title.setBounds(20, 2, 100, 20);
-		label_Title.setForeground(Color.WHITE);
-		panel.add(label_Title);
+		final JLabel label_Registration = new MyLabel("Equipments", 1, 4, 1);
+		panel.add(label_Registration);
 
 		return panel;
 	}
@@ -94,46 +89,41 @@ public class EquipmentList extends JPanel {
 		panel.setPreferredSize(new Dimension(0, 60));
 		panel.setBackground(COLOR1);
 
-		panel.add(createPanelButton1());
-		panel.add(createPanelButton2());
+		panel.add(createPanelButtonWest());
+		panel.add(createPanelButtonEast());
 
 		return panel;
 	}
 
-	private JPanel createPanelButton1() {
-		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-		panel.setPreferredSize(new Dimension(800, 60));
+	private JPanel createPanelButtonWest() {
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+		panel.setPreferredSize(new Dimension(800, 50));
 		panel.setBackground(COLOR2);
 
-		JButton buttonNew = new JButton("New");
-		buttonNew.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonNew = new MyButton("New", SIZEBUTTONS);
 		buttonNew.addActionListener(new buttonNewListener());
 		panel.add(buttonNew);
 
-		JButton buttonEdit = new JButton("Edit");
-		buttonEdit.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonEdit = new MyButton("Edit", SIZEBUTTONS);
 		buttonEdit.addActionListener(new buttonEditListener());
 		panel.add(buttonEdit);
 
-		JButton buttonView = new JButton("View");
-		buttonView.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonView = new MyButton("View", SIZEBUTTONS);
 		buttonView.addActionListener(new buttonViewListener());
 		panel.add(buttonView);
 
-		JButton buttonDisable = new JButton("Disable");
-		buttonDisable.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonDisable = new MyButton("Disable", SIZEBUTTONS);
 		buttonDisable.addActionListener(new buttonDisableListener());
 		panel.add(buttonDisable);
 
-		JButton buttonExport = new JButton("Export");
-		buttonExport.setPreferredSize(DIMENSIONBUTTON);
+		JButton buttonExport = new MyButton("Export", SIZEBUTTONS);
 		buttonExport.addActionListener(new buttonExportListener());
 		panel.add(buttonExport);
 
 		return panel;
 	}
 
-	private JPanel createPanelButton2() {
+	private JPanel createPanelButtonEast() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(450, 60));
@@ -150,13 +140,11 @@ public class EquipmentList extends JPanel {
 		panel.add(textField_Filter);
 
 		JLabel label_Quantity = new JLabel("Quantity:");
-		label_Quantity.setPreferredSize(new Dimension(80, 35));
 		label_Quantity.setBounds(340, 15, 80, 25);
 		label_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Quantity);
 
 		label_Show_Quantity = new JLabel(String.valueOf(equipments.size()));
-		label_Show_Quantity.setPreferredSize(new Dimension(30, 35));
 		label_Show_Quantity.setBounds(400, 15, 50, 25);
 		label_Show_Quantity.setForeground(Color.WHITE);
 		panel.add(label_Show_Quantity);
@@ -174,13 +162,6 @@ public class EquipmentList extends JPanel {
 		return scrollPane;
 	}
 
-	private List<Option> loadDataOptions() {
-		final OptionService service = new OptionService();
-		List<Option> list = service.findAll();
-		list.sort((o1, o2) -> o1.getOption().compareTo(o2.getOption()));
-		return list;
-	}
-
 	private class buttonNewListener implements ActionListener {
 
 		@Override
@@ -189,7 +170,7 @@ public class EquipmentList extends JPanel {
 				JOptionPane.showMessageDialog(null, "You do not have access to this function", "access denied", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			else {
-				new NewEquipmentForm(model, options).setVisible(true);
+				new NewEquipmentForm(model);
 				label_Show_Quantity.setText(String.valueOf(table.getRowCount()));
 				repaint();
 			}
@@ -216,7 +197,7 @@ public class EquipmentList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This equipment is disabled", "Unable to Edit", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new EditEquipmentForm(model, equipment, options, modelRow).setVisible(true);
+						new EditEquipmentForm(model, equipment, modelRow);
 					}
 				}
 			}
@@ -235,7 +216,7 @@ public class EquipmentList extends JPanel {
 			else {
 				int modelRow = table.convertRowIndexToModel(lineSelected);
 				Equipment equipment = model.getEquipment(modelRow);
-				new ViewEquipmentForm(equipment).setVisible(true);
+				new ViewEquipmentForm(equipment);
 			}
 		}
 	}
@@ -263,7 +244,7 @@ public class EquipmentList extends JPanel {
 						JOptionPane.showMessageDialog(null, "This equipment is in use", "Unable to Disable", JOptionPane.INFORMATION_MESSAGE);
 					} 
 					else {
-						new DisableEquipmentForm(model, equipment, options, modelRow).setVisible(true);
+						new DisableEquipmentForm(model, equipment, modelRow);
 					}
 				}
 			}
@@ -330,7 +311,7 @@ public class EquipmentList extends JPanel {
 				if (lineSelected >= 0) {
 					int modelRow = table.convertRowIndexToModel(lineSelected);
 					Equipment equipment = model.getEquipment(modelRow);
-					new ViewEquipmentForm(equipment).setVisible(true);
+					new ViewEquipmentForm(equipment);
 				}
 			}
 		}

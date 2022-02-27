@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -19,14 +17,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import application.LoadData;
 import db.DBException;
 import exception.ObjectException;
 import exception.ValidationException;
-import model.entities.Option;
 import model.entities.Project;
 import model.entities.User;
 import model.services.user.UserService;
 import model.services.user.UserTableModel;
+import model.util.JTextFieldFilter;
 import model.util.MyButton;
 import model.util.MyComboBox;
 import model.util.MyLabel;
@@ -64,7 +63,7 @@ public class EditUserForm extends JDialog {
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
 	private final int HEIGHT_MAIN_PANEL = HEIGHT_FIELD_PANEL + HEIGHT_BUTTON_PANEL + 84;
 
-	private UserTableModel model;
+	private final UserTableModel model;
 	private final User userOld;
 	private final int lineSelected;
 
@@ -121,8 +120,7 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Registration = new MyLabel("Registration:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Registration);
 
-		final JLabel label_Show_Registration = new MyLabel(userOld.getRegistration(), SIZE_LABELS_SHOW,
-				COLOR_LABEL_SHOW, FONT);
+		final JLabel label_Show_Registration = new MyLabel(userOld.getRegistration(), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_Registration);
 
 		final JLabel labelError_Registration_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -131,7 +129,9 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Name = new MyLabel("Name:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Name);
 
-		textField_Name = new MyTextField(userOld.getName(), SIZE_FIELDS_COMBOX);
+		textField_Name = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Name.setDocument(new JTextFieldFilter(JTextFieldFilter.LETTERS_ONLY_WITH_SPACE, 60));
+		textField_Name.setText(userOld.getName());
 		fieldsPanel.add(textField_Name);
 
 		labelError_Name = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -140,7 +140,9 @@ public class EditUserForm extends JDialog {
 		final JLabel label_CPF = new MyLabel("CPF:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_CPF);
 
-		textField_CPF = new MyTextField(userOld.getCpf(), SIZE_FIELDS_COMBOX);
+		textField_CPF = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_CPF.setDocument(new JTextFieldFilter(JTextFieldFilter.CPF, 14));
+		textField_CPF.setText(userOld.getCpf());
 		fieldsPanel.add(textField_CPF);
 
 		labelError_CPF = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -149,7 +151,9 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Phone = new MyLabel("Phone:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Phone);
 
-		textField_Phone = new MyTextField(userOld.getPhone(), SIZE_FIELDS_COMBOX);
+		textField_Phone = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Phone.setDocument(new JTextFieldFilter(JTextFieldFilter.PHONE, 15));
+		textField_Phone.setText(userOld.getPhone());
 		fieldsPanel.add(textField_Phone);
 
 		labelError_Phone = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -158,7 +162,9 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Email = new MyLabel("Email:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Email);
 
-		textField_Email = new MyTextField(userOld.getEmail(), SIZE_FIELDS_COMBOX);
+		textField_Email = new MyTextField("", SIZE_FIELDS_COMBOX);
+		textField_Email.setDocument(new JTextFieldFilter(JTextFieldFilter.MY_EMAIL, 30));
+		textField_Email.setText(userOld.getEmail());
 		fieldsPanel.add(textField_Email);
 
 		labelError_Email = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -167,11 +173,7 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Department = new MyLabel("Department:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Department);
 
-		comboBox_Department = new MyComboBox(
-				UserList.options.stream()
-						.filter(o -> o.getType().equals("DEPARTMENT") && o.getStatus().equals("ACTIVE"))
-						.map(Option::getOption).collect(Collectors.toList()),
-				userOld.getDepartment(), SIZE_FIELDS_COMBOX);
+		comboBox_Department = new MyComboBox( LoadData.getOptionByType("DEPARTMENT"), userOld.getDepartment(), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Department);
 
 		labelError_Department = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -180,9 +182,7 @@ public class EditUserForm extends JDialog {
 		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_Project);
 
-		comboBox_Project = new MyComboBox(
-				UserList.projects.stream().filter(p -> p.getStatus().equals("ACTIVE")).collect(Collectors.toList()),
-				userOld.getProject(), SIZE_FIELDS_COMBOX);
+		comboBox_Project = new MyComboBox(LoadData.getProjectsListByStatus("ACTIVE"), userOld.getProject(), SIZE_FIELDS_COMBOX);
 		fieldsPanel.add(comboBox_Project);
 
 		labelError_Project = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
@@ -197,7 +197,7 @@ public class EditUserForm extends JDialog {
 		final JLabel labelError_Status_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_Status_Empty);
 
-		JLabel label_DateEntry = new MyLabel("DateEntry:", SIZE_LABELS, COLOR_LABEL, FONT);
+		JLabel label_DateEntry = new MyLabel("Date Entry:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_DateEntry);
 
 		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(userOld.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
@@ -267,52 +267,69 @@ public class EditUserForm extends JDialog {
 		// Validation Name
 		if (textField_Name.getText() == null || textField_Name.getText().trim().equals("")) {
 			exception.addError("name", "Field can't be empty");
-		} else if (textField_Name.getText().length() < 10) {
+		} 
+		else if (textField_Name.getText().length() < 10) {
 			exception.addError("name", "Invalid Name - Ex: > 10");
-		} else {
+		} 
+		else {
 			user.setName(textField_Name.getText().trim().toUpperCase());
 		}
 
 		// Validation CPF
-		if (Utils.ToCheckCPFNull(textField_CPF.getText())) {
+		if (textField_CPF.getText() == null || textField_CPF.getText().trim().equals("")) {
 			exception.addError("CPF", "Field can't be empty");
-		} else if (textField_CPF.getText().length() < 14) {
+		} 
+		else if (textField_CPF.getText().length() < 14) {
 			exception.addError("CPF", "Invalid CPF - Ex: > 14");
-		} else {
+		} 
+		else if (Utils.ToCheckCPF(textField_CPF.getText())) {
+			exception.addError("CPF", "Invalid format - Ex: ###.###.###-##");
+		}
+		else {
 			user.setCpf(textField_CPF.getText().trim().toUpperCase());
 		}
 
 		// Validation Phone
-		if (Utils.ToCheckPhoneNull(textField_Phone.getText())) {
+		if (textField_Phone.getText() == null || textField_Phone.getText().trim().equals("")) {
 			exception.addError("phone", "Field can't be empty");
-		} else if (textField_Phone.getText().length() < 14) {
+		} 
+		else if (textField_Phone.getText().length() < 14) {
 			exception.addError("phone", "Invalid phone - Ex: > 14");
-		} else {
+		} 
+		else if (Utils.ToCheckPhone(textField_Phone.getText())) {
+			exception.addError("CPF", "Invalid format - Ex: (##) #####-####");
+		} 
+		else {
 			user.setPhone(textField_Phone.getText().trim().toUpperCase());
 		}
 
 		// Validation Email
 		if (textField_Email.getText() == null || textField_Email.getText().trim().equals("")) {
 			exception.addError("email", "Field can't be empty");
-		} else if (textField_Email.getText().length() < 11) {
-			exception.addError("email", "Invalid Email - Ex: > 11");
-		} else if (Utils.ToCheckEmailNull(textField_Email.getText())) {
+		} 
+		else if (textField_Email.getText().length() < 11) {
+			exception.addError("email", "Invalid Email - Ex: > 12");
+		} 
+		else if (Utils.ToCheckEmailContain(textField_Email.getText())) {
 			exception.addError("email", "Invalid Domain - Ex: @MINSAIT.COM");
-		} else {
+		} 
+		else {
 			user.setEmail(textField_Email.getText().trim().toUpperCase());
 		}
 
 		// Validation Department
 		if (comboBox_Department.getSelectedIndex() < 0 || comboBox_Department.getSelectedItem() == null) {
 			exception.addError("department", "Field can't be empty");
-		} else {
+		} 
+		else {
 			user.setDepartment(comboBox_Department.getSelectedItem().toString());
 		}
 
 		// Validation Project
 		if (comboBox_Project.getSelectedIndex() < 0 || comboBox_Project.getSelectedItem() == null) {
 			exception.addError("project", "Field can't be empty");
-		} else {
+		} 
+		else {
 			user.setProject((Project) comboBox_Project.getSelectedItem());
 		}
 
