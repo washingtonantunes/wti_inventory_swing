@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import application.MainWindow;
 import model.gui.equipment.EquipmentList;
-import model.gui.inventory.InventoryList;
 import model.gui.monitor.MonitorList;
 import model.gui.project.ProjectList;
 import model.gui.user.UserList;
@@ -88,10 +87,6 @@ public class MenuBar extends JMenuBar {
 		final JMenuItem menuItemOptions = new JMenuItem("Options");
 		menuItemOptions.addActionListener(new MenuItemOptionsListener());
 		menuTools.add(menuItemOptions);
-		
-		final JMenuItem menuItemSortOptions = new JMenuItem("Sort Options");
-		menuItemSortOptions.addActionListener(new menuItemSortOptionsListener());
-		menuTools.add(menuItemSortOptions);
 
 		return menuTools;
 	}
@@ -102,10 +97,6 @@ public class MenuBar extends JMenuBar {
 		final JMenuItem menuItemDashboard = new JMenuItem("Dashboard");
 		menuItemDashboard.addActionListener(new MenuItemDashboardListener());
 		menuWork.add(menuItemDashboard);
-		
-		final JMenuItem menuItemInventory = new JMenuItem("Inventory");
-		menuItemInventory.addActionListener(new MenuItemInventoryListener());
-		menuWork.add(menuItemInventory);
 		
 		final JMenuItem menuItemLayout = new JMenuItem("Layout");
 		menuItemLayout.addActionListener(new MenuItemLayoutListener());
@@ -122,6 +113,8 @@ public class MenuBar extends JMenuBar {
 		menuProperties.add(menuItemProfile);
 
 		menuProperties.add(createMenuSettings());
+		
+		menuProperties.add(createMenuDefault());
 
 		return menuProperties;
 	}
@@ -132,12 +125,31 @@ public class MenuBar extends JMenuBar {
 		final JMenuItem menuItemDataBase = new JMenuItem("DataBase");
 		menuItemDataBase.addActionListener(new MenuItemDataBaseListener());
 		menuSettings.add(menuItemDataBase);
-
+		
 		return menuSettings;
+	}
+	
+	private JMenu createMenuDefault() {
+		final JMenu menuDefault = new JMenu("Default");
+		
+		final JMenuItem menuItemSortOptions = new JMenuItem("Sort Options");
+		menuItemSortOptions.addActionListener(new menuItemSortOptionsListener());
+		menuDefault.add(menuItemSortOptions);
+		
+		final JMenuItem menuItemSortChanges = new JMenuItem("Sort Changes");
+		menuItemSortChanges.addActionListener(new menuItemSortChangesListener());
+		menuDefault.add(menuItemSortChanges);
+		
+		final JMenuItem menuItemDefaultChanges = new JMenuItem("Default Changes");
+		menuItemDefaultChanges.addActionListener(new menuItemDefaultChangesListener());
+		menuDefault.add(menuItemDefaultChanges);
+		
+		return menuDefault;
 	}
 
 	private class MenuItemHomeListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final MainWindow mainWindow = new MainWindow();
@@ -148,6 +160,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemCloseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Runtime.getRuntime().exit(0);
 		}
@@ -155,6 +168,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemEquipmentsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final EquipmentList equipmentList = new EquipmentList();
@@ -165,6 +179,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemMonitorsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final MonitorList monitorList = new MonitorList();
@@ -175,6 +190,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemWorkPositionsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final WorkPositionList workPositionList = new WorkPositionList();
@@ -185,6 +201,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemProjectsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final ProjectList projectList = new ProjectList();
@@ -195,6 +212,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemUsersListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainDesktopPane.removeAll();
 			final UserList userList = new UserList();
@@ -205,6 +223,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemCollaboratorsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemCollaboratosListener");
 		}
@@ -212,37 +231,23 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemOptionsListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemOptionsListener");
 		}
 	}
 	
-	private class menuItemSortOptionsListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			new SortListDefault();
-		}
-	}
-	
 	private class MenuItemDashboardListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemDashboardListener");
 		}
 	}
 	
-	private class MenuItemInventoryListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			mainDesktopPane.removeAll();
-			final InventoryList inventoryList = new InventoryList();
-			mainDesktopPane.add(inventoryList);
-			mainDesktopPane.revalidate();
-		}
-	}
-	
 	private class MenuItemLayoutListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemLayoutListener");
 		}
@@ -250,6 +255,7 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemProfileListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("MenuItemProfileListener");
 		}
@@ -257,12 +263,37 @@ public class MenuBar extends JMenuBar {
 
 	private class MenuItemDataBaseListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (privilege != 1) {
 				JOptionPane.showMessageDialog(getComponentPopupMenu(), "Access denied");
 			} else {
 				System.out.println("MenuItemDataBaseListener");
 			}
+		}
+	}
+	
+	private class menuItemSortOptionsListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new SortListOption();
+		}
+	}
+	
+	private class menuItemSortChangesListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new SortListChange();
+		}
+	}
+	
+	private class menuItemDefaultChangesListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new DefaultChanges();
 		}
 	}
 }

@@ -90,6 +90,9 @@ public class CreateExlFileEquipment {
 			cell.setCellValue("Date Entry");
 			
 			cell = row.createCell(cellnum++);
+			cell.setCellValue("Project");
+			
+			cell = row.createCell(cellnum++);
 			cell.setCellValue("User");
 			
 			cell = row.createCell(cellnum++);
@@ -148,10 +151,13 @@ public class CreateExlFileEquipment {
 				cell.setCellValue(sdf.format(equipment.getDateEntry()));
 				
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(equipment.getUser().getName());
+				cell.setCellValue(equipment.getProject() != null ? equipment.getProject().getName() : "");
 				
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(equipment.getWorkPosition().getWorkPoint());
+				cell.setCellValue(equipment.getUser() != null ? equipment.getUser().getName() : "");
+				
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(equipment.getWorkPosition() != null ? equipment.getWorkPosition().getWorkPoint() : "");
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");

@@ -64,14 +64,22 @@ public class TableMonitor extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 5) {
-				column.setPreferredWidth(60); // Value
+				column.setPreferredWidth(80); // Value
 				column.setResizable(false);
 			} 
 			else if (i == 6) {
-				column.setPreferredWidth(100); // Status
+				column.setPreferredWidth(100); // Location
 				column.setResizable(false);
 			} 
 			else if (i == 7) {
+				column.setPreferredWidth(110); // Note Entry
+				column.setResizable(false);
+			} 
+			else if (i == 8) {
+				column.setPreferredWidth(100); // Status
+				column.setResizable(false);
+			} 
+			else if (i == 9) {
 				column.setPreferredWidth(100); // Date Entry
 				column.setResizable(false);
 			} 

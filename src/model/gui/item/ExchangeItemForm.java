@@ -22,7 +22,7 @@ import javax.swing.border.TitledBorder;
 
 import application.LoadData;
 import db.DBException;
-import exception.ValidationException;
+import exception.ObjectException;
 import model.entities.Equipment;
 import model.entities.License;
 import model.entities.Monitor;
@@ -303,41 +303,44 @@ public class ExchangeItemForm extends JDialog {
 	}
 	
 	private void uptdateItem() {
-		if (type == 1) {
-			final EquipmentService service = new EquipmentService();
-			
-			final Equipment equipmentOld = LoadData.getEquipment(itemOld.getCode());
-			final Equipment equipmentNew = LoadData.getEquipment(itemNew.getCode());
-			
-			service.removeForUser(equipmentOld, user);
-			service.addForUser(equipmentNew, user);
-		} 
-		else if (type == 2) {
-			final MonitorService service = new MonitorService();
-			
-			final Monitor monitorOld = LoadData.getMonitor(itemOld.getCode());
-			final Monitor monitorNew = LoadData.getMonitor(itemNew.getCode());
-			
-			service.removeForUser(monitorOld, user);
-			service.addForUser(monitorNew, user);
-		} 
-		else if (type == 3) {
-			final PeripheralService service = new PeripheralService();
-			
-			final Peripheral peripheralOld = LoadData.getPeripheral(itemOld.getCode());
-			final Peripheral peripheralNew = LoadData.getPeripheral(itemNew.getCode());
-			
-			service.removeForUser(peripheralOld, user);
-			service.addForUser(peripheralNew, user);
-		} 
-		else if (type == 4) {
-			final LicenseService service = new LicenseService();
-			
-			License licenseOld = LoadData.getLicense(itemOld.getCode());
-			License licenseNew = LoadData.getLicense(itemNew.getCode());
+		if (itemOld != null && itemNew != null) {
+			if (type == 1) {
+				final EquipmentService service = new EquipmentService();
+				
+				final Equipment equipmentOld = LoadData.getEquipment(itemOld.getCode());
+				final Equipment equipmentNew = LoadData.getEquipment(itemNew.getCode());
+				
+				service.exchangeForUser(equipmentOld, equipmentNew, user);
+			} 
+			else if (type == 2) {
+				final MonitorService service = new MonitorService();
+				
+				final Monitor monitorOld = LoadData.getMonitor(itemOld.getCode());
+				final Monitor monitorNew = LoadData.getMonitor(itemNew.getCode());
+				
+				service.removeForUser(monitorOld, user);
+				service.addForUser(monitorNew, user);
+			} 
+			else if (type == 3) {
+				final PeripheralService service = new PeripheralService();
+				
+				final Peripheral peripheralOld = LoadData.getPeripheral(itemOld.getCode());
+				final Peripheral peripheralNew = LoadData.getPeripheral(itemNew.getCode());
+				
+				service.removeForUser(peripheralOld, user);
+				service.addForUser(peripheralNew, user);
+			} 
+			else if (type == 4) {
+				final LicenseService service = new LicenseService();
+				
+				License licenseOld = LoadData.getLicense(itemOld.getCode());
+				License licenseNew = LoadData.getLicense(itemNew.getCode());
 
-			service.removeForUser(licenseOld, user);
-			service.addForUser(licenseNew, user);
+				service.removeForUser(licenseOld, user);
+				service.addForUser(licenseNew, user);
+			}
+		} else {
+			throw new ObjectException("There is no change");
 		}
 	}
 	
@@ -357,14 +360,13 @@ public class ExchangeItemForm extends JDialog {
 				model.updateItem(lineSelected, itemNew);
 
 				dispose();
-				JOptionPane.showMessageDialog(rootPane, "Item successfully updated", "Success updating item",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootPane, "Item successfully updated", "Success updating item", JOptionPane.INFORMATION_MESSAGE);
 			} 
-			catch (ValidationException e) {
-
+			catch (ObjectException oe) {
+				JOptionPane.showMessageDialog(null, "There is no object to exchange", "Unable to updating", JOptionPane.INFORMATION_MESSAGE);
 			} 
-			catch (DBException e) {
-
+			catch (DBException db) {
+				JOptionPane.showMessageDialog(rootPane, db.getMessage(), "Error updating item", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

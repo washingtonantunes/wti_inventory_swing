@@ -18,12 +18,32 @@ public class OptionService {
 		return optionDao.findAll();
 	}
 	
-	public void update(int idOld, int idNew) {
+	public void updateSort(int idOld, int idNew) {
 		Connection conn = DB.getConnection();
 		try {
 			conn.setAutoCommit(false);
 
 			optionDao.updateSort(idOld, idNew);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void toSetDefault(int lastIndex) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			optionDao.toSetDefault(lastIndex);
 
 			conn.commit();
 		} 

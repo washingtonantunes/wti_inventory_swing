@@ -67,7 +67,6 @@ public class Change implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Change [id=" + id + ", object=" + object + ", type=" + type + ", changes=" + changes + ", date=" + date
-				+ ", author=" + author + "]";
+		return "Change [id=" + id + ", object=" + object + ", type=" + type + ", changes=" + changes + ", date=" + date + ", author=" + author + "]";
 	}
 }

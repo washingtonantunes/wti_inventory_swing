@@ -133,6 +133,93 @@ public class EquipmentService {
 		}
 	}
 	
+	public void exchangeForUser(Equipment equipmentOld, Equipment EquipmentNew, User user) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+			
+			final String typeChange = "Equipment Exchange";
+			
+			{//Equipment Old
+				//Change Equipment
+				Change change = getChange(equipmentOld, equipmentOld, 4);
+				change.setType(typeChange);
+				changeDao.insert(change);
+				equipmentOld.addChange(change);
+				
+				//Insert into running list
+				LoadData.addChange(change);
+				
+				//Change User
+				Change changeUser = getChange(equipmentOld, equipmentOld, 4);
+				changeUser.setObject(user.getRegistration());
+				changeUser.setChanges(getChangeUser(equipmentOld, 2));
+				changeUser.setType(typeChange);
+				changeDao.insert(changeUser);
+				user.addChange(changeUser);
+				
+				//Insert into running list
+				LoadData.addChange(changeUser);
+				
+				equipmentOld.setLocation(Utils.getLocationEquipment());
+				equipmentOld.setStatus("STAND BY");
+				equipmentOld.setUser(null);
+				equipmentOld.setProject(null);
+				equipmentDao.updateStatusForUser(equipmentOld); //Update object into the database
+				
+				user.removeEquipment(equipmentOld);
+
+				//Insert user/equipment relationship
+				objectWithUserDao.removeEquipmentWithUser(user, equipmentOld);
+			}
+
+
+			{//Equipment New
+				EquipmentNew.setLocation("WITH USER");
+				EquipmentNew.setStatus("IN USE");
+				EquipmentNew.setUser(user);
+				EquipmentNew.setProject(user.getProject());
+				equipmentDao.updateStatusForUser(EquipmentNew); //Update object into the database
+				
+				user.addEquipment(EquipmentNew);
+
+				//Change
+				Change change = getChange(EquipmentNew, EquipmentNew, 3);
+				change.setType(typeChange);
+				changeDao.insert(change);
+				EquipmentNew.addChange(change);
+				
+				//Insert into running list
+				LoadData.addChange(change);
+				
+				//Change User
+				Change changeUser = getChange(EquipmentNew, EquipmentNew, 3);
+				changeUser.setObject(user.getRegistration());
+				changeUser.setChanges(getChangeUser(EquipmentNew, 1));
+				changeUser.setType(typeChange);
+				changeDao.insert(changeUser);
+				user.addChange(changeUser);
+				
+				//Insert into running list
+				LoadData.addChange(changeUser);
+				
+				//Insert user/equipment relationship
+				objectWithUserDao.insertEquipmentWithUser(user, EquipmentNew);
+			}
+			
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
 	public void removeForUser(Equipment obj, User user) {
 		Connection conn = DB.getConnection();
 		try {

@@ -60,26 +60,7 @@ public class OptionDaoJDBC implements OptionDao {
 		}
 	}
 	
-	@Override
-	public void updateSort(int idOld, int idNew) {
-		PreparedStatement st = null;
-		try {
-			st = conn.prepareStatement(
-					"UPDATE `options` "
-					+ "SET `id` = ? "
-					+ "WHERE `id` = ?");
-			
-			st.setInt(1, idNew);
-			st.setInt(2, idOld);
-			
-
-			st.executeUpdate();
-		} catch (SQLException e) {
-			throw new DBException(e.getMessage());
-		} finally {
-			DB.closeStatement(st);
-		}
-	}
+	
 
 	@Override
 	public void update(Option obj) {
@@ -114,6 +95,45 @@ public class OptionDaoJDBC implements OptionDao {
 
 			st.setString(1, status);
 			st.setInt(2, idOption);
+			
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void updateSort(int idOld, int idNew) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `options` "
+					+ "SET `id` = ? "
+					+ "WHERE `id` = ?");
+			
+			st.setInt(1, idNew);
+			st.setInt(2, idOld);
+			
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void toSetDefault(int lastIndex) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("ALTER TABLE options AUTO_INCREMENT=?");
+
+			st.setInt(1, lastIndex);
 			
 			st.executeUpdate();
 		} 

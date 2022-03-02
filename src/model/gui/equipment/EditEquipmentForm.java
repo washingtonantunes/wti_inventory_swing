@@ -56,7 +56,7 @@ public class EditEquipmentForm extends JDialog {
 	private final int WIDTH_INTERNAL_PANEL = (150 + 200 + 300) + 40;
 
 	private final int HEIGHT_TOP_PANEL = 10;
-	private final int HEIGHT_FIELD_PANEL = 36 * 18;
+	private final int HEIGHT_FIELD_PANEL = 36 * 19;
 	private final int HEIGHT_BUTTON_PANEL = 50;
 
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
@@ -281,6 +281,15 @@ public class EditEquipmentForm extends JDialog {
 
 		final JLabel labelError_DateEntry_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
 		fieldsPanel.add(labelError_DateEntry_Empty);
+		
+		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Project);
+
+		final JLabel label_Show_Project = new MyLabel(equipmentOld.getProject() != null ? equipmentOld.getProject().getName() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		fieldsPanel.add(label_Show_Project);
+		
+		final JLabel labelError_Project_Empty = new MyLabel("", SIZE_LABELS_ERROR, COLOR_LABEL_ERROR, FONT);
+		fieldsPanel.add(labelError_Project_Empty);
 		
 		JLabel label_User = new MyLabel("User:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_User);

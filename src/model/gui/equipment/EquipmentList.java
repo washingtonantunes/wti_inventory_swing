@@ -126,7 +126,7 @@ public class EquipmentList extends JPanel {
 	private JPanel createPanelButtonEast() {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
-		panel.setPreferredSize(new Dimension(450, 60));
+		panel.setPreferredSize(new Dimension(450, 50));
 		panel.setBackground(COLOR2);
 
 		final JLabel label_Search = new JLabel("Enter to filter");

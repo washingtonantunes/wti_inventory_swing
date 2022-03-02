@@ -282,6 +282,9 @@ public class NewEquipmentForm extends JDialog {
 			catch (DBException db) {
 				setErrorMessagesDBException(db);
 			}
+			finally {
+				
+			}
 		}
 	}
 

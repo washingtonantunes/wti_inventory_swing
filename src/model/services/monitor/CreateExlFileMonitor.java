@@ -75,6 +75,9 @@ public class CreateExlFileMonitor {
 			cell.setCellValue("Date Entry");
 			
 			cell = row.createCell(cellnum++);
+			cell.setCellValue("Project");
+			
+			cell = row.createCell(cellnum++);
 			cell.setCellValue("User");
 			
 			cell = row.createCell(cellnum++);
@@ -118,10 +121,13 @@ public class CreateExlFileMonitor {
 				cell.setCellValue(sdf.format(monitor.getDateEntry()));
 				
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(monitor.getUser().getName());
+				cell.setCellValue(monitor.getProject() != null ? monitor.getProject().getName() : "");
 				
 				cell = row.createCell(cellnum++);
-				cell.setCellValue(monitor.getWorkPosition().getWorkPoint());
+				cell.setCellValue(monitor.getUser() != null ? monitor.getUser().getName() : "");
+				
+				cell = row.createCell(cellnum++);
+				cell.setCellValue(monitor.getWorkPosition() != null ? monitor.getWorkPosition().getWorkPoint() : "");
 			}
 
 			FileOutputStream fileOut = new FileOutputStream(filePath.contains(".xls") ? filePath : filePath + ".xls");

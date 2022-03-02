@@ -60,6 +60,68 @@ public class ChangeDaoJDBC implements ChangeDao {
 			DB.closeStatement(st);
 		}
 	}
+	
+	@Override
+	public void updateDefault(Change change) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `changes` "
+					+ "SET `type` = ?, "
+					+ "`changes = ?`"
+					+ "WHERE `id` = ?");
+			
+			st.setString(1, change.getType());
+			st.setString(2, change.getChanges());
+			st.setInt(3, change.getId());
+			
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void updateSort(int idOld, int idNew) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE `changes` "
+					+ "SET `id` = ? "
+					+ "WHERE `id` = ?");
+			
+			st.setInt(1, idNew);
+			st.setInt(2, idOld);
+			
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
+	}
+	
+	@Override
+	public void toSetDefault(int lastIndex) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("ALTER TABLE changes AUTO_INCREMENT=?");
+
+			st.setInt(1, lastIndex);
+			
+			st.executeUpdate();
+		} 
+		catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} 
+		finally {
+			DB.closeStatement(st);
+		}
+	}
 
 	@Override
 	public List<Change> findAll() {

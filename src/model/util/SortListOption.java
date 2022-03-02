@@ -8,15 +8,15 @@ import application.LoadData;
 import model.entities.Option;
 import model.services.OptionService;
 
-public class SortListDefault {
+public class SortListOption {
 	
 	private final OptionService service = new OptionService();
 
 	private List<Option> listOriginal;
 	private List<Option> listOrderly;
 
-	public SortListDefault() {
-		listOriginal = LoadData.getOptionList();
+	public SortListOption() {
+		listOriginal = LoadData.getOptionsList();
 		sort();
 	}
 
@@ -35,26 +35,25 @@ public class SortListDefault {
 			for (Option option : listOriginal) {
 				final int idOld = option.getId();
 				option.setId(++larger);
-				service.update(idOld, option.getId());
+				service.updateSort(idOld, option.getId());
 			}
 
 			listOrderly = listOriginal;
-			listOrderly.sort((o1, o2) -> o1.getType().compareTo(o2.getType()));
+			listOrderly.sort((c1, c2) -> c1.getType().compareTo(c2.getType()));
 
 			int index = 0;
 
 			for (Option option : listOrderly) {
 				final int idOld = option.getId();
 				option.setId(++index);
-				service.update(idOld, option.getId());
-
+				service.updateSort(idOld, option.getId());
 			}
+			
+			service.toSetDefault(++larger);
+			JOptionPane.showMessageDialog(null, "Ordered list", null, JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Lista já está ordenada", null, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "List is already sorted", null, JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-	public static void main(String[] args) {
-		new SortListDefault();
-	}
 }

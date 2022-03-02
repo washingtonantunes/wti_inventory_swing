@@ -165,6 +165,10 @@ public class LoadData {
 		list.sort((c1, c2) -> c1.getDate().compareTo(c2.getDate()));
 		return list;
 	}
+	
+	public static List<Change> getChangesList() {
+		return MainWindow.changes;
+	}
 
 	// EquipmentWithUser Methods
 
@@ -524,8 +528,15 @@ public class LoadData {
 	}
 
 	//
-	public static User getUser(String registration) {
+	public static User getUserByRegistration(String registration) {
 		return MainWindow.users.get(registration);
+	}
+	
+	//
+	public static User getUserByName(String name) {
+		List<User> list = getUsersList();
+		
+		return list.stream().filter(u -> u.getName().equals(name)).findAny().get();
 	}
 
 	// Used to get user on Map
@@ -548,7 +559,7 @@ public class LoadData {
 	// Option Methods
 	
 	//
-	public static List<Option> getOptionList() {
+	public static List<Option> getOptionsList() {
 		return MainWindow.options;
 	}
 	

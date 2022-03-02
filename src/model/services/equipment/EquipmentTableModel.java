@@ -22,15 +22,17 @@ public class EquipmentTableModel extends AbstractTableModel {
 	private static final int COL_HARD_DISK = 8;
 	private static final int COL_COST_TYPE = 9;
 	private static final int COL_VALUE = 10;
-	private static final int COL_STATUS = 11;
-	private static final int COL_DATE_ENTRY = 12;
+	private static final int COL_LOCATION = 11;
+	private static final int COL_NOTE_ENTRY = 12;
+	private static final int COL_STATUS = 13;
+	private static final int COL_DATE_ENTRY = 14;
 
 	private List<Equipment> equipments;
 
 	private String[] columns = new String[] { "<html><center>Serial <br>Number</html>",
 			"Host Name", "<html><center>Address<br>MAC</html>", "Type",
 			"<html><center>Patrimony <br>Number</html>", "Brand", "Model", "<html><center>Memory <br>RAM</html>",
-			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Status", "Date Enty"};
+			"<html><center>Hard <br>Disk</html>", "Cost Type", "Value", "Location", "Note Entry", "Status", "Date Enty"};
 
 	public EquipmentTableModel(List<Equipment> equipments) {
 		this.equipments = new ArrayList<>(equipments);
@@ -93,6 +95,12 @@ public class EquipmentTableModel extends AbstractTableModel {
 		} 
 		else if (column == COL_VALUE) {
 			return e.getValue();
+		} 
+		else if (column == COL_LOCATION) {
+			return e.getLocation();
+		} 
+		else if (column == COL_NOTE_ENTRY) {
+			return e.getNoteEntry();
 		} 
 		else if (column == COL_STATUS) {
 			return e.getStatus();

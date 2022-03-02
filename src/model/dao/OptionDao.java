@@ -12,7 +12,9 @@ public interface OptionDao {
 
 	void disable(Integer idOption, String status);
 
-	List<Option> findAll();
-
 	void updateSort(int idOld, int idNew);
+
+	void toSetDefault(int lastIndex);
+
+	List<Option> findAll();
 }

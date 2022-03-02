@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import model.entities.Equipment;
 import model.gui.change.ChangesPanel;
+import model.gui.project.ViewProjectForm;
 import model.gui.user.ViewUserForm;
 import model.gui.workposition.ViewWorkPositionForm;
 import model.util.MyButton;
@@ -44,7 +45,7 @@ public class ViewEquipmentForm extends JDialog {
 	private final int WIDTH_INTERNAL_PANEL = (150 + 300) + 20;
 
 	private final int HEIGHT_TOP_PANEL = 10;
-	private final int HEIGHT_FIELD_PANEL = 36 * 18;
+	private final int HEIGHT_FIELD_PANEL = 36 * 19;
 	private final int HEIGHT_BUTTON_PANEL = 50;
 
 	private final int WIDTH_MAIN_PANEL = WIDTH_INTERNAL_PANEL + 50;
@@ -182,6 +183,14 @@ public class ViewEquipmentForm extends JDialog {
 		final JLabel label_Show_DateEntry = new MyLabel(sdf.format(equipment.getDateEntry()), SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
 		fieldsPanel.add(label_Show_DateEntry);
 		
+		final JLabel label_Project = new MyLabel("Project:", SIZE_LABELS, COLOR_LABEL, FONT);
+		fieldsPanel.add(label_Project);
+
+		final JLabel label_Show_Project = new MyLabel(equipment.getProject() != null ? equipment.getProject().getName() : "", SIZE_LABELS_SHOW, COLOR_LABEL_SHOW, FONT);
+		label_Show_Project.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		label_Show_Project.addMouseListener(new MouseListenerProject());
+		fieldsPanel.add(label_Show_Project);
+		
 		final JLabel label_User = new MyLabel("User:", SIZE_LABELS, COLOR_LABEL, FONT);
 		fieldsPanel.add(label_User);
 
@@ -230,6 +239,18 @@ public class ViewEquipmentForm extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			dispose();
+		}
+	}
+	
+	private class MouseListenerProject extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			if (evt.getClickCount() == 1) {
+				if (equipment.getProject() != null) {
+					new ViewProjectForm(equipment.getProject());
+				}
+			}
 		}
 	}
 

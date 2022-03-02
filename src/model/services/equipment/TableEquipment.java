@@ -25,6 +25,7 @@ public class TableEquipment extends JTable {
 	private void initComponents() {
 		setFillsViewportHeight(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setRowHeight(25);
 		configureHeader();
 		configureSizeColumn();
@@ -85,14 +86,22 @@ public class TableEquipment extends JTable {
 				column.setResizable(false);
 			} 
 			else if (i == 10) {
-				column.setPreferredWidth(60); // Value
+				column.setPreferredWidth(80); // Value
 				column.setResizable(false);
 			} 
 			else if (i == 11) {
-				column.setPreferredWidth(100); // Status
+				column.setPreferredWidth(100); // Location
 				column.setResizable(false);
 			} 
 			else if (i == 12) {
+				column.setPreferredWidth(110); // Note Entry
+				column.setResizable(false);
+			} 
+			else if (i == 13) {
+				column.setPreferredWidth(100); // Status
+				column.setResizable(false);
+			} 
+			else if (i == 14) {
 				column.setPreferredWidth(100); // Date Entry
 				column.setResizable(false);
 			} 

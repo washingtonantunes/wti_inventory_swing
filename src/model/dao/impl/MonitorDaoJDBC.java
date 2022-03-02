@@ -220,7 +220,7 @@ public class MonitorDaoJDBC implements MonitorDao {
 	}
 	
 	private User instatiateUser(ResultSet rs) throws SQLException {
-		return LoadData.getUser(rs.getString("user"));
+		return LoadData.getUserByRegistration(rs.getString("user"));
 	}
 	
 	private WorkPosition instatiateWorkPosition(ResultSet rs) throws SQLException {

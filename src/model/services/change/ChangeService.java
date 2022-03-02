@@ -1,9 +1,13 @@
 package model.services.change;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 import application.MainWindow;
+import db.DB;
+import db.DBException;
 import model.dao.ChangeDao;
 import model.dao.DaoFactory;
 import model.entities.Change;
@@ -21,6 +25,86 @@ public class ChangeService {
 
 	public List<Change> findAll() {
 		return changeDao.findAll();
+	}
+	
+	public void insert(Change change) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			changeDao.insert(change);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void updateDefault(Change change) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			changeDao.updateDefault(change);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void updateSort(int idOld, int idNew) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			changeDao.updateSort(idOld, idNew);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
+	}
+	
+	public void toSetDefault(int lastIndex) {
+		Connection conn = DB.getConnection();
+		try {
+			conn.setAutoCommit(false);
+
+			changeDao.toSetDefault(lastIndex);
+
+			conn.commit();
+		} 
+		catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DBException("Transaction rolled back! Cause by: " + e.getMessage());
+			} 
+			catch (SQLException e1) {
+				throw new DBException("Error trying to rollback! Cause by: " + e1.getMessage());
+			}
+		}
 	}
 
 	// GET Change Equipment
